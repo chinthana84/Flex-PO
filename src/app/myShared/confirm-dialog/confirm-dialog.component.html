@@ -1,0 +1,62 @@
+<div *ngIf="message" class="modal" tabindex="-1" role="dialog" style="display:block!important">
+  <div class="modal-dialog custom-alert" role="document">
+    <div class="modal-content">
+
+      <div *ngIf="message?.type == 'confirm'" class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <p class="text-center confirm-message">{{message.msg}}</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="confirm-button">
+              <a class="mr-2" (click)="this.message?.yesFn">
+                <button class=" btn btn-yes">Yes</button>
+              </a>
+              <a (click)="this.message?.noFn  ">
+                <button class="btn btn-no">No</button>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="message?.type == 'ok'" class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div class='alert alert-danger' role='alert'>
+              {{message.msg}}</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="confirm-button">
+              <a class="mr-2" (click)="message.noFn()">
+                <button class="btn btn-yes" data-dismiss="modal">OK</button>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="message?.type == 'list'" class="modal-body">
+        <div class="row">
+          <div class="col-md-12">
+            <div *ngFor="let item of message.msgList" class='alert alert-danger' role='alert'>
+              {{item}}</div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <p class="confirm-button">
+              <a class="mr-2" (click)="this.message.noFn">
+                <button class="btn btn-yes" data-dismiss="modal">OK</button>
+              </a>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
