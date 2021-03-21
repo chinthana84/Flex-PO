@@ -50,4 +50,8 @@ export class ApprovalComponent implements OnInit {
    });
  }
 
+ Add(obj:any){
+   this.gridOption.datas.pagedItems.push({})
+ }
+
 }
