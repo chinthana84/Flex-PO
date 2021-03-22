@@ -23,13 +23,37 @@
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
-                  <td>{{item.Name}} </td>
-                  <td>{{item.Caps}} </td>
-                  <td>{{item.Status}}</td>
-                  <td>{{item.Remarks}}</td>
+                <tr *ngFor="let item of gridOption.datas.pagedItems ; let i = index;" class="table-hover">
                   <td>
-                    <button class="btn btn-primary " data-title="Edit" data-toggle="modal" data-target="#edit">
+                    <input [(ngModel)]="item.Name" id="Name{{ i }}" name="Name{{ i }}" class="form-control" type="text"
+                      placeholder="Name" />
+                  </td>
+                  <td>
+                    <input [(ngModel)]="item.Caps" id="Caps{{ i }}" name="CapsName{{ i }}" class="form-control"
+                      type="text" placeholder="Caps" numeric decimals="2" />
+                  </td>
+
+                  <td>
+                    <select [(ngModel)]="item.StatusRefId" class="form-control" id="Status{{ i }}" name="Status{{ i }}">
+                      <option *ngFor="let j of this.statusList" [ngValue]="j.RefId">
+                        {{ j.RefDescription }}
+                      </option>
+                    </select>
+
+
+                  </td>
+                  <td>
+
+                    <input [(ngModel)]="item.Remarks" id="Remarks{{ i }}" name="Remarks{{ i }}" class="form-control"
+                      type="text" placeholder="Remarks" />
+                  </td>
+                  <td>
+                    <button (click)="Save(item)" class="btn btn-primary " data-title="Edit" data-toggle="modal"
+                      data-target="#edit">
+                      <span class="fa fa-edit"></span></button>
+
+                    <button (click)="redirectToApprovalUsers(item.ApprovalGroupId)" class="btn btn-primary " data-title="Edit"
+                      data-toggle="modal" data-target="#edit">
                       <span class="fa fa-edit"></span></button>
                   </td>
                 </tr>
