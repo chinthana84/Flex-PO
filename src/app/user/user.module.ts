@@ -8,29 +8,20 @@ import { GridModule } from "../grid/grid.module";
 import { FormsModule } from "@angular/forms";
 import { MySharedModule } from "../myShared/my-shared.module";
 import { ApprovalUsersComponent } from "./admin/approval-users/approval-users.component";
+import { NgSelectModule } from "@ng-select/ng-select";
 
 const routes: Routes = [
-
   {
-    path: "login",
-    data: { titleKey: "request" },
-    component: LoginComponent,
+    path: "login", data: { titleKey: "request" }, component: LoginComponent,
   },
   {
-    path: "approvalGroups",
-    data: { titleKey: "approvalGroups" },
-    component: ApprovalComponent
-  }
-  ,
-  {
-    path: "approvalGroupsUsers",
-    data: { titleKey: "approvalGroupsUsers" },
-    component: ApprovalUsersComponent
+    path: "approvalGroups", data: { titleKey: "approvalGroups" }, component: ApprovalComponent,
   },
   {
-    path: "home",
-    data: { titleKey: "request" },
-    component: HomeComponent,
+    path: "approvalGroupsUsers", data: { titleKey: "approvalGroupsUsers" }, component: ApprovalUsersComponent,
+  },
+  {
+    path: "home", data: { titleKey: "request" }, component: HomeComponent,
   },
 ];
 
@@ -45,9 +36,9 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     RouterModule.forChild(routes),
+    NgSelectModule,
     GridModule,
     MySharedModule,
   ],
-
 })
-export class UserModule {}
+export class UserModule { }

@@ -1,6 +1,6 @@
 export class Login {
-  public UserName?: string="";
-  public  Password?: string="";
+  public UserName?: string = "";
+  public Password?: string = "";
   public NewPassword?: string;
 }
 
@@ -12,4 +12,9 @@ export class SecurityModel {
 
   public Supplier?: Boolean = false;
 
+}
+
+export class UserDetails {
+  public UserId?: number = 0;
+  public UserName?: string = "";
 }

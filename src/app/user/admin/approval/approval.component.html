@@ -4,7 +4,7 @@
       <div class="card-header">
         <h3 class="card-title">
           <i class="fas fa-chart-pie mr-1"></i>
-          Sales
+
         </h3>
       </div>
       <div class="card-body">
@@ -30,7 +30,7 @@
                   </td>
                   <td>
                     <input [(ngModel)]="item.Caps" id="Caps{{ i }}" name="CapsName{{ i }}" class="form-control"
-                      type="text" placeholder="Caps" numeric decimals="2" />
+                      placeholder="Caps" numeric decimals="2" />
                   </td>
 
                   <td>
@@ -52,8 +52,8 @@
                       data-target="#edit">
                       <span class="fa fa-edit"></span></button>
 
-                    <button (click)="redirectToApprovalUsers(item.ApprovalGroupId)" class="btn btn-primary " data-title="Edit"
-                      data-toggle="modal" data-target="#edit">
+                    <button (click)="redirectToApprovalUsers(item.ApprovalGroupId)" class="btn btn-primary "
+                      data-title="Edit" data-toggle="modal" data-target="#edit">
                       <span class="fa fa-edit"></span></button>
                   </td>
                 </tr>

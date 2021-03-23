@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~11.0.1",
     "@angular/platform-browser-dynamic": "~11.0.1",
     "@angular/router": "~11.0.1",
+    "@ng-select/ng-select": "6.1.0",
     "angular2-toaster": "11.0.1",
     "ngx-toastr": "13.2.1",
     "rxjs": "~6.6.0",

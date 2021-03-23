@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-      debugger
+       
       this.currentObj = r;
 
       if (this.currentObj.IsAuthenticated==false){

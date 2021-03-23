@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
-import { RefTable } from 'src/app/models/refTable.model';
+import { RefTableDTO } from 'src/app/models/refTable.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { environment } from 'src/environments/environment';
 
@@ -17,7 +17,7 @@ import { environment } from 'src/environments/environment';
 })
 export class ApprovalComponent implements OnInit {
 
-  statusList: RefTable[] = [];
+  statusList: RefTableDTO[] = [];
   gridOption: GridOptions = {
     datas: {},
     searchObject: {
