@@ -18,7 +18,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-       
+        
       this.currentObj = r;
 
       if (this.currentObj.IsAuthenticated==false){
@@ -34,7 +34,10 @@ export class AppComponent implements OnInit {
 
           this.securityService
           .Login(objUser)
-          .subscribe((r) => { this.currentObj = r;  });
+          .subscribe((r) => {
+            this.currentObj = r;
+           }, (error) => {
+                  this.router.navigate(["login"]); });
         }else{
           this.router.navigate(["login"]);
         }

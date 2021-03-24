@@ -1,40 +1,86 @@
-<ng-select  [(ngModel)]="approvalGroupID" (change)="changeApprovalGroup(selectedApprovalGroup)">
-  <ng-option *ngFor="let car of approvalGroups" [value]="car.ApprovalGroupId">{{car.Name}}</ng-option>
-</ng-select>
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i>
+          Sales
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="tab-content p-0">
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="StudentNumbers">Approval Groups</label>
+                <ng-select [(ngModel)]="approvalGroupID" (change)="changeApprovalGroup(approvalGroupID)">
+                  <ng-option *ngFor="let car of approvalGroups" [value]="car.ApprovalGroupId">{{car.Name}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="StudentNumbers">Users</label>
+                <ng-select [(ngModel)]="selectedUserid">
+                  <ng-option *ngFor="let car of userDetails" [value]="car.UserId">{{car.UserName}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="col-md-2">
+              <label for="StudentNumbers">Add Users</label><br />
+              <button (click)="AddUser()" class="btn btn-primary ">
+                <span class="fa fa-plus"></span></button>
+            </div>
+          </div>
+
+          <div class="row">
+            <table class="table ">
+              <thead>
+                <th>Name</th>
+
+                <th>
+
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of this.model.ApprovalGroupUsers; let i = index;" class="table-hover">
+                  <td>
+                    {{item.User?.UserName}}
+                  </td>
+                  <td>
+                    <button class="btn btn-primary " (click)="deleteApprovalUser(item)">
+                      <span class="fa fa-trash"></span></button>
+                  </td>
+                </tr>
+                <tr *ngIf="this.model.ApprovalGroupUsers?.length == 0 || this.model.ApprovalGroupUsers == undefined">
+                  <td class="datanotfound" colspan="2">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="row">
+            <div class="btn-group">
+              <button type="button" (click)="Save()" class="btn btn-primary save_button">
+                <span class="fa fa-save"></span>
+              </button>
+              <button type="button" (click)="this.router.navigate(['approvalGroupsUsers']);" class="btn btn-primary back_button">
+                <span class="fa fa-arrow-left"></span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
 
 
-<br /><br />
-<ng-select [(ngModel)]="selectedUserid">
-  <ng-option *ngFor="let car of userDetails" [value]="car.UserId">{{car.UserName}}</ng-option>
-</ng-select>
-
-<button (click)="AddUser()" class="btn btn-primary ">
-  <span class="fa fa-plus"></span></button>
 
 
-
-<table class="table ">
-  <thead>
-    <th>Name</th>
-
-    <th>
-      <button class="btn btn-primary ">
-        <span class="fa fa-plus"></span></button>
-    </th>
-  </thead>
-  <tbody>
-    <tr *ngFor="let item of this.model.ApprovalGroupUsers; let i = index;" class="table-hover">
-      <td>
-        {{item.UserDetailsDTO?.UserName}}
-      </td>
-      <td>
-
-      </td>
-    </tr>
-  </tbody>
-</table>
-
-
-
-<button (click)="Save()" class="btn btn-primary ">
-  <span class="fa fa-save"></span></button>

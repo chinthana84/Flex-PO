@@ -1,0 +1,61 @@
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i>
+          Sales
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="tab-content p-0">
+
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <label for="StudentNumbers">Users</label>
+                <ng-select [(ngModel)]="selectedRef" (change)="getRefTable()">
+                  <ng-option *ngFor="let car of this.distnctRef" [value]="car.RefTableName">{{car.RefTableName}}
+                  </ng-option>
+                </ng-select>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <table class="table ">
+              <thead>
+                <th>Name</th>
+                <th>
+                  <button class="btn btn-primary " (click)="Add()">
+                    <span class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of this.model; let i = index;" class="table-hover">
+
+                  <td>
+                    <input [(ngModel)]="item.RefDescription" id="RefDescription{{ i }}" name="RefDescription{{ i }}" class="form-control"
+                      placeholder="Description"  />
+                  </td>
+
+
+                  <td>
+                    <button (click)="Save(item)" class="btn btn-primary " >
+                      <span class="fa fa-edit"></span></button>
+
+
+                  </td>
+                </tr>
+                <tr *ngIf="this.model.length==0">
+                  <td class="datanotfound" colspan="3">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

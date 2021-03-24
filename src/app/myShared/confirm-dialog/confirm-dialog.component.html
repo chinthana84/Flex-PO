@@ -11,10 +11,10 @@
         <div class="row">
           <div class="col-md-12">
             <p class="confirm-button">
-              <a class="mr-2" (click)="this.message?.yesFn">
+              <a class="mr-2" (click)="this.message?.yesFn()">
                 <button class=" btn btn-yes">Yes</button>
               </a>
-              <a (click)="this.message?.noFn  ">
+              <a (click)="this.message?.noFn() ">
                 <button class="btn btn-no">No</button>
               </a>
             </p>

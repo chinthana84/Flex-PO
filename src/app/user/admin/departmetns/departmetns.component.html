@@ -1,0 +1,129 @@
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i>
+
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="tab-content p-0">
+          <div *ngIf="!edited">
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"> </app-search>
+            <table class="table ">
+              <thead>
+                <th>Name</th>
+                <th>Status</th>
+                <th>
+                  <button (click)="Action(undefined)" class="btn btn-primary "><span class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of gridOption.datas.pagedItems ; let i = index;" class="table-hover">
+                  <td>
+                    {{item.DepartmentName}}
+                  </td>
+                  <td>
+                    <select disabled [(ngModel)]="item.StatusRefId" class="form-control" id="Status{{ i }}"
+                      name="Status{{ i }}">
+                      <option *ngFor="let j of this.statusList" [ngValue]="j.RefId">
+                        {{ j.RefDescription }}
+                      </option>
+                    </select>
+                  </td>
+                  <td>
+                    <button (click)="Action(item)" class="btn btn-primary " data-title="Edit" data-toggle="modal"
+                      data-target="#edit"> <span class="fa fa-edit"></span></button>
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="3">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+            <br /><br />
+          </div>
+
+          <div *ngIf="edited">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="DepartmentName">Deparment Name</label>
+                  <input id="DepartmentName" name="DepartmentName" [(ngModel)]="this.model.DepartmentName" type="text"
+                    class="form-control" placeholder="Department Name" />
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="StudentNumbers">Status</label>
+                  <ng-select [(ngModel)]="this.model.StatusRefId">
+                    <ng-option *ngFor="let car of statusList" [value]="car.RefId">{{car.RefDescription}}</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Latest Members</h3>
+
+                    <div class="card-tools">
+                      <span class="badge badge-danger">8 New Members</span>
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+
+
+
+                  <div class="card-body p-0">
+                    <ul class="users-list clearfix">
+                      <li *ngFor="let item of this.checkedSecutiryGroups ; let i = index;">
+
+
+                        <div class="form-check form-check-inline">
+                          <input id="SecurityGroupName{{ i }}" name="SecurityGroupName{{ i }}" type="checkbox"
+                          [(ngModel)]="item.Checked"    >
+                          <label for="SecurityGroupName{{ i }}">{{item.SecurityGroupName}}</label>
+                        </div>
+                        <!-- <input
+            type="checkbox"
+            [checked]="!item.SecurityGroup.checked"
+             /> -->
+
+
+                      </li>
+
+                    </ul>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="btn-group">
+                <button type="button" (click)="Save()" class="btn btn-primary save_button">
+                  <span class="fa fa-save"></span>
+                </button>
+                <button type="button" (click)="this.router.navigate(['approvalGroupsUsers']);" class="btn btn-primary back_button">
+                  <span class="fa fa-arrow-left"></span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

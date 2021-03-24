@@ -174,17 +174,17 @@
             <!-- Add icons to the links using the .nav-icon class
                  with font-awesome or any other icon font library -->
 
-                 <li class="nav-item  ">
-                  <a routerLink="home" class="nav-link  ">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>
-                      Home
-                    </p>
-                  </a>
+            <li class="nav-item  ">
+              <a routerLink="home" class="nav-link  ">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Home
+                </p>
+              </a>
 
-                </li>
+            </li>
             <li class="nav-item menu-open">
-              <a   class="nav-link active">
+              <a class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   PO
@@ -202,7 +202,7 @@
               </ul>
             </li>
             <li class="nav-item menu-open">
-              <a   class="nav-link active">
+              <a class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Admin
@@ -216,10 +216,22 @@
                     <p>approvalGroups </p>
                   </a>
                 </li>
-     <li class="nav-item">
+                <li class="nav-item">
                   <a routerLink="approvalGroupsUsers" class="nav-link active">
 
                     <p>approvalGroupsUsers </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a routerLink="departments" class="nav-link active">
+
+                    <p>departments </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a routerLink="masterData" class="nav-link active">
+
+                    <p>masterData </p>
                   </a>
                 </li>
               </ul>
@@ -235,10 +247,10 @@
     </aside>
     <app-confirm-dialog></app-confirm-dialog>
     <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper" >
-       <section class="content">
-        <div class="container-fluid  "  >
-<br />
+    <div class="content-wrapper">
+      <section class="content">
+        <div class="container-fluid  ">
+          <br />
           <router-outlet> </router-outlet>
 
           <!-- /.row (main row) -->

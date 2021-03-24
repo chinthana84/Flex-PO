@@ -23,9 +23,9 @@ export class ApprovalUsersComponent implements OnInit {
   approvalGroupID: number;
   selectedUserid: number;
 
-  selectedApprovalGroup: ApprovalGroupsDTO = {};
+ // selectedApprovalGroup: ApprovalGroupsDTO = {};
 
-  constructor(private commonService: CommonService, public route: ActivatedRoute, private toasterService: ToastrService, private router: Router, private http: HttpClient, private activatedRoute: ActivatedRoute, private gridService: GridService, private confirmDialogService: ConfirmDialogService) { }
+  constructor(private commonService: CommonService, public route: ActivatedRoute, private toasterService: ToastrService, public router: Router, private http: HttpClient, private activatedRoute: ActivatedRoute, private gridService: GridService, private confirmDialogService: ConfirmDialogService) { }
 
   ngOnInit() {
     this.http
@@ -48,15 +48,15 @@ export class ApprovalUsersComponent implements OnInit {
   }
 
   changeApprovalGroup(obj: any) {
-    debugger
-    console.log(this.selectedApprovalGroup)
-    // this.http
-    //   .get<UserDetails[]>(`${environment.APIEndpoint}/Admin/GetApprovalGroupsByID/` + this.approvalGroupID)
-    //   .subscribe((data) => {
-    //     this.userDetails = data;
-    //   }, (error) => {
-    //     this.confirmDialogService.messageBox(environment.APIerror)
-    //   });
+
+    this.http
+      .get<ApprovalGroupsDTO>(`${environment.APIEndpoint}/Admin/GetApprovalGroupsByID/` + this.approvalGroupID)
+      .subscribe((data) => {
+        debugger
+        this.model = data;
+      }, (error) => {
+        this.confirmDialogService.messageBox(environment.APIerror)
+      });
 
   }
 
@@ -68,8 +68,8 @@ export class ApprovalUsersComponent implements OnInit {
     obj.ApprovalGroupId = this.approvalGroupID;
     obj.guid = this.commonService.newGuid();
 
-    obj.UserDetailsDTO = {};
-    obj.UserDetailsDTO = this.userDetails.filter(r => r.UserId == obj.UserId)[0];
+    obj.User = {};
+    obj.User = this.userDetails.filter(r => r.UserId == obj.UserId)[0];
 
 
     if (this.model.ApprovalGroupUsers == undefined) {
@@ -77,6 +77,26 @@ export class ApprovalUsersComponent implements OnInit {
     }
 
     this.model.ApprovalGroupUsers.push(obj);
+
+  }
+
+  deleteApprovalUser(obj:ApprovalGroupUsersDTO){
+    debugger
+
+    this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
+
+      if (obj.ApprovalGroupUserId>0){
+        this.model.ApprovalGroupUsers=this.model.ApprovalGroupUsers.filter(r=> r.ApprovalGroupUserId != obj.ApprovalGroupUserId);
+      }
+      else{
+        this.model.ApprovalGroupUsers=this.model.ApprovalGroupUsers.filter(r=> r.guid != obj.guid);
+      }
+
+
+    },
+      function () { })
+
+
 
   }
 
@@ -90,8 +110,8 @@ export class ApprovalUsersComponent implements OnInit {
         }
         else {
           this.toasterService.show("SSS");
-          this.router.navigate(['venue']);
-          
+          this.router.navigate(['approvalGroupsUsers']);
+
         }
       }, (error) => {
 

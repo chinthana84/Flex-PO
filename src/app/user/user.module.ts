@@ -9,6 +9,8 @@ import { FormsModule } from "@angular/forms";
 import { MySharedModule } from "../myShared/my-shared.module";
 import { ApprovalUsersComponent } from "./admin/approval-users/approval-users.component";
 import { NgSelectModule } from "@ng-select/ng-select";
+import { DepartmetnsComponent } from './admin/departmetns/departmetns.component';
+import { RefTablesComponent } from './admin/ref-tables/ref-tables.component';
 
 const routes: Routes = [
   {
@@ -19,6 +21,15 @@ const routes: Routes = [
   },
   {
     path: "approvalGroupsUsers", data: { titleKey: "approvalGroupsUsers" }, component: ApprovalUsersComponent,
+  }
+  ,
+  {
+    path: "masterData", data: { titleKey: "masterData" }, component: RefTablesComponent,
+  }
+  ,
+  {
+    path: "departments", data: { titleKey: "departments" }, component: DepartmetnsComponent,
+       children: [{ path: 'edit', component: DepartmetnsComponent }]
   },
   {
     path: "home", data: { titleKey: "request" }, component: HomeComponent,
@@ -31,6 +42,8 @@ const routes: Routes = [
     HomeComponent,
     ApprovalComponent,
     ApprovalUsersComponent,
+    DepartmetnsComponent,
+    RefTablesComponent,
   ],
   imports: [
     CommonModule,

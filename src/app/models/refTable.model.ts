@@ -27,6 +27,57 @@ export   class ApprovalGroupUsersDTO
     public   UserId ?:number=0;
 
     public    ApprovalGroup?:ApprovalGroupsDTO;
-    public   UserDetailsDTO ?: UserDetails;
+    public   User ?: UserDetails;
     public guid?:string="";
+}
+
+
+export   class VwGetRefDistinctDTO
+{
+    public   RefTableName ?:string="";
+}
+
+
+export class DepWrapper
+{
+    public dep?:DepartmentsDTO    ;
+    public   lstSecutiryGropp ?:SecurityGroupsDTO[];
+}
+
+export   class SecurityGroupsDTO
+{
+    public   SecurityGroupId ?:number=0;
+    public   SecurityGroupName?:string=""
+    public   StatusRefId ?:number=0;
+
+    public   StatusRef?:RefTableDTO;
+
+     public  DepartmentsSecurityGroups ?:DepartmentsSecurityGroupsDTO[]=[];
+
+     public Checked?:boolean=true;
+}
+
+
+export   class DepartmentsSecurityGroupsDTO
+{
+    public   DepartmentsSecurityGroupsId ?:number=0;
+    public   DepartmentId ?:number=0;
+    public   SecurityGroupId ?:number=0;
+
+    public   Department?:DepartmentsDTO ={}
+    public   SecurityGroup?: SecurityGroupsDTO={}
+
+    public checked?:boolean=true;
+}
+
+
+export   class DepartmentsDTO
+{
+
+    public   DepartmentId?:number=0;
+    public   DepartmentName ?:string="";
+    public   StatusRefId ?:number=0;
+
+    public    StatusRef?:RefTableDTO={};
+    public   DepartmentsSecurityGroups?: DepartmentsSecurityGroupsDTO[]=[];
 }

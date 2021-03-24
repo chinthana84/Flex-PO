@@ -12,5 +12,6 @@ export class GridOptions{
   }
 
   export enum GridType {
-    ApprovalGroups=1
+    ApprovalGroups=1,
+    Departments=2
   }
