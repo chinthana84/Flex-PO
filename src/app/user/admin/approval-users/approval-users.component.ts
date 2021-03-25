@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
-import { ApprovalGroupsDTO, ApprovalGroupUsersDTO } from 'src/app/models/refTable.model';
+import { ApprovalGroupsDTO, ApprovalGroupUsersDTO, SecurityGroupsDTO, SecurityGroupsUserDetailsDTO } from 'src/app/models/refTable.model';
 import { UserDetails } from 'src/app/models/secutiry.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { CommonService } from 'src/app/myShared/services/common.service';
@@ -17,13 +17,13 @@ import { environment } from 'src/environments/environment';
 export class ApprovalUsersComponent implements OnInit {
 
   model: ApprovalGroupsDTO = {};
-
+  securityGroupsUsers:SecurityGroupsUserDetailsDTO[]=[];
+  securityGroups: SecurityGroupsDTO[] = [];
   approvalGroups: ApprovalGroupsDTO[] = [];
-  userDetails: UserDetails[] = [];
-  approvalGroupID: number;
-  selectedUserid: number;
 
- // selectedApprovalGroup: ApprovalGroupsDTO = {};
+  approvalGroupID: number;
+ 
+  selectedSG:number;
 
   constructor(private commonService: CommonService, public route: ActivatedRoute, private toasterService: ToastrService, public router: Router, private http: HttpClient, private activatedRoute: ActivatedRoute, private gridService: GridService, private confirmDialogService: ConfirmDialogService) { }
 
@@ -36,15 +36,27 @@ export class ApprovalUsersComponent implements OnInit {
         this.confirmDialogService.messageBox(environment.APIerror)
       });
 
-    this.http
-      .get<UserDetails[]>(`${environment.APIEndpoint}/Admin/GetAllUsers`)
+
+
+      this.http
+      .get<SecurityGroupsDTO[]>(`${environment.APIEndpoint}/Admin/GetAllSecurityGroups`)
       .subscribe((data) => {
-        this.userDetails = data;
+        this.securityGroups = data;
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror)
       });
+  }
 
+  GetUsersBySG(selectedSG:number){
 
+    this.http
+      .get<SecurityGroupsUserDetailsDTO[]>(`${environment.APIEndpoint}/Admin/GetUserDetailsBySecurityGroupID/` + this.selectedSG)
+      .subscribe((data) => {
+debugger
+        this.securityGroupsUsers = data;
+      }, (error) => {
+        this.confirmDialogService.messageBox(environment.APIerror)
+      });
   }
 
   changeApprovalGroup(obj: any) {
@@ -52,7 +64,7 @@ export class ApprovalUsersComponent implements OnInit {
     this.http
       .get<ApprovalGroupsDTO>(`${environment.APIEndpoint}/Admin/GetApprovalGroupsByID/` + this.approvalGroupID)
       .subscribe((data) => {
-        debugger
+
         this.model = data;
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror)
@@ -60,16 +72,16 @@ export class ApprovalUsersComponent implements OnInit {
 
   }
 
-  AddUser() {
+  AddUser(obj:SecurityGroupsUserDetailsDTO) {
 
+debugger
+    // let obj = new ApprovalGroupUsersDTO();
+    // obj.UserId = this.selectedUserid;
+    // obj.ApprovalGroupId = this.approvalGroupID;
+      obj.guid = this.commonService.newGuid();
 
-    let obj = new ApprovalGroupUsersDTO();
-    obj.UserId = this.selectedUserid;
-    obj.ApprovalGroupId = this.approvalGroupID;
-    obj.guid = this.commonService.newGuid();
-
-    obj.User = {};
-    obj.User = this.userDetails.filter(r => r.UserId == obj.UserId)[0];
+    // obj.User = {};
+    // obj.User = this.userDetails.filter(r => r.UserId == obj.UserId)[0];
 
 
     if (this.model.ApprovalGroupUsers == undefined) {
@@ -81,10 +93,10 @@ export class ApprovalUsersComponent implements OnInit {
   }
 
   deleteApprovalUser(obj:ApprovalGroupUsersDTO){
-    debugger
+
 
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-
+debugger
       if (obj.ApprovalGroupUserId>0){
         this.model.ApprovalGroupUsers=this.model.ApprovalGroupUsers.filter(r=> r.ApprovalGroupUserId != obj.ApprovalGroupUserId);
       }

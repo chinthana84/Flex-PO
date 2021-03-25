@@ -9,15 +9,20 @@
       </div>
       <div class="card-body">
         <div class="tab-content p-0">
-
           <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-6">
               <div class="form-group">
                 <label for="StudentNumbers">Users</label>
                 <ng-select [(ngModel)]="selectedRef" (change)="getRefTable()">
                   <ng-option *ngFor="let car of this.distnctRef" [value]="car.RefTableName">{{car.RefTableName}}
                   </ng-option>
                 </ng-select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="Reference">Search by name</label>
+                <input  [disabled]="this.selectedRef.length==0" [(ngModel)]="this.searchDescription" id="Referenceasdfsadf" name="Referenceasdfsadf" type="text" class="form-control" placeholder="Reference" />
               </div>
             </div>
           </div>
@@ -27,12 +32,12 @@
               <thead>
                 <th>Name</th>
                 <th>
-                  <button class="btn btn-primary " (click)="Add()">
+                  <button class="btn btn-primary " [disabled]="this.selectedRef.length==0" (click)="Add()">
                     <span class="fa fa-plus"></span></button>
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let item of this.model; let i = index;" class="table-hover">
+                <tr *ngFor="let item of this.model | searchpipe: this.searchDescription; let i = index;" class="table-hover">
 
                   <td>
                     <input [(ngModel)]="item.RefDescription" id="RefDescription{{ i }}" name="RefDescription{{ i }}" class="form-control"

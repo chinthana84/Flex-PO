@@ -8,13 +8,13 @@ import { DialogMessage } from './confirm-dialog.component';
   private subject = new Subject<DialogMessage>();
 
   confirmThis(message: string, yesFn: () => void, noFn: () => void): any {
-    debugger
+
       this.setConfirmation(message, yesFn, noFn,"confirm");
   }
 
 
   setConfirmation(message: string, yesFn: () => void, noFn: () => void,msgtype:string): any {
-    debugger
+     
       const that = this;
       this.subject.next({
           type: msgtype,

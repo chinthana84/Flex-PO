@@ -11,7 +11,7 @@
         <div class="tab-content p-0">
 
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="StudentNumbers">Approval Groups</label>
                 <ng-select [(ngModel)]="approvalGroupID" (change)="changeApprovalGroup(approvalGroupID)">
@@ -24,63 +24,96 @@
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
+                <label for="StudentNumbers">Securty Groups</label>
+                <ng-select [(ngModel)]="selectedSG"  (change)="GetUsersBySG(selectedSG)">
+                  <ng-option *ngFor="let car of this.securityGroups" [value]="car.SecurityGroupId">
+                    {{car.SecurityGroupName}}</ng-option>
+                </ng-select>
+              </div>
+            </div>
+            <!-- <div class="col-md-4">
+              <div class="form-group">
                 <label for="StudentNumbers">Users</label>
                 <ng-select [(ngModel)]="selectedUserid">
                   <ng-option *ngFor="let car of userDetails" [value]="car.UserId">{{car.UserName}}</ng-option>
                 </ng-select>
               </div>
             </div>
-
             <div class="col-md-2">
               <label for="StudentNumbers">Add Users</label><br />
               <button (click)="AddUser()" class="btn btn-primary ">
                 <span class="fa fa-plus"></span></button>
-            </div>
+            </div> -->
           </div>
 
           <div class="row">
-            <table class="table ">
-              <thead>
-                <th>Name</th>
-
-                <th>
-
-                </th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of this.model.ApprovalGroupUsers; let i = index;" class="table-hover">
-                  <td>
-                    {{item.User?.UserName}}
-                  </td>
-                  <td>
-                    <button class="btn btn-primary " (click)="deleteApprovalUser(item)">
-                      <span class="fa fa-trash"></span></button>
-                  </td>
-                </tr>
-                <tr *ngIf="this.model.ApprovalGroupUsers?.length == 0 || this.model.ApprovalGroupUsers == undefined">
-                  <td class="datanotfound" colspan="2">Data not found</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-
-          <div class="row">
-            <div class="btn-group">
-              <button type="button" (click)="Save()" class="btn btn-primary save_button">
-                <span class="fa fa-save"></span>
-              </button>
-              <button type="button" (click)="this.router.navigate(['approvalGroupsUsers']);" class="btn btn-primary back_button">
-                <span class="fa fa-arrow-left"></span>
-              </button>
+            <div class="col-md-6">
+              <table class="table ">
+                <thead>
+                  <th>Name</th>
+                  <th>
+                  </th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of this.securityGroupsUsers; let i = index;" class="table-hover">
+                    <td>
+                      {{item.User?.UserName}}
+                    </td>
+                    <td>
+                      <button class="btn btn-primary " (click)="AddUser(item)">
+                        <span class="fa fa-arrow-right"></span></button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="this.model.ApprovalGroupUsers?.length == 0 || this.model.ApprovalGroupUsers == undefined">
+                    <td class="datanotfound" colspan="2">Data not found</td>
+                  </tr>
+                </tbody>
+              </table>
             </div>
+            <div class="col-md-6">
+              <table class="table ">
+                <thead>
+                  <th>Name</th>
+                  <th>
+                  </th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of this.model.ApprovalGroupUsers; let i = index;" class="table-hover">
+                    <td>
+                      {{item.User?.UserName}}
+                    </td>
+                    <td>
+                      <button class="btn btn-danger " (click)="deleteApprovalUser(item)">
+                        <span class="fa fa-trash"></span></button>
+                    </td>
+                  </tr>
+                  <tr *ngIf="this.model.ApprovalGroupUsers?.length == 0 || this.model.ApprovalGroupUsers == undefined">
+                    <td class="datanotfound" colspan="2">Data not found</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
           </div>
+
+
 
         </div>
+      </div>
+
+      <div class="card-footer">
+
+          <div class="btn-group">
+            <button type="button" (click)="Save()" class="btn btn-primary save_button">
+              <span class="fa fa-save"></span>
+            </button>
+            <button type="button" (click)="this.router.navigate(['approvalGroupsUsers']);"
+              class="btn btn-primary back_button">
+              <span class="fa fa-arrow-left"></span>
+            </button>
+          </div>
+
       </div>
     </div>
   </section>
 </div>
-
-
-
-

@@ -20,7 +20,7 @@ export class ConfirmDialogComponent implements OnInit {
      *   triggered when we call this from any other component
      */
     this.confirmDialogService.getMessage().subscribe(message => {
-      debugger
+       
       this.message = message;
 
     });

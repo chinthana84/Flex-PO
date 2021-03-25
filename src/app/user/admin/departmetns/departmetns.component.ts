@@ -57,7 +57,7 @@ export class DepartmetnsComponent implements OnInit {
       forkJoin([a, b]).subscribe(results => {
         this.statusList = results[0]
         this.securtyGroups = results[1];
-        debugger
+         
         if (params.id > 0) {
           let x = this.http.get<DepartmentsDTO>(`${environment.APIEndpoint}/Admin/GetDepartmentByID/` + params.id);
           let y = this.http.get<SecurityGroupsDTO[]>(`${environment.APIEndpoint}/Admin/GetAllSecurityGroupsByDeparmentid/` + params.id);

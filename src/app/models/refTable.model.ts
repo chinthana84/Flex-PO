@@ -1,5 +1,17 @@
 import { UserDetails } from "./secutiry.model";
 
+export class SecurityGroupsUserDetailsDTO
+{
+    public   SecGroupUserDetailsId ?:number=0;
+    public   UserId ?:number=0;
+    public   SecurityGroupId ?:number=0;
+    public   guid?:string="";
+
+    public  SecurityGroup?:SecurityGroupsDTO={};
+    public  User?: UserDetails={};
+
+}
+
 export class RefTableDTO {
   public   RefId ?:number=0;
   public   RefTableName ?: string = "";
