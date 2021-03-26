@@ -11,13 +11,14 @@ import { ApprovalUsersComponent } from "./admin/approval-users/approval-users.co
 import { NgSelectModule } from "@ng-select/ng-select";
 import { DepartmetnsComponent } from './admin/departmetns/departmetns.component';
 import { RefTablesComponent } from './admin/ref-tables/ref-tables.component';
+import { CommonService } from "../myShared/services/common.service";
 
 const routes: Routes = [
   {
     path: "login", data: { titleKey: "request" }, component: LoginComponent,
   },
   {
-    path: "approvalGroups", data: { titleKey: "approvalGroups" }, component: ApprovalComponent,
+    path: new CommonService().GetAllNavigations().approvalGroups, data: { titleKey: "approvalGroups" }, component: ApprovalComponent,
   },
   {
     path: "approvalGroupsUsers", data: { titleKey: "approvalGroupsUsers" }, component: ApprovalUsersComponent,

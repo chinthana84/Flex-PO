@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MyNavigations } from './grid/gridModels/gridOption.model';
 import { Login, SecurityModel } from './models/secutiry.model';
+import { CommonService } from './myShared/services/common.service';
 import { SecurityService } from './myShared/services/security.service';
 
 @Component({
@@ -11,19 +13,24 @@ import { SecurityService } from './myShared/services/security.service';
 export class AppComponent implements OnInit {
   title = 'Flex-PO';
   currentObj: SecurityModel = {}
+  myNavigations:MyNavigations;
 
-  constructor(public securityService: SecurityService,
+  constructor(public securityService: SecurityService,public commonService: CommonService,
     private router: Router) { }
 
+
+
   ngOnInit(): void {
+    debugger
+   this.myNavigations= this.commonService.GetAllNavigations()
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-        
+
       this.currentObj = r;
 
       if (this.currentObj.IsAuthenticated==false){
-        let u= localStorage.getItem("username")??"";
-        let pw = localStorage.getItem("pw")??"";
+        let u= localStorage.getItem("usernameFlex")??"";
+        let pw = localStorage.getItem("pwFlex")??"";
 
         if (u.length >0 && pw.length >0)
         {
