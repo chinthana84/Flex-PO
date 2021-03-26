@@ -51,14 +51,14 @@ export class SecurityService {
         //Now check if Authenticated is true store token in sessionStorage
         if (m.IsAuthenticated) {
           this._securityModel2.next(m);
-          localStorage.setItem("authenticated","1");
-          localStorage.setItem("todoBearerToken",m.BearerToken);
+          localStorage.setItem("authenticatedFlex","1");
+          localStorage.setItem("todoBearerTokenFlex",m.BearerToken);
           localStorage.setItem(
-            "username",
+            "usernameFlex",
             u.UserName
           )
           localStorage.setItem(
-            "pw",
+            "pwFlex",
             u.Password
           )
         } else {
@@ -69,10 +69,13 @@ export class SecurityService {
   }
 
   public logout() {
+    debugger
     this._securityModel2.next(new SecurityModel() );
-    localStorage.removeItem("todoBearerToken");
-    localStorage.removeItem("username");
-    localStorage.removeItem("pw");
+    localStorage.removeItem("todoBearerTokenFlex");
+    localStorage.removeItem("usernameFlex");
+    localStorage.removeItem("pwFlex");
+    localStorage.removeItem("usernameFlex");
+    localStorage.removeItem("authenticatedFlex");
     this.router.navigate(['login']);
   }
 

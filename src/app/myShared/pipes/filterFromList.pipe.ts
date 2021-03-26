@@ -13,7 +13,7 @@ debugger
     args = args.toLowerCase();
 
     return value.filter(function(item){
-        return item.RefDescription.startsWith(args);
+        return item.RefDescription.toLowerCase().startsWith(args);
     });
 }
 

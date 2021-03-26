@@ -22,7 +22,7 @@ export class ApprovalUsersComponent implements OnInit {
   approvalGroups: ApprovalGroupsDTO[] = [];
 
   approvalGroupID: number;
- 
+
   selectedSG:number;
 
   constructor(private commonService: CommonService, public route: ActivatedRoute, private toasterService: ToastrService, public router: Router, private http: HttpClient, private activatedRoute: ActivatedRoute, private gridService: GridService, private confirmDialogService: ConfirmDialogService) { }
@@ -52,7 +52,7 @@ export class ApprovalUsersComponent implements OnInit {
     this.http
       .get<SecurityGroupsUserDetailsDTO[]>(`${environment.APIEndpoint}/Admin/GetUserDetailsBySecurityGroupID/` + this.selectedSG)
       .subscribe((data) => {
-debugger
+
         this.securityGroupsUsers = data;
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror)
@@ -64,7 +64,7 @@ debugger
     this.http
       .get<ApprovalGroupsDTO>(`${environment.APIEndpoint}/Admin/GetApprovalGroupsByID/` + this.approvalGroupID)
       .subscribe((data) => {
-
+debugger
         this.model = data;
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror)
@@ -72,14 +72,15 @@ debugger
 
   }
 
-  AddUser(obj:SecurityGroupsUserDetailsDTO) {
+  AddUser(objx:SecurityGroupsUserDetailsDTO) {
 
 debugger
-    // let obj = new ApprovalGroupUsersDTO();
+      let obj = new ApprovalGroupUsersDTO();
     // obj.UserId = this.selectedUserid;
-    // obj.ApprovalGroupId = this.approvalGroupID;
+      obj.ApprovalGroupId = this.approvalGroupID;
       obj.guid = this.commonService.newGuid();
-
+      obj.UserId=objx.UserId;
+      obj.User=objx.User;
     // obj.User = {};
     // obj.User = this.userDetails.filter(r => r.UserId == obj.UserId)[0];
 
@@ -88,7 +89,14 @@ debugger
       this.model.ApprovalGroupUsers = [];
     }
 
-    this.model.ApprovalGroupUsers.push(obj);
+  if(  this.model.ApprovalGroupUsers.filter(r=> r.UserId == objx.UserId).length >0){
+    this.confirmDialogService.messageBox("User already exists")
+  }
+
+else{
+  this.model.ApprovalGroupUsers.push(obj);
+}
+
 
   }
 
@@ -113,8 +121,9 @@ debugger
   }
 
   Save() {
+
     this.http
-      .post<any>(`${environment.APIEndpoint}/Admin/SaveApprovalGroupUsers`, this.model.ApprovalGroupUsers, {})
+      .post<any>(`${environment.APIEndpoint}/Admin/SaveApprovalGroupUsers`, this.model, {})
       .subscribe((data) => {
         if (data.IsValid == false) {
           debugger
