@@ -8,6 +8,7 @@ import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model'
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { DepartmentsDTO, DepWrapper, RefTableDTO, SecurityGroupsDTO } from 'src/app/models/refTable.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
+import { CommonService } from 'src/app/myShared/services/common.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
@@ -38,7 +39,7 @@ export class DepartmetnsComponent implements OnInit {
   };
 
 
-  constructor(public route: ActivatedRoute, private toasterService: ToastrService, private router: Router, private http: HttpClient, private activatedRoute: ActivatedRoute, private gridService: GridService, private confirmDialogService: ConfirmDialogService) { }
+  constructor(public commonService:CommonService,  public route: ActivatedRoute, private toasterService: ToastrService, private router: Router, private http: HttpClient, private activatedRoute: ActivatedRoute, private gridService: GridService, private confirmDialogService: ConfirmDialogService) { }
 
   ngOnInit(): void {
     this.activatedRoute.queryParams.subscribe((params) => {

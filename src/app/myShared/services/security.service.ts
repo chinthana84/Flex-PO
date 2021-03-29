@@ -32,7 +32,7 @@ export class SecurityService {
     }
 
   public Login(userForm: Login): Observable<SecurityModel> {
-
+debugger
     const httpOptions = {
       headers: new HttpHeaders({
         "Content-Type": "application/json",
@@ -50,6 +50,7 @@ export class SecurityService {
       //  Object.assign(m, result);
         //Now check if Authenticated is true store token in sessionStorage
         if (m.IsAuthenticated) {
+          debugger
           this._securityModel2.next(m);
           localStorage.setItem("authenticatedFlex","1");
           localStorage.setItem("todoBearerTokenFlex",m.BearerToken);
@@ -70,12 +71,13 @@ export class SecurityService {
 
   public logout() {
     debugger
-    this._securityModel2.next(new SecurityModel() );
     localStorage.removeItem("todoBearerTokenFlex");
     localStorage.removeItem("usernameFlex");
     localStorage.removeItem("pwFlex");
     localStorage.removeItem("usernameFlex");
     localStorage.removeItem("authenticatedFlex");
+    this._securityModel2.next(new SecurityModel() );
+
     this.router.navigate(['login']);
   }
 

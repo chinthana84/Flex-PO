@@ -18,22 +18,22 @@ const routes: Routes = [
     path: "login", data: { titleKey: "request" }, component: LoginComponent,
   },
   {
-    path: new CommonService().GetAllNavigations().approvalGroups, data: { titleKey: "approvalGroups" }, component: ApprovalComponent,
+    path: new CommonService().GetAllNavigations().approvalGroups, data: { titleKey: "ApprovalGroups" }, component: ApprovalComponent,
   },
   {
-    path: "approvalGroupsUsers", data: { titleKey: "approvalGroupsUsers" }, component: ApprovalUsersComponent,
+    path: "approvalGroupsUsers", data: { titleKey: "ApprovalGroupsUsers" }, component: ApprovalUsersComponent,
   }
   ,
   {
-    path: "masterData", data: { titleKey: "masterData" }, component: RefTablesComponent,
+    path: "masterData", data: { titleKey: "MasterData" }, component: RefTablesComponent,
   }
   ,
   {
-    path: "departments", data: { titleKey: "departments" }, component: DepartmetnsComponent,
-       children: [{ path: 'edit', component: DepartmetnsComponent }]
+    path: "departments", data: { titleKey: "Departments" }, component: DepartmetnsComponent,
+    children: [{ path: 'edit', component: DepartmetnsComponent }]
   },
   {
-    path: "home", data: { titleKey: "request" }, component: HomeComponent,
+    path: "home", data: { titleKey: "home" }, component: HomeComponent,
   },
 ];
 

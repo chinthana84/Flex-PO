@@ -10,6 +10,8 @@ import { SecurityService } from 'src/app/myShared/services/security.service';
 })
 export class LoginComponent implements OnInit {
   loginViewModel: Login = {};
+  user:string="";
+  paw:string=""
   constructor(private securityService: SecurityService, private router: Router) { }
 
   ngOnInit(): void {
@@ -19,7 +21,7 @@ export class LoginComponent implements OnInit {
 
   Login(): void {
     debugger
-    this.loginViewModel={UserName:'admin',Password:'a'};
+    this.loginViewModel={UserName:this.user,Password:this.paw};
     this.securityService.Login(this.loginViewModel).subscribe(
 
       (item) => {

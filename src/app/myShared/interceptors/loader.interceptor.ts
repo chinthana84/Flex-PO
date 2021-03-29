@@ -19,10 +19,10 @@ export class LoaderInterceptor implements HttpInterceptor {
       request: HttpRequest<any>,
       next: HttpHandler
     ): Observable<HttpEvent<any>> {
-       
+
       this.loaderService.show();
 
-      if (localStorage.getItem("todoBearerToken")) {
+      if (localStorage.getItem("todoBearerTokenFlex")) {
 
         const headerSettings: {[name: string]: string | string[]; } = {};
 
@@ -49,7 +49,7 @@ export class LoaderInterceptor implements HttpInterceptor {
 
         const newHeader = new HttpHeaders(headerSettings);
 
-        headerSettings['Authorization'] = 'Bearer ' + localStorage.getItem("todoBearerToken");
+        headerSettings['Authorization'] = 'Bearer ' + localStorage.getItem("todoBearerTokenFlex");
         request = request.clone({
 
           setHeaders:  headerSettings
