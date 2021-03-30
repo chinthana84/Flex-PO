@@ -1,0 +1,116 @@
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+
+      <div class="card-body">
+        <div class="tab-content p-0">
+
+          <div *ngIf="!edited">
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+
+
+            <table class="table  ">
+              <thead>
+                <th>Name</th>
+                <th>Unit</th>
+                <th>Unit Price</th>
+                <th>Status</th>
+
+                <th>
+                  <button (click)="Action(null)" class="btn btn-primary ">
+                    <span class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
+                  <td>{{ item.Name }}</td>
+                  <td>{{ item.Unit }}</td>
+                  <td>{{ item.UnitPrice }}</td>
+                  <td>{{ item.Status }}</td>
+
+                  <td>
+                    <div class="btn-group">
+                      <button (click)="Action(item)" class="btn btn-primary  ">
+                        <span class="fa fa-edit"></span></button>
+                      <button class="btn btn-primary" (click)="this.LoadReport()"> <span class="fa fa-print"></span></button>
+                    </div>
+
+
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <br />
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+          </div>
+
+          <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
+
+
+
+
+            <div class="row">
+               <div class="col-md-6">
+                 <div class="form-group">
+                   <label for="ItemDescription">ItemDescription</label>
+                   <input id="ItemDescription" name="ItemDescription" [(ngModel)]="this.model.ItemDescription" type="text" class="form-control"
+                     placeholder="ItemDescription" />
+                 </div>
+               </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="UnitId">Status</label>
+                    <ng-select name="UnitId" [(ngModel)]="this.model.UnitId">
+                      <ng-option *ngFor="let car of this.unitList" [value]="car.RefId">{{car.RefDescription}}</ng-option>
+                    </ng-select>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <label for="UnitPrice">UnitPrice</label>
+                    <input id="UnitPrice" name="UnitPrice" [(ngModel)]="this.model.UnitPrice" type="text" class="form-control"
+                      placeholder="UnitPrice" numeric decimals="2" />
+                  </div>
+                </div>
+               </div>
+
+             <div class="row">
+               <div class="col-md-4">
+                 <div class="form-group">
+                   <label for="xx">Status</label>
+                   <ng-select name="xx" [(ngModel)]="this.model.StatusId">
+                     <ng-option *ngFor="let car of this.statusList" [value]="car.RefId">{{car.RefDescription}}</ng-option>
+                   </ng-select>
+                 </div>
+               </div>
+             </div>
+
+
+             <div class="btn-group">
+               <button type="submit" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
+
+
+               <button type="button" (click)="router.navigate(['items']);" class="btn btn-primary back_button"> <span
+                   class="fa fa-arrow-left"></span> </button>
+             </div>
+           </form>
+
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+

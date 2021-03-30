@@ -64,7 +64,7 @@ export class ApprovalUsersComponent implements OnInit {
     this.http
       .get<ApprovalGroupsDTO>(`${environment.APIEndpoint}/Admin/GetApprovalGroupsByID/` + this.approvalGroupID)
       .subscribe((data) => {
-debugger
+
         this.model = data;
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror)
@@ -74,7 +74,7 @@ debugger
 
   AddUser(objx:SecurityGroupsUserDetailsDTO) {
 
-debugger
+ 
       let obj = new ApprovalGroupUsersDTO();
     // obj.UserId = this.selectedUserid;
       obj.ApprovalGroupId = this.approvalGroupID;

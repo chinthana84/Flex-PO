@@ -54,7 +54,7 @@
                 Alexander Pierce
               </p>
             </li>
- 
+
             <li class="user-footer">
 
               <div class="pull-right">
@@ -173,10 +173,7 @@
 
 
         <nav *ngIf="this.currentObj.IsAuthenticated" class="mt-2">
-          <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <!-- Add icons to the links using the .nav-icon class
-                 with font-awesome or any other icon font library -->
-
+          <ul class="sidemenuss nav nav-pills nav-sidebar flex-column  "   data-widget="treeview" role="menu" data-accordion="false">
             <li class="nav-item  ">
               <a routerLink="home" class="nav-link  ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -204,7 +201,7 @@
 
               </ul>
             </li>
-            <li class="nav-item menu-open">
+            <li class="nav-item  ">
               <a class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
@@ -230,6 +227,18 @@
                   <a routerLink="{{  this.commonService.GetAllNavigations().departments }}" class="nav-link active">
 
                     <p>departments </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link active">
+
+                    <p>Supplier </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().items }}" class="nav-link active">
+
+                    <p>Item </p>
                   </a>
                 </li>
                 <li class="nav-item">
@@ -287,6 +296,16 @@
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
   <script>
     $.widget.bridge('uibutton', $.ui.button)
+
+    $(function() {
+  var box = $('.sidemenuss li');
+  var button = $('.sidemenuss li  ');
+  button.on('click', function(){
+    alert('')
+    box.toggleClass('active');
+  });
+});
+
   </script>
   <!-- Bootstrap 4 -->
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -311,7 +330,7 @@
   <!-- AdminLTE App -->
   <script src="assets/plugins/dist/js/adminlte.js"></script>
   <!-- AdminLTE for demo purposes -->
-  <script src="assets/plugins/dist/js/demo.js"></script>
+  <!-- <script src="assets/plugins/dist/js/demo.js"></script> -->
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-  <script src="assets/plugins/dist/js/pages/dashboard.js"></script>
+  <!-- <script src="assets/plugins/dist/js/pages/dashboard.js"></script> -->
 </body>

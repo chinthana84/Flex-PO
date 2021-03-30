@@ -1,39 +1,63 @@
-import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { RouterModule, Routes } from "@angular/router";
-import { LoginComponent } from "./login/login.component";
-import { HomeComponent } from "./home/home.component";
-import { ApprovalComponent } from "./admin/approval/approval.component";
-import { GridModule } from "../grid/grid.module";
-import { FormsModule } from "@angular/forms";
-import { MySharedModule } from "../myShared/my-shared.module";
-import { ApprovalUsersComponent } from "./admin/approval-users/approval-users.component";
-import { NgSelectModule } from "@ng-select/ng-select";
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule, Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
+import { HomeComponent } from './home/home.component';
+import { ApprovalComponent } from './admin/approval/approval.component';
+import { GridModule } from '../grid/grid.module';
+import { FormsModule } from '@angular/forms';
+import { MySharedModule } from '../myShared/my-shared.module';
+import { ApprovalUsersComponent } from './admin/approval-users/approval-users.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { DepartmetnsComponent } from './admin/departmetns/departmetns.component';
 import { RefTablesComponent } from './admin/ref-tables/ref-tables.component';
-import { CommonService } from "../myShared/services/common.service";
+import { CommonService } from '../myShared/services/common.service';
+import { SupplierComponent } from './admin/supplier/supplier.component';
+import { ItemsComponent } from './admin/items/items.component';
 
 const routes: Routes = [
   {
-    path: "login", data: { titleKey: "request" }, component: LoginComponent,
+    path: 'login',
+    data: { titleKey: 'request' },
+    component: LoginComponent,
   },
   {
-    path: new CommonService().GetAllNavigations().approvalGroups, data: { titleKey: "ApprovalGroups" }, component: ApprovalComponent,
+    path: new CommonService().GetAllNavigations().approvalGroups,
+    data: { titleKey: 'ApprovalGroups' },
+    component: ApprovalComponent,
   },
   {
-    path: "approvalGroupsUsers", data: { titleKey: "ApprovalGroupsUsers" }, component: ApprovalUsersComponent,
-  }
-  ,
-  {
-    path: "masterData", data: { titleKey: "MasterData" }, component: RefTablesComponent,
-  }
-  ,
-  {
-    path: "departments", data: { titleKey: "Departments" }, component: DepartmetnsComponent,
-    children: [{ path: 'edit', component: DepartmetnsComponent }]
+    path: 'approvalGroupsUsers',
+    data: { titleKey: 'ApprovalGroupsUsers' },
+    component: ApprovalUsersComponent,
   },
   {
-    path: "home", data: { titleKey: "home" }, component: HomeComponent,
+    path: 'masterData',
+    data: { titleKey: 'MasterData' },
+    component: RefTablesComponent,
+  },
+  {
+    path: 'departments',
+    data: { titleKey: 'Departments' },
+    component: DepartmetnsComponent,
+    children: [{ path: 'edit', component: DepartmetnsComponent }],
+  },
+  {
+    path: new CommonService().GetAllNavigations().supplier,
+    data: { titleKey: 'Supplier' },
+    component: SupplierComponent,
+    children: [{ path: 'edit', component: SupplierComponent }],
+  },
+  {
+    path: new CommonService().GetAllNavigations().items,
+    data: { titleKey: 'Item' },
+    component: ItemsComponent,
+    children: [{ path: 'edit', component: ItemsComponent }],
+  },
+  {
+    path: 'home',
+    data: { titleKey: 'home' },
+    component: HomeComponent,
   },
 ];
 
@@ -45,6 +69,8 @@ const routes: Routes = [
     ApprovalUsersComponent,
     DepartmetnsComponent,
     RefTablesComponent,
+    SupplierComponent,
+    ItemsComponent,
   ],
   imports: [
     CommonModule,
@@ -55,4 +81,4 @@ const routes: Routes = [
     MySharedModule,
   ],
 })
-export class UserModule { }
+export class UserModule {}

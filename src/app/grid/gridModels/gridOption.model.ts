@@ -13,7 +13,9 @@ export class GridOptions{
 
   export enum GridType {
     ApprovalGroups=1,
-    Departments=2
+    Departments=2,
+    Supplier=3,
+    Item=4
   }
 
   export class MyNavigations {
@@ -22,6 +24,8 @@ export class GridOptions{
     public approvalGroupsUsers: string="approvalGroupsUsers";
     public departments: string="departments";
     public masterData: string="masterData";
+    public supplier:string="supplier";
+   public items:string="items";
    }
 
 

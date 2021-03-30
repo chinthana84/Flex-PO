@@ -73,9 +73,7 @@ export class DepartmetnsComponent implements OnInit {
         else if(params.id==0){
           let y = this.http.get<SecurityGroupsDTO[]>(`${environment.APIEndpoint}/Admin/GetAllSecurityGroupsByDeparmentid/` + params.id);
           forkJoin([y]).subscribe((data) => {
-            debugger
-
-            this.checkedSecutiryGroups = data[0];
+              this.checkedSecutiryGroups = data[0];
             this.model={};
           }, (error) => {
             this.confirmDialogService.messageBox(environment.APIerror)

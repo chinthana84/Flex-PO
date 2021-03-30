@@ -1,0 +1,159 @@
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+
+      <div class="card-body">
+        <div class="tab-content p-0">
+
+          <div *ngIf="!edited">
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+
+            <table class="table  ">
+              <thead>
+                <th>SupplierName</th>
+                <th>SupplierAddress</th>
+                <th>City</th>
+                <th>Contact</th>
+                <th>Status</th>
+                <th>
+                  <button (click)="Action(null)" class="btn btn-primary ">
+                    <span class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
+
+                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.SupplierAddress }}</td>
+                  <td>{{ item.City }}</td>
+                  <td>{{ item.Contact }}</td>
+                  <td>{{ item.RefDescription }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button (click)="Action(item)" class="btn btn-primary  ">
+                        <span class="fa fa-edit"></span></button>
+                      <button class="btn btn-primary" (click)="this.LoadReport()"> <span class="fa fa-print"></span></button>
+                    </div>
+
+
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <br />
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+          </div>
+
+          <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
+
+
+
+
+           <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="SupplierName">Supplier Name</label>
+                  <input id="SupplierName" name="SupplierName" [(ngModel)]="model.SupplierName" type="text" class="form-control"
+                    placeholder="SupplierName" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="Contact">Contact  </label>
+                  <input id="Contact" name="Contact" [(ngModel)]="model.Contact" type="text" class="form-control"
+                    placeholder="Contact" />
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="SupplierAddress">SupplierAddress</label>
+                  <input id="SupplierAddress" name="CompanyName" [(ngModel)]="model.SupplierAddress" type="text" class="form-control"
+                    placeholder="SupplierAddress" />
+                </div>
+              </div>
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="City">City</label>
+                  <input id="City" name="City" [(ngModel)]="model.City" type="text" class="form-control"
+                    placeholder="City" />
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="State">State</label>
+                  <input id="State" name="State" [(ngModel)]="model.State" type="text" class="form-control" placeholder="State" />
+                </div>
+              </div>
+
+              <div class="col-md-2">
+                <div class="form-group">
+                  <label for="Postcode">Postcode</label>
+                  <input id="Postcode" name="Postcode" [(ngModel)]="model.Postcode" type="text" class="form-control" placeholder="Postcode" />
+                </div>
+              </div>
+            </div>
+
+
+              <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="Email">Email</label>
+                  <input id="Email" name="Email" [(ngModel)]="model.Email" type="text" class="form-control"
+                    placeholder="Email" />
+                </div>
+              </div>
+
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="Phone">Phone</label>
+                  <input id="Phone" name="Phone" [(ngModel)]="model.Phone" type="text" class="form-control" placeholder="Phone" />
+                </div>
+              </div>
+
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="Fax">Fax</label>
+                  <input id="Fax" name="Fax" [(ngModel)]="model.Fax" type="text" class="form-control" placeholder="Fax" />
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="xx">Status</label>
+                  <ng-select name="xx" [(ngModel)]="this.model.SupplierStatusId">
+                    <ng-option *ngFor="let car of this.statusList" [value]="car.RefId">{{car.RefDescription}}</ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="btn-group">
+              <button type="submit" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
+
+
+              <button type="button" (click)="router.navigate(['supplier']);" class="btn btn-primary back_button"> <span
+                  class="fa fa-arrow-left"></span> </button>
+            </div>
+          </form>
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
