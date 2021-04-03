@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { PurchaseRequestComponent } from './purchase-request/purchase-request.component';
 import { RouterModule, Routes } from '@angular/router';
 import { GridModule } from '../grid/grid.module';
+import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 const routes: Routes = [
   {
@@ -17,6 +18,7 @@ const routes: Routes = [
   imports: [
     CommonModule,
     GridModule,
+    NgbModule,
     RouterModule.forChild(routes)
   ]
 })

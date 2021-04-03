@@ -15,6 +15,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoaderInterceptor } from './myShared/interceptors/loader.interceptor';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './user/login/login.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -31,11 +32,14 @@ import { LoginComponent } from './user/login/login.component';
     PoModule,
     MySharedModule,
     ToastrModule.forRoot(),
-
+    NgbModule,
     RouterModule.forRoot([
-      { path: '', component: LoginComponent } 
+      { path: '', component: LoginComponent }
     ]),
+
+
   ],
+  exports:[],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
   ],

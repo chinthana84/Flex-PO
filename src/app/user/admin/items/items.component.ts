@@ -33,7 +33,7 @@ export class ItemsComponent implements OnInit {
       , defaultSortColumnName: "Name",
       pageNo: 1,
       searchColName: '',
-      colNames: [{ colName: "Name", colText: 'Name' } 
+      colNames: [{ colName: "Name", colText: 'Name' }
       ]
     }
   };
@@ -77,7 +77,7 @@ export class ItemsComponent implements OnInit {
           this.unitList = data[1];
           this.model=data[2];
         }, (error) => {
-          this.confirmDialogService.messageBox(environment.APIerror)
+         this.confirmDialogService.messageBox(environment.APIerror)
         });
       } else {
         this.edited = false;
@@ -91,7 +91,7 @@ export class ItemsComponent implements OnInit {
         this.gridOption.datas = data;
         this.gridOption.searchObject.saveID = 0;
       }, (error) => {
-        this.confirmDialogService.messageBox(environment.APIerror);
+       this.confirmDialogService.messageBox(environment.APIerror);
 
       });
   }
@@ -123,7 +123,7 @@ export class ItemsComponent implements OnInit {
           this.setPage(this.gridOption.searchObject);
         }
       }, (error) => {
-        this.confirmDialogService.messageBox(environment.APIerror)
+       this.confirmDialogService.messageBox(environment.APIerror)
 
         //this.errorHandler.handleError(error);
 
