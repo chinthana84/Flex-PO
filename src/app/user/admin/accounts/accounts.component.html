@@ -7,14 +7,12 @@
 
           <div *ngIf="!edited">
             <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
-
-
             <table class="table  ">
               <thead>
-                <th>Name</th>
-                <th>Unit</th>
-                <th>Unit Price</th>
-                <th>Status</th>
+                <th>AccountCode</th>
+                <th>AccountName</th>
+                <th>AccountDescription</th>
+                <th>AccountType</th>
 
                 <th>
                   <button (click)="Action(null)" class="btn btn-primary ">
@@ -24,17 +22,16 @@
               <tbody>
 
                 <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
-                  <td>{{ item.Name }}</td>
-                  <td>{{ item.Unit }}</td>
-                  <td>{{ item.UnitPrice }}</td>
-                  <td>{{ item.Status }}</td>
+                  <td>{{ item.AccountCode }}</td>
+                  <td>{{ item.AccountName }}</td>
+                  <td>{{ item.AccountDescription }}</td>
+                  <td>{{ item.AccountType }}</td>
 
                   <td>
                     <div class="btn-group">
                       <button (click)="Action(item)" class="btn btn-primary  ">
                         <span class="fa fa-edit"></span></button>
-                      <button class="btn btn-primary" (click)="this.LoadReport()"> <span
-                          class="fa fa-print"></span></button>
+
                     </div>
 
 
@@ -51,6 +48,40 @@
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
+            <!-- public int AccountListId { get; set; }
+            public string AccountCode { get; set; }
+            public string AccountName { get; set; }
+            public string AccountDescription { get; set; }
+            public int AccountTypeId { get; set; }
+            public int AccountStatusId { get; set; } -->
+            <div class="row">
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="AccountCode">AccountCode</label>
+                  <input id="AccountCode" name="AccountCode" [(ngModel)]="model.AccountCode" type="text"
+                    class="form-control" placeholder="AccountCode" />
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label for="AccountName">AccountName </label>
+                  <input id="AccountName" name="Contact" [(ngModel)]="model.AccountName" type="text"
+                    class="form-control" placeholder="AccountName" />
+                </div>
+              </div>
+
+            </div>
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="AccountDescription">AccountDescription</label>
+                  <input id="AccountDescription" name="AccountDescription" [(ngModel)]="model.AccountDescription"
+                    type="text" class="form-control" placeholder="AccountDescription" />
+                </div>
+              </div>
+
+            </div>
 
 
 
@@ -58,41 +89,18 @@
             <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
-                  <label for="ItemDescription">ItemDescription</label>
-                  <input id="ItemDescription" name="ItemDescription" [(ngModel)]="this.model.ItemDescription"
-                    type="text" class="form-control" placeholder="ItemDescription" />
-                </div>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="UnitId">Unit</label>
-                  <ng-select [clearable]="false" name="UnitId" [(ngModel)]="this.model.UnitId">
-                    <ng-option [value]="0"> <b>Please Select </b> </ng-option>
-                    <ng-option *ngFor="let car of this.unitList" [value]="car.RefId">{{car.RefDescription}}</ng-option>
-
+                  <label for="AccountTypeId">Type</label>
+                  <ng-select name="AccountTypeId" [(ngModel)]="this.model.AccountTypeId">
+                    <ng-option *ngFor="let car of this.accountTypeList" [value]="car.RefId">{{car.RefDescription}}
+                    </ng-option>
                   </ng-select>
                 </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col-md-4">
-                <div class="form-group">
-                  <label for="UnitPrice">UnitPrice</label>
-                  <input id="UnitPrice" name="UnitPrice" [(ngModel)]="this.model.UnitPrice" type="text"
-                    class="form-control" placeholder="UnitPrice" numeric decimals="2" />
-                </div>
-              </div>
-            </div>
 
-            <div class="row">
-              <div class="col-md-4">
+              <div class="col-md-6">
                 <div class="form-group">
                   <label for="xx">Status</label>
-                  <ng-select [clearable]="false" name="xx" [(ngModel)]="this.model.StatusId">
-                    <ng-option [value]="0"> <b>Please Select </b> </ng-option>
+                  <ng-select name="xx" [(ngModel)]="this.model.AccountStatusId">
                     <ng-option *ngFor="let car of this.statusList" [value]="car.RefId">{{car.RefDescription}}
                     </ng-option>
                   </ng-select>
@@ -105,11 +113,10 @@
               <button type="submit" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
 
 
-              <button type="button" (click)="router.navigate(['items']);" class="btn btn-primary back_button"> <span
+              <button type="button" (click)="router.navigate(['AccountList']);" class="btn btn-primary back_button"> <span
                   class="fa fa-arrow-left"></span> </button>
             </div>
           </form>
-
 
 
         </div>
@@ -117,5 +124,3 @@
     </div>
   </section>
 </div>
-
-{{this.model |json}}

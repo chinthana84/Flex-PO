@@ -1,3 +1,4 @@
+import { AccountListDTO } from './../models/refTable.model';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
@@ -14,6 +15,7 @@ import { RefTablesComponent } from './admin/ref-tables/ref-tables.component';
 import { CommonService } from '../myShared/services/common.service';
 import { SupplierComponent } from './admin/supplier/supplier.component';
 import { ItemsComponent } from './admin/items/items.component';
+import { AccountsComponent } from './admin/accounts/accounts.component';
 
 const routes: Routes = [
   {
@@ -55,6 +57,12 @@ const routes: Routes = [
     children: [{ path: 'edit', component: ItemsComponent }],
   },
   {
+    path: new CommonService().GetAllNavigations().accountList,
+    data: { titleKey: 'accountList' },
+    component: AccountsComponent,
+    children: [{ path: 'edit', component: AccountsComponent }],
+  },
+  {
     path: 'home',
     data: { titleKey: 'home' },
     component: HomeComponent,
@@ -71,6 +79,7 @@ const routes: Routes = [
     RefTablesComponent,
     SupplierComponent,
     ItemsComponent,
+    AccountsComponent,
   ],
   imports: [
     CommonModule,
@@ -80,5 +89,6 @@ const routes: Routes = [
     GridModule,
     MySharedModule,
   ],
+  exports:[SupplierComponent]
 })
 export class UserModule {}

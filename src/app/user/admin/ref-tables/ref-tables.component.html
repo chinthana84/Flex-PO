@@ -31,6 +31,7 @@
             <table class="table ">
               <thead>
                 <th>Name</th>
+                <th>value2</th>
                 <th>
                   <button class="btn btn-primary " [disabled]="this.selectedRef.length==0" (click)="Add()">
                     <span class="fa fa-plus"></span></button>
@@ -44,6 +45,10 @@
                       placeholder="Description"  />
                   </td>
 
+     <td>
+                    <input [(ngModel)]="item.RefDescription2" id="RefDescription2{{ i }}" name="RefDescription2{{ i }}" class="form-control"
+                      placeholder="RefDescription2"  />
+                  </td>
 
                   <td>
                     <button (click)="Save(item)" class="btn btn-primary " >

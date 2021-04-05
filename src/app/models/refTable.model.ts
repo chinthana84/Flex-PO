@@ -16,6 +16,7 @@ export class RefTableDTO {
   public RefTableName?: string = "";
   public RefDescription?: string = "";
   public DisplayName?: string = "";
+  public   RefDescription2 ?: string = "";
 }
 
 
@@ -105,12 +106,26 @@ export class SupplierDTO
 
 export   class ItemsDTO
 {
+
+
     public   ItemId ?:number=0;
     public   ItemDescription ?: string = "";
     public    Sih?:number=0;
-    public    UnitId?:number=0;
-    public    UnitPrice?:number=0;
+    public    UnitId? :number = 0;
+    public    UnitPrice:number=0;
     public    StatusId?:number=0;
+}
+
+export class AccountListDTO
+{
+    public   AccountListId ?:number=0;
+    public   AccountCode ?: string = "";
+    public   AccountName ?: string = "";
+    public   AccountDescription?: string = "";
+    public   AccountTypeId ?:number=0;
+    public   AccountStatusId ?:number=0;
 
 
+    public    AccountStatus ?:RefTableDTO;
+    public   RefTablesDTO ?:RefTableDTO;
 }

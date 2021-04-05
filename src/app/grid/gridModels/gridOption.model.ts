@@ -11,12 +11,14 @@ export class GridOptions{
     searchID?:number=1
   }
 
-  export enum GridType {
-    ApprovalGroups=1,
-    Departments=2,
-    Supplier=3,
-    Item=4
-  }
+
+export enum GridType {
+  ApprovalGroups = 1,
+  Departments = 2,
+  Supplier = 3,
+  Item = 4,
+  AccountList=5
+}
 
   export class MyNavigations {
     public login: string="login";
@@ -26,6 +28,7 @@ export class GridOptions{
     public masterData: string="masterData";
     public supplier:string="supplier";
    public items:string="items";
+   public accountList="AccountList";
    }
 
 

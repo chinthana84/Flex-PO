@@ -1,39 +1,39 @@
-import { HttpClient } from '@angular/common/http';
+import { AccountListDTO, RefTableDTO, SupplierDTO } from './../../../models/refTable.model';
 import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { forkJoin } from 'rxjs';
 import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
-import { SupplierDTO, RefTableDTO, ItemsDTO } from 'src/app/models/refTable.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { CommonService } from 'src/app/myShared/services/common.service';
 import { environment } from 'src/environments/environment';
 import { SubSink } from 'subsink';
+import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-items',
-  templateUrl: './items.component.html',
-  styleUrls: ['./items.component.css']
+  selector: 'app-accounts',
+  templateUrl: './accounts.component.html',
+  styleUrls: ['./accounts.component.css']
 })
-export class ItemsComponent implements OnInit {
-
+export class AccountsComponent implements OnInit {
 
   private subs = new SubSink();
-  model: ItemsDTO;
+  model: AccountListDTO = {};
   edited: boolean = false;
   statusList: RefTableDTO[] = [];
-  unitList: RefTableDTO[] = [];
+  accountTypeList: RefTableDTO[] = [];
 
   gridOption: GridOptions = {
     datas: {},
     searchObject: {
-      girdId: GridType.Item
-      , SavedDBColumn: "Name"
-      , defaultSortColumnName: "Name",
+      girdId: GridType.AccountList
+      , SavedDBColumn: "ID"
+      , defaultSortColumnName: "ID",
       pageNo: 1,
       searchColName: '',
-      colNames: [{ colName: "Name", colText: 'Name' }
+      colNames: [{ colName: "AccountCode", colText: 'AccountCode' },
+      { colName: "AccountName", colText: 'AccountName' }
       ]
     }
   };
@@ -56,29 +56,40 @@ export class ItemsComponent implements OnInit {
 
       if (params.id == 0) {
         this.edited = true;
-        this.model=new ItemsDTO();
-        let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'ROW_STATUS');
-        let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'UNITS');
+        this.model = {};
 
-        forkJoin([x, y]).subscribe((data) => {
+        this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'ROW_STATUS').subscribe(
+          r => { this.statusList = r; }, (error) => {
+            this.confirmDialogService.messageBox(environment.APIerror)
+          });
+
+
+        this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'ACCOUNT_TYPES').subscribe(
+          r => { this.accountTypeList = r; }, (error) => {
+            this.confirmDialogService.messageBox(environment.APIerror)
+          });
+
+
+      } else if (params.id > 0) {
+        this.edited = true;
+
+        let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'ROW_STATUS');
+
+        let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'ACCOUNT_TYPES');
+
+        let z = this.http
+          .get<any>(`${environment.APIEndpoint}/Admin/GetAccountListByID/` + params.id);
+
+        forkJoin([x, y, z]).subscribe((data) => {
+          debugger
           this.statusList = data[0];
-          this.unitList = data[1];
+          this.accountTypeList = data[1];
+          this.model = data[2];
         }, (error) => {
           this.confirmDialogService.messageBox(environment.APIerror)
         });
 
-      } else if (params.id > 0) {
-        this.edited = true;
-        let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'ROW_STATUS');
-        let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'UNITS');
-        let z = this.http.get<ItemsDTO>(`${environment.APIEndpoint}/Admin/GetItemByID/` + params.id );
-        forkJoin([x, y,z]).subscribe((data) => {
-          this.statusList = data[0];
-          this.unitList = data[1];
-          this.model=data[2];
-        }, (error) => {
-         this.confirmDialogService.messageBox(environment.APIerror)
-        });
+
       } else {
         this.edited = false;
       }
@@ -91,7 +102,7 @@ export class ItemsComponent implements OnInit {
         this.gridOption.datas = data;
         this.gridOption.searchObject.saveID = 0;
       }, (error) => {
-       this.confirmDialogService.messageBox(environment.APIerror);
+        this.confirmDialogService.messageBox(environment.APIerror);
 
       });
   }
@@ -100,31 +111,30 @@ export class ItemsComponent implements OnInit {
   Action(item: any) {
     debugger
     if (item == undefined) {
-      this.router.navigate(["/items/edit"], { queryParams: { id: 0 } });
+      this.router.navigate(["/AccountList/edit"], { queryParams: { id: 0 } });
     } else {
-      this.router.navigate(["/items/edit"], {
-        queryParams: { id: item.ItemId },
+      this.router.navigate(["/AccountList/edit"], {
+        queryParams: { id: item.Id },
       });
     }
     this.edited = true;
   }
 
-  onSubmit(obj: ItemsDTO) {
-    debugger
+  onSubmit(obj: AccountListDTO) {
     this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/Admin/SaveItem`, obj, {}).subscribe((data) => {
+      .post<any>(`${environment.APIEndpoint}/Admin/SaveAccountList`, obj, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
 
         }
         else {
           this.toastr.success(environment.dataSaved);
-          this.router.navigate(['items']);
+          this.router.navigate(['AccountList']);
           this.gridOption.searchObject.saveID = data.SavedID;
           this.setPage(this.gridOption.searchObject);
         }
       }, (error) => {
-       this.confirmDialogService.messageBox(environment.APIerror)
+        this.confirmDialogService.messageBox(environment.APIerror)
 
         //this.errorHandler.handleError(error);
 
@@ -136,6 +146,5 @@ export class ItemsComponent implements OnInit {
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
-
 
 }
