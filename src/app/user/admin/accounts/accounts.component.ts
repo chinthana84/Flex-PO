@@ -81,7 +81,7 @@ export class AccountsComponent implements OnInit {
           .get<any>(`${environment.APIEndpoint}/Admin/GetAccountListByID/` + params.id);
 
         forkJoin([x, y, z]).subscribe((data) => {
-          debugger
+           
           this.statusList = data[0];
           this.accountTypeList = data[1];
           this.model = data[2];
@@ -109,7 +109,7 @@ export class AccountsComponent implements OnInit {
 
 
   Action(item: any) {
-    debugger
+
     if (item == undefined) {
       this.router.navigate(["/AccountList/edit"], { queryParams: { id: 0 } });
     } else {

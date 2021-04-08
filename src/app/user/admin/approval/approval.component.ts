@@ -41,7 +41,7 @@ export class ApprovalComponent implements OnInit {
         this.statusList = data;
          this.setPage(this.gridOption.searchObject ?? {}); }
         , (error) => {
-          this.confirmDialogService.messageBox(environment.APIerror)
+          this.confirmDialogService.messageBoxWithError(environment.APIerror,error)
         });
 
 
@@ -70,22 +70,22 @@ export class ApprovalComponent implements OnInit {
   }
 
   Save(obj: any) {
-debugger
+
     this.http
       .post<any>(`${environment.APIEndpoint}/Admin/SaveApprovalGroups`, obj, {})
       .subscribe((data) => {
         if (data.IsValid == false) {
-          debugger
+
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-            this.toasterService.show("SSS");
-            this.router.navigate(['venue']);
+          this.toasterService.success(environment.dataSaved);
+            this.router.navigate(['approvalGroups']);
             this.setPage(this.gridOption.searchObject?? {});
         }
       }, (error) => {
 
-        this.confirmDialogService.messageBox(environment.APIerror)
+        this.confirmDialogService.messageBoxWithError(environment.APIerror,error)
       });
 
   }

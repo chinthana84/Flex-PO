@@ -87,11 +87,12 @@ export class RefTablesComponent implements OnInit {
       .subscribe(
         (data) => {
           if (data.IsValid == false) {
-            debugger;
+
             this.confirmDialogService.messageListBox(data.ValidationMessages);
           } else {
-            this.toasterService.show('SSS');
-            this.router.navigate(['masterData']);
+            this.toasterService.success(environment.dataSaved);
+            //this.router.navigate(['masterData']);
+         
           }
         },
         (error) => {

@@ -61,6 +61,8 @@ export class ApprovalUsersComponent implements OnInit {
 
   changeApprovalGroup(obj: any) {
 
+    if(this.approvalGroupID==0) return;
+
     this.http
       .get<ApprovalGroupsDTO>(`${environment.APIEndpoint}/Admin/GetApprovalGroupsByID/` + this.approvalGroupID)
       .subscribe((data) => {
@@ -74,7 +76,7 @@ export class ApprovalUsersComponent implements OnInit {
 
   AddUser(objx:SecurityGroupsUserDetailsDTO) {
 
- 
+
       let obj = new ApprovalGroupUsersDTO();
     // obj.UserId = this.selectedUserid;
       obj.ApprovalGroupId = this.approvalGroupID;
@@ -104,7 +106,7 @@ else{
 
 
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-debugger
+
       if (obj.ApprovalGroupUserId>0){
         this.model.ApprovalGroupUsers=this.model.ApprovalGroupUsers.filter(r=> r.ApprovalGroupUserId != obj.ApprovalGroupUserId);
       }
@@ -126,11 +128,11 @@ debugger
       .post<any>(`${environment.APIEndpoint}/Admin/SaveApprovalGroupUsers`, this.model, {})
       .subscribe((data) => {
         if (data.IsValid == false) {
-          debugger
+
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-          this.toasterService.show("SSS");
+          this.toasterService.success(environment.dataSaved);
           this.router.navigate(['approvalGroupsUsers']);
 
         }

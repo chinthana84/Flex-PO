@@ -37,7 +37,7 @@ export class PurchaseRequestComponent implements OnInit {
   }
 
   clickme(){
-    debugger;
+     ;
     this.confirmDialogService.messageBox("EROR")
   }
 
@@ -84,7 +84,7 @@ export class PurchaseRequestComponent implements OnInit {
   getDismissReason(reason: any) {
     throw new Error('Method not implemented.');
   }
-  
+
     formatter = (x:  TypeHeadSearchDTO) => x.Name
     formatterx = (x: TypeHeadSearchDTO) => x.Name;
 }

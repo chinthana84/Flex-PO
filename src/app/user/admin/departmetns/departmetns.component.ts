@@ -63,7 +63,7 @@ export class DepartmetnsComponent implements OnInit {
           let x = this.http.get<DepartmentsDTO>(`${environment.APIEndpoint}/Admin/GetDepartmentByID/` + params.id);
           let y = this.http.get<SecurityGroupsDTO[]>(`${environment.APIEndpoint}/Admin/GetAllSecurityGroupsByDeparmentid/` + params.id);
           forkJoin([x, y]).subscribe((data) => {
-            debugger
+
             this.model = data[0];
             this.checkedSecutiryGroups = data[1];
           }, (error) => {
@@ -96,7 +96,7 @@ export class DepartmetnsComponent implements OnInit {
   }
 
   Action(obj: any) {
-    debugger
+
     if (obj == undefined) {
       this.router.navigate(['/departments/edit'], { queryParams: { id: 0 } });
     }
@@ -108,7 +108,7 @@ export class DepartmetnsComponent implements OnInit {
 
 
   Save() {
-    debugger
+
     let obj: DepWrapper = {};
     obj.dep = this.model;
     obj.lstSecutiryGropp = this.checkedSecutiryGroups;
@@ -117,13 +117,13 @@ export class DepartmetnsComponent implements OnInit {
       .post<any>(`${environment.APIEndpoint}/Admin/SaveDepartments`, obj, {})
       .subscribe((data) => {
         if (data.IsValid == false) {
-          debugger
+
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-          this.toasterService.show("SSS");
+          this.toasterService.success(environment.dataSaved);
           this.router.navigate(['departments']);
-
+                                  
         }
       }, (error) => {
 

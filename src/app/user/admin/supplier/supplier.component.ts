@@ -93,7 +93,7 @@ export class SupplierComponent implements OnInit {
 
 
   Action(item: any) {
-    debugger
+     
     if (item == undefined) {
       this.router.navigate(["/supplier/edit"], { queryParams: { id: 0 } });
     } else {

@@ -1,16 +1,15 @@
 <div class="row">
   <section class="col-lg-12">
     <div class="card">
-
       <div class="card-body">
         <div class="tab-content p-0">
-
           <div class="row">
             <div class="col-md-4">
               <div class="form-group">
                 <label for="StudentNumbers">Approval Groups</label>
-                <ng-select [(ngModel)]="approvalGroupID" (change)="changeApprovalGroup(approvalGroupID)">
-                  <ng-option *ngFor="let car of approvalGroups" [value]="car.ApprovalGroupId">{{car.Name}}</ng-option>
+                <ng-select [clearable]="false"  [(ngModel)]="approvalGroupID" (change)="changeApprovalGroup(approvalGroupID)">
+                  <ng-option [value]="0"> <b>Please Select </b> </ng-option>
+                  <ng-option *ngFor="let car of approvalGroups" [value]="car.ApprovalGroupId">{{ car.Name }}</ng-option>
                 </ng-select>
               </div>
             </div>
@@ -22,73 +21,80 @@
                 <label for="StudentNumbers">Securty Groups</label>
                 <ng-select [(ngModel)]="selectedSG" (change)="GetUsersBySG(selectedSG)">
                   <ng-option *ngFor="let car of this.securityGroups" [value]="car.SecurityGroupId">
-                    {{car.SecurityGroupName}}</ng-option>
+                    {{ car.SecurityGroupName }}</ng-option>
                 </ng-select>
               </div>
             </div>
-
           </div>
 
           <div class="row">
             <div class="col-md-6">
               <div class="card">
                 <div class="card-body p-0">
-                  <table class="table ">
+                  <table class="table">
                     <thead>
-                      <th>Name</th>
-                      <th>
-                      </th>
+                      <th>Users by Security Group</th>
+                      <th></th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let item of this.securityGroupsUsers; let i = index;" class="table-hover">
+                      <tr *ngFor="
+                          let item of this.securityGroupsUsers;
+                          let i = index
+                        " class="table-hover">
                         <td>
-                          {{item.User?.UserName}}
+                          {{ item.User?.UserName }}
                         </td>
                         <td>
-                          <button class="btn btn-primary " (click)="AddUser(item)">
-                            <span class="fa fa-arrow-right"></span></button>
+                          <button class="btn btn-primary" (click)="AddUser(item)">
+                            <span class="fa fa-arrow-right"></span>
+                          </button>
                         </td>
                       </tr>
-                      <tr *ngIf="this.securityGroupsUsers?.length == 0 || this.securityGroupsUsers == undefined">
+                      <tr *ngIf="
+                          this.securityGroupsUsers?.length == 0 ||
+                          this.securityGroupsUsers == undefined
+                        ">
                         <td class="datanotfound" colspan="2">Data not found</td>
                       </tr>
                     </tbody>
-                 </table>
+                  </table>
                 </div>
-                <div class="card-footer clearfix">
-                </div>
-
+                <div class="card-footer clearfix"></div>
               </div>
             </div>
 
             <div class="col-md-6">
               <div class="card">
                 <div class="card-body p-0">
-                  <table class="table ">
+                  <table class="table">
                     <thead>
                       <th>Name</th>
-                      <th>
-                      </th>
+                      <th></th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let item of this.model.ApprovalGroupUsers; let i = index;" class="table-hover">
+                      <tr *ngFor="
+                          let item of this.model.ApprovalGroupUsers;
+                          let i = index
+                        " class="table-hover">
                         <td>
-                          {{item.User?.UserName}}
+                          {{ item.User?.UserName }}
                         </td>
                         <td>
-                          <button class="btn btn-danger " (click)="deleteApprovalUser(item)">
-                            <span class="fa fa-trash"></span></button>
+                          <button class="btn btn-danger" (click)="deleteApprovalUser(item)">
+                            <span class="fa fa-trash"></span>
+                          </button>
                         </td>
                       </tr>
-                      <tr *ngIf="this.model.ApprovalGroupUsers?.length == 0 || this.model.ApprovalGroupUsers == undefined">
+                      <tr *ngIf="
+                          this.model.ApprovalGroupUsers?.length == 0 ||
+                          this.model.ApprovalGroupUsers == undefined
+                        ">
                         <td class="datanotfound" colspan="2">Data not found</td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                <div class="card-footer clearfix">
-                </div>
-
+                <div class="card-footer clearfix"></div>
               </div>
             </div>
           </div>
@@ -100,7 +106,6 @@
           <button type="button" (click)="Save()" class="btn btn-primary save_button">
             <span class="fa fa-save"></span>
           </button>
-          
         </div>
       </div>
     </div>

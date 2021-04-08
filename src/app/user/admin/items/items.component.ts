@@ -98,7 +98,7 @@ export class ItemsComponent implements OnInit {
 
 
   Action(item: any) {
-    debugger
+
     if (item == undefined) {
       this.router.navigate(["/items/edit"], { queryParams: { id: 0 } });
     } else {
@@ -110,7 +110,7 @@ export class ItemsComponent implements OnInit {
   }
 
   onSubmit(obj: ItemsDTO) {
-    debugger
+     
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/Admin/SaveItem`, obj, {}).subscribe((data) => {
         if (data.IsValid == false) {

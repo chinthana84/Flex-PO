@@ -28,10 +28,16 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     this.setBreadcrumb();
-    debugger;
 
     this.securityService.currentSecurityObject.subscribe((r) => {
+      debugger
+
+      // if(this.router.url.includes("login")==true){
+      //   return
+      // }
+
       this.currentObj = r;
+
 
       if (this.currentObj.IsAuthenticated == false) {
         let u = localStorage.getItem('usernameFlex') ?? '';
@@ -67,7 +73,7 @@ export class AppComponent implements OnInit {
       let route = routeEvent.state.root;
       let dispayname: string = ""
       dispayname = route.firstChild.data["titleKey"]
- 
+
       if (dispayname==undefined){
 
         if (route.queryParams.rptUI_ID==undefined){

@@ -7,6 +7,10 @@ import { DialogMessage } from './confirm-dialog.component';
 @Injectable() export class ConfirmDialogService {
   private subject = new Subject<DialogMessage>();
 
+  constructor( public router: Router){
+
+  }
+
   confirmThis(message: string, yesFn: () => void, noFn: () => void): any {
 
       this.setConfirmation(message, yesFn, noFn,"confirm");
@@ -14,7 +18,7 @@ import { DialogMessage } from './confirm-dialog.component';
 
 
   setConfirmation(message: string, yesFn: () => void, noFn: () => void,msgtype:string): any {
-     
+
       const that = this;
       this.subject.next({
           type: msgtype,
@@ -35,10 +39,25 @@ import { DialogMessage } from './confirm-dialog.component';
 
 
   messageBox(message: string): any {
-    debugger
+ debugger
       this.setBox(message,function (){},"ok")
   }
+
+  messageBoxWithError(message: string,error : any): any {
+    debugger
+    if(error.status=="401"){
+      this.router.navigate(['login']);
+     // this.setBox(message,function (){},"ok");
+    }
+    else{
+      this.setBox(message,function (){},"ok");
+    }
+
+      }
+
+
   setBox(message: string, noFn: () => void, msgtype:string): any {
+
     const that = this;
     this.subject.next({
       msg: message,
