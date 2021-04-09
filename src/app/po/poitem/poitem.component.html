@@ -1,0 +1,107 @@
+<div class="row">
+  <div class="col-md-12">
+
+    <div class="card">
+      <div class="card-header">
+        <h3 class="card-title">
+          <i class="fas fa-chart-pie mr-1"></i>
+          Supplier
+        </h3>
+      </div>
+      <div class="card-body">
+        <div class="tab-content p-0">
+
+          <div class="row">
+            <div class="col-md-10">
+              <div class="form-group">
+                <label for="Name">Item Description</label>
+                <input id="Name" name="Name" type="text" autocomplete="off" class="form-control" placeholder="Name" />
+              </div>
+            </div>
+            <div class="col-md-2">
+              <div class="form-group">
+                <label for="Name">Item Unit</label>
+                <input id="Name" disabled name="Name" type="text" autocomplete="off" class="form-control" placeholder="Name" />
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+
+                <label for="accountcodes">Account Codes</label>
+                <ng-select [clearable]="false" name="accountcodes">
+                  <ng-option *ngFor="let car of this.AccountCodes" [value]="car.AccountListId">
+                    {{car.AccountCode}}
+                  </ng-option>
+                </ng-select>
+
+
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+
+                <label for="jobcodes">Job Codes</label>
+                <ng-select [clearable]="false" name="jobcodes">
+                  <ng-option *ngFor="let car of this.JobCOdes" [value]="car.RefId">
+                    {{car.RefDescription}}
+                  </ng-option>
+                </ng-select>
+
+
+              </div>
+            </div>
+          </div>
+
+
+
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="City">Quantity</label>
+                  <input class="form-control" id="Quantity" name="Quantity" type="text" placeholder="Quantity" />
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="City">Unit Price</label>
+                  <input class="form-control" id="UnitpRice" name="UnitpRice" type="text" placeholder="UnitpRice" />
+                </div>
+              </div>
+            </div>
+
+
+
+
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="City">Reference</label>
+                  <input class="form-control" id="Reference" name="Reference" type="text" placeholder="Reference" />
+                </div>
+              </div>
+            </div>
+
+
+
+
+
+          </div>
+        </div>
+      </div>
+
+      <div class="card-footer text-muted">
+        <div class="btn-group">
+          <button type="button" (click)="AddITems()" class="btn btn-primary save_button"> Add Item</button>
+
+
+
+        </div>
+      </div>
+
+    </div>
+
+
+  </div>

@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { GridModule } from '../grid/grid.module';
 import { NgbDate, NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { PoitemComponent } from './poitem/poitem.component';
 
 const routes: Routes = [
   {
@@ -15,7 +17,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent],
+  declarations: [PurchaseRequestComponent, PoitemComponent],
 
   imports: [
     CommonModule,
@@ -23,6 +25,7 @@ const routes: Routes = [
     FormsModule,
     NgbModule,
     UserModule,
+    NgSelectModule,
     RouterModule.forChild(routes)
   ]
 })

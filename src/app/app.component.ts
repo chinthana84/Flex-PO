@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
     this.setBreadcrumb();
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-      debugger
+       
 
       // if(this.router.url.includes("login")==true){
       //   return

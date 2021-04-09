@@ -132,7 +132,7 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="xx">Status</label>
-                  <ng-select name="xx" [(ngModel)]="this.model.SupplierStatusId">
+                  <ng-select  [clearable]="false" name="xx" [(ngModel)]="this.model.SupplierStatusId">
                     <ng-option *ngFor="let car of this.statusList" [value]="car.RefId">{{car.RefDescription}}</ng-option>
                   </ng-select>
                 </div>
@@ -155,4 +155,3 @@
     </div>
   </section>
 </div>
- 

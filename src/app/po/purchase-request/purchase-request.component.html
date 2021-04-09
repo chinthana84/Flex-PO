@@ -1,64 +1,280 @@
 <div class="row">
   <section class="col-lg-12">
     <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">
-          <i class="fas fa-chart-pie mr-1"></i>
-          Sales
-        </h3>
-      </div>
+
       <div class="card-body">
         <div class="tab-content p-0">
-          <input type="button" value="click" (click)="clickme()" />
+          <div *ngIf="!edited">
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+            <table class="table  ">
+              <thead>
+                <th>PONo</th>
+                <th>DepartmentName</th>
+                <th>SupplierName</th>
+                <th>ShipTo</th>
+                <th>CreateDate</th>
+                <th>
+                  <button (click)="Action(null)" class="btn btn-primary ">
+                    <span class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
 
-        </div>
-      </div>
-    </div>
-  </section>
-</div>
+                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
+                  <td>{{ item.Pono }}</td>
+                  <td>{{ item.DepartmentName }}</td>
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.ShipTo }}</td>
+                  <td>{{ item.CreateDate }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button (click)="Action(item)" class="btn btn-primary  ">
+                        <span class="fa fa-edit"></span></button>
+
+                    </div>
 
 
-<div class="row">
-  <section class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <h3 class="card-title">
-          <i class="fas fa-chart-pie mr-1"></i>
-          Sales
-        </h3>
-      </div>
-      <div class="card-body">
-        <div class="tab-content p-0">
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
 
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <!-- <ngb-datepicker #d></ngb-datepicker> -->
-
-
-                <label for="ItemDescription">supplierSearch</label>
-                <input id="typeahead-http" type="text" [resultFormatter]="formatter"
-                [inputFormatter]="formatterx"
-                class="form-control mx-sm-3" [class.is-invalid]="searchFailed"
-                 [(ngModel)]="model"  typeaheadOptionField="Name" [ngbTypeahead]="search" placeholder="Wikipedia search" />
-
-                <!-- <input id="supplierSearch" name="supplierSearch" type=" text" class="form-control"
-                  placeholder="ItemDescription" /> -->
-              </div>
-            </div>
+            <br />
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
           </div>
 
+          <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
+            {{ this.model |json}}
+            <div class="row">
+              <div class="col-md-6">
+
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-chart-pie mr-1"></i>
+                      Supplier
+                    </h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="tab-content p-0">
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="Name">Name</label>
+                            <input id="Name" name="Name" type="text" autocomplete="off" [(ngModel)]="model"
+                              [resultFormatter]="formatter" [inputFormatter]="formatterx" [ngbTypeahead]="search"
+                              (selectItem)="selectedItem($event)" class="form-control" placeholder="Name" />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="SupplierAddress">Address</label>
+                            <input class="form-control" id="SupplierAddress" name="SupplierAddress" type="text"
+                              [(ngModel)]="this.modelSupplier.SupplierAddress" placeholder="SupplierAddress" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="City">City</label>
+                            <input class="form-control" id="City" name="City" type="text"
+                              [(ngModel)]="this.modelSupplier.City" placeholder="City" />
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="City">State</label>
+                            <input class="form-control" id="State" name="State" type="text"
+                              [(ngModel)]="this.modelSupplier.State" placeholder="State" />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="PostCode">Post Code</label>
+                            <input class="form-control" id="PostCode" name="PostCode" type="text"
+                              [(ngModel)]="this.modelSupplier.Postcode" placeholder="PostCode" />
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="City">Contact</label>
+                            <input class="form-control" id="Contact" name="Contact" type="text"
+                              [(ngModel)]="this.modelSupplier.Contact" placeholder="Contact" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="Phone">Phone</label>
+                            <input class="form-control" id="Phone" name="Phone" type="text"
+                              [(ngModel)]="this.modelSupplier.Phone" placeholder="Phone" />
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="form-group">
+                            <label for="PostCode">Fax</label>
+                            <input class="form-control" id="Fax" name="Fax" type="text"
+                              [(ngModel)]="this.modelSupplier.Fax" placeholder="Fax" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="City">Email Address</label>
+                            <input class="form-control" id="Email" name="Email" type="text"
+                              [(ngModel)]="this.modelSupplier.Email" placeholder="Email" />
+                          </div>
+                        </div>
+                      </div>
+
+
+                      <div class="row">
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label for="City">Quote Ref</label>
+                            <input class="form-control" id="quoteRef" name="quoteRef" type="text"
+                              [(ngModel)]="this.modelSupplier.City" placeholder="quoteRef" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+
+              </div>
+
+              <div class="col-md-6">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-chart-pie mr-1"></i>
+                      Other
+                    </h3>
+                  </div>
+                  <div class="card-body">
+
+                    <div class="row">
+                      <div class="col-md-12">
+                        <div class="form-group">
+                          <label for="DepartmentId">Department</label>
+                          <ng-select [clearable]="false" name="DepartmentId">
+                            <ng-option *ngFor="let car of this.loggedUserDepartments" [value]="car.DepartmentId">
+                              {{car.DepartmentName}}
+                            </ng-option>
+                          </ng-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <section class="col-lg-12">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">
+                      <i class="fas fa-chart-pie mr-1"></i>
+                      Details
+                    </h3>
+                  </div>
+                  <div class="card-body">
+                    <div class="tab-content p-0">
+
+                      <table class="table  ">
+                        <thead>
+                          <th>Quantity</th>
+                          <th>Reference</th>
+                          <th>Description</th>
+                          <th>Account Code</th>
+                          <th>Job Code</th>
+                          <th>Unit Price</th>
+                          <th>Amount</th>
+                          <th>
+                            <button type="button" (click)="openXl(content)" class="btn btn-primary ">
+                              <span class="fa fa-plus"></span></button>
+                          </th>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let item of this.modelPR.PurchaseRequestDetail; let i=index;" class="table-hover">
+                            <td>Quantity</td>
+                            <td>Reference</td>
+                            <td> <input  id="ItemDescription{{ i }}"
+                                name="ItemDescription{{ i }}" class="form-control" placeholder="ItemDescription"
+                                autocomplete="off" [(ngModel)]="model"
+                                [resultFormatter]="formatter" [inputFormatter]="formatterx" [ngbTypeahead]="searchItems"
+                                />
+
+<!--
+                                <input id="Name" name="Name" type="text" autocomplete="off" [(ngModel)]="model"
+                                [resultFormatter]="formatter" [inputFormatter]="formatterx" [ngbTypeahead]="search"
+                                (selectItem)="selectedItem($event)" class="form-control" placeholder="Name" /> -->
+                              </td>
+                            <td>Account Code</td>
+                            <td>Job Code</td>
+                            <td>Unit Price</td>
+                            <td>Amount</td>
+                            <td>
+                              <button type="button" (click)="AddRow()" class="btn btn-primary ">
+                                <span class="fa fa-plus"></span></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div class="btn-group">
+              <button type="submit" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
+              <button type="button" (click)="router.navigate(['AccountList']);" class="btn btn-primary back_button">
+                <span class="fa fa-arrow-left"></span> </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
   </section>
 </div>
 
-<div class="row">
 
-</div>
+<ng-template #content let-modal>
+ <app-poitem></app-poitem>
+</ng-template>
 
-<div class="row">
+<!-- <label for="ItemDescription">supplierSearch</label>
+<input id="typeahead-http" type="text" [resultFormatter]="formatter"
+[inputFormatter]="formatterx"
+class="form-control mx-sm-3" [class.is-invalid]="searchFailed"
+ [(ngModel)]="model"  typeaheadOptionField="Name" [ngbTypeahead]="search" placeholder="Wikipedia search" />
+
+ -->
+
+<!-- <div class="row">
   <section class="col-lg-12">
     <div class="card">
       <div class="card-header">
@@ -72,20 +288,4 @@
       </div>
     </div>
   </section>
-</div>
-
-<ng-template #content let-modal>
-  <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Profile update</h4>
-    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body">
- <app-supplier></app-supplier>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
-  </div>
-</ng-template>
-<button class="btn btn-lg btn-outline-primary" (click)="open(content)">Launch demo modal</button>
+</div> -->

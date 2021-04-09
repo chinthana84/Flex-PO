@@ -39,12 +39,12 @@ import { DialogMessage } from './confirm-dialog.component';
 
 
   messageBox(message: string): any {
- debugger
+
       this.setBox(message,function (){},"ok")
   }
 
   messageBoxWithError(message: string,error : any): any {
-    debugger
+     
     if(error.status=="401"){
       this.router.navigate(['login']);
      // this.setBox(message,function (){},"ok");
