@@ -9,15 +9,18 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class TypeheadService {
-
   constructor(private http: HttpClient) {}
 
   search(term: string) {
     if (term === '') {
       return of([]);
     }
-
     return this.http
       .get<TypeHeadSearchDTO[]>(`${environment.APIEndpoint}/TypeHead/GetSupplierByName/`+ term);
+  }
+
+  TypeHeadSearch(term: string,id:number) {
+    return this.http
+      .get<TypeHeadSearchDTO[]>(`${environment.APIEndpoint}/TypeHead/TypeHeadSearch/${term}/${id}` );
   }
 }

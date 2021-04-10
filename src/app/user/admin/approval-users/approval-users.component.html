@@ -7,7 +7,8 @@
             <div class="col-md-4">
               <div class="form-group">
                 <label for="StudentNumbers">Approval Groups</label>
-                <ng-select [clearable]="false"  [(ngModel)]="approvalGroupID" (change)="changeApprovalGroup(approvalGroupID)">
+                <ng-select [clearable]="false" [(ngModel)]="approvalGroupID"
+                  (change)="changeApprovalGroup(approvalGroupID)">
                   <ng-option [value]="0"> <b>Please Select </b> </ng-option>
                   <ng-option *ngFor="let car of approvalGroups" [value]="car.ApprovalGroupId">{{ car.Name }}</ng-option>
                 </ng-select>

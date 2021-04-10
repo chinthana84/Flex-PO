@@ -20,7 +20,7 @@ export class LoaderInterceptor implements HttpInterceptor {
       next: HttpHandler
     ): Observable<HttpEvent<any>> {
 
-      this.loaderService.show();
+     // this.loaderService.show();
 
       if (localStorage.getItem("todoBearerTokenFlex")) {
 
@@ -56,9 +56,9 @@ export class LoaderInterceptor implements HttpInterceptor {
 
         });
       }
-      this.loaderService.show();
+   //   this.loaderService.show();
               return next.handle(request).pipe(
-            finalize(() => this.loaderService.hide())
+            finalize(() => {})
         );
     }
 

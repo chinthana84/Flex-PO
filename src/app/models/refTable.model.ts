@@ -114,6 +114,9 @@ export   class ItemsDTO
     public    UnitId? :number = 0;
     public    UnitPrice:number=0;
     public    StatusId?:number=0;
+
+    public    Status ?:RefTableDTO={};
+    public     Unit ?:RefTableDTO={};
 }
 
 export class AccountListDTO

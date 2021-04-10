@@ -11,11 +11,12 @@ export   class purchaseRequestHeaderDTO
   public  ShipToRefId ?: number=0;
   public   OtherShiptTo ?:string=""
   public  PoStatusRefId ?: number=0;
-
+  public  Podate?:Date;
 
   public    Department?: DepartmentsDTO
   public    PoStatusRef ?: RefTableDTO
   public     ShipToRef ?: RefTableDTO;
+  public     Supplier ?: SupplierDTO;
   public   PurchaseRequestDetail?: PurchaseRequestDetailDTO[]=[];
 }
 
@@ -25,16 +26,16 @@ export class PurchaseRequestDetailDTO
     public   PodetId ?: number=0;
     public   PoheaderId ?: number=0;
     public   ItemId ?: number=0;
-    public   SupplierId ?: number=0;
+    
     public   Qty ?: number=0;
     public   AccountListId ?: number=0;
     public   JobRefId ?: number=0;
     public  UnitPrice ?: number=0;
     public   Reference ?:string=""
 
-    public    AccountList?: AccountListDTO;
+    public    AccountList?: AccountListDTO={};
     public    Item ?: ItemsDTO;
     public    JobRef ?: RefTableDTO;
     public    Poheader ?:purchaseRequestHeaderDTO;
-    public    Supplier ?: SupplierDTO;
+
 }
