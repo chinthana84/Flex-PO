@@ -104,10 +104,9 @@
 
     <div class="card-footer text-muted">
       <div class="btn-group">
-        <button type="button" (click)="AddITems()" class="btn btn-primary save_button"> Add Item</button>
-
-
-
+        <button type="button"
+        *ngIf="this.modelItem.ItemId>0 && this.details.Qty >0 && this.details.AccountListId >0 && this.details.JobRefId >0 && this.details.UnitPrice >0 "
+        (click)="AddITems()" class="btn btn-primary save_button"> Add Item</button>
       </div>
     </div>
 

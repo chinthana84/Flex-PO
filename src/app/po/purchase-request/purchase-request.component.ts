@@ -1,6 +1,6 @@
 import { RefTableDTO } from 'src/app/models/refTable.model';
 import { ItemService } from './../../myShared/services/item.service';
-import { PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
+import { PurchaseRequestAttachmentsDTO, PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
 import { SupplierDTO } from './../../models/refTable.model';
 import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model';
 import { Component, OnInit } from '@angular/core';
@@ -18,6 +18,8 @@ import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/app/myShared/services/common.service';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { environment } from 'src/environments/environment';
+import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
+import { SrvRecord } from 'node:dns';
 
 @Component({
   selector: 'app-purchase-request',
@@ -28,9 +30,9 @@ export class PurchaseRequestComponent implements OnInit {
 
   private subs = new SubSink();
   edited: boolean = false;
-  modelPR: purchaseRequestHeaderDTO={};
+  modelPR: purchaseRequestHeaderDTO = {};
   modelSupplier: SupplierDTO = {};
-  modelShiptTo: RefTableDTO[]=[];
+  modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
 
 
@@ -43,11 +45,13 @@ export class PurchaseRequestComponent implements OnInit {
     searchObject: {
       girdId: GridType.PR
       , SavedDBColumn: "SupplierID"
-      , defaultSortColumnName: "CompanyName",
+      , defaultSortColumnName: "PONo",
       pageNo: 1,
       searchColName: '',
-      colNames: [{ colName: "CompanyName", colText: 'Company Name' },
-      { colName: "ContactName", colText: 'Contact Name' }
+      colNames: [{ colName: "PONo", colText: 'PONo' },
+      { colName: "DepartmentName", colText: 'DepartmentName' }
+      ,{ colName: "SupplierName", colText: 'SupplierName' }
+      ,{ colName: "ShipTo", colText: 'ShipTo' }
       ]
     }
   };
@@ -59,7 +63,9 @@ export class PurchaseRequestComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
     private itemService: ItemService,
-    public commonService: CommonService) { this.edited = false; }
+    public commonService: CommonService,
+    public fileuploadService:FileuploadService
+    ) { this.edited = false; }
 
   ngOnInit(): void {
 
@@ -82,10 +88,10 @@ export class PurchaseRequestComponent implements OnInit {
             this.confirmDialogService.messageBox(environment.APIerror)
           });
 
-          this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
-            r=>{this.modelShiptTo=r;},  (error) => {
-              this.confirmDialogService.messageBox(environment.APIerror)
-            });
+        this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
+          r => { this.modelShiptTo = r; }, (error) => {
+            this.confirmDialogService.messageBox(environment.APIerror)
+          });
 
       } else if (params.id > 0) {
         this.edited = true;
@@ -93,45 +99,16 @@ export class PurchaseRequestComponent implements OnInit {
         let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
         let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
         let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + params.id);
-        forkJoin([x, y,z]).subscribe((data) => {
+        forkJoin([x, y, z]).subscribe((data) => {
           this.loggedUserDepartments = data[0];
           this.modelShiptTo = data[1];
-
-
-          this.modelPR=data[2];;
-
+          this.modelPR = data[2];;
           this.modelSupplier = data[2].Supplier;
-          this.modelPR.SupplierId=data[2].SupplierId;
-         this.modelPR.Podate=new Date(this.modelPR.Podate);
-
+          this.modelPR.SupplierId = data[2].SupplierId;
+          this.modelPR.Podate = new Date(this.modelPR.Podate);
         }, (error) => {
-         this.confirmDialogService.messageBox(environment.APIerror)
+          this.confirmDialogService.messageBox(environment.APIerror)
         });
-
-
-        // this.subs.sink = this.http
-        //   .get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
-        //   .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => {
-        //     this.confirmDialogService.messageBox(environment.APIerror)
-        //   });
-
-        //   this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
-        //     r=>{this.modelShiptTo=r;},  (error) => {
-        //       this.confirmDialogService.messageBox(environment.APIerror)
-        //     });
-
-          // this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + params.id).subscribe(
-          //   r=>{
-
-          //     this.modelPR=r;
-
-          //     this.modelSupplier = r.Supplier;
-          //     this.modelPR.SupplierId=r.SupplierId;
-          //    this.modelPR.Podate=new Date(this.modelPR.Podate);
-
-          //         },  (error) => {
-          //     this.confirmDialogService.messageBox(environment.APIerror)
-          //   });
       } else {
         this.edited = false;
       }
@@ -196,16 +173,16 @@ export class PurchaseRequestComponent implements OnInit {
     )
 
 
-   public test(a:any){
-      return '2021-01-15';
-    }
+  public test(a: any) {
+    return '2021-01-15';
+  }
 
 
   selectedItem(item: any) {
     debugger
     this.subs.sink = this.http
       .get<any>(`${environment.APIEndpoint}/Admin/GetSupplierByID/` + item.item.ID)
-      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId=item.item.ID;}, (error) => {
+      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror)
       });
   }
@@ -225,9 +202,17 @@ export class PurchaseRequestComponent implements OnInit {
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
 
+  deleteItem(index:number){
+
+    this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
+      this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.ItemId != index);
+    },
+     function () { });
+  }
+
   Save() {
     debugger
- this.modelPR.PoStatusRefId=27; //raised po
+    this.modelPR.PoStatusRefId = 27; //raised po
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
@@ -245,6 +230,38 @@ export class PurchaseRequestComponent implements OnInit {
         //this.errorHandler.handleError(error);
 
       });
+  }
+
+  AddRowAttachemtns(){
+    let obj=new PurchaseRequestAttachmentsDTO();
+    this.modelPR.PurchaseRequestAttachments.push(obj);
+  }
+
+  addFile(event,i: PurchaseRequestAttachmentsDTO): void {
+    debugger
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+      let formData: FormData = new FormData();
+      formData.append('uploadFile', file, file.name);
+      this.fileuploadService
+        .upload(file)
+        .subscribe(res => {
+          i.UniqueFileName = String(res);
+        });
+    }
+  }
+
+  deleteFile(id:number){
+
+    this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
+
+        this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
+      
+
+    },
+      function () { })
+
   }
 
 }

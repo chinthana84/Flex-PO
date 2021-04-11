@@ -18,6 +18,7 @@ export   class purchaseRequestHeaderDTO
   public     ShipToRef ?: RefTableDTO;
   public     Supplier ?: SupplierDTO;
   public   PurchaseRequestDetail?: PurchaseRequestDetailDTO[]=[];
+   public   PurchaseRequestAttachments ?:PurchaseRequestAttachmentsDTO[]=[];
 }
 
 
@@ -26,7 +27,7 @@ export class PurchaseRequestDetailDTO
     public   PodetId ?: number=0;
     public   PoheaderId ?: number=0;
     public   ItemId ?: number=0;
-    
+
     public   Qty ?: number=0;
     public   AccountListId ?: number=0;
     public   JobRefId ?: number=0;
@@ -38,4 +39,14 @@ export class PurchaseRequestDetailDTO
     public    JobRef ?: RefTableDTO;
     public    Poheader ?:purchaseRequestHeaderDTO;
 
+}
+
+export   class PurchaseRequestAttachmentsDTO
+{
+    public   Id ?:Number=0;
+    public   PoheaderId ?:Number=0;
+   // public Filename?:byte[] ;
+    public   UniqueFileName ?:string="";
+public Description?:string="";
+    public    Poheader?:purchaseRequestHeaderDTO;
 }

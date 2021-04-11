@@ -61,10 +61,11 @@ private itemService:ItemService,
     this.details.AccountList=this.AccountCodes.filter(r=> r.AccountListId == this.details.AccountListId)[0];
     this.details.JobRef=this.JobCOdes.filter(r=> r.RefId === this.details.JobRefId)[0];
 this.itemService.addItem(this.details);
+this.details=new  PurchaseRequestDetailDTO();
   }
 
   selectedItem(item :any){
-    debugger
+     
     this.subs.sink = this.http
     .get<any>(`${environment.APIEndpoint}/Admin/GetItemByID/` + item.item.ID)
     .subscribe((data) => {
