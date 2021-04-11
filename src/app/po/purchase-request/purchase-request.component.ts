@@ -19,7 +19,7 @@ import { CommonService } from 'src/app/myShared/services/common.service';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { environment } from 'src/environments/environment';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
-import { SrvRecord } from 'node:dns';
+ 
 
 @Component({
   selector: 'app-purchase-request',
@@ -257,7 +257,7 @@ export class PurchaseRequestComponent implements OnInit {
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
 
         this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
-      
+
 
     },
       function () { })
