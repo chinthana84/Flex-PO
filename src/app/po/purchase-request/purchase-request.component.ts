@@ -19,15 +19,14 @@ import { CommonService } from 'src/app/myShared/services/common.service';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { environment } from 'src/environments/environment';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
- 
+import { PoitemComponent } from '../poitem/poitem.component';
+
 
 @Component({
   selector: 'app-purchase-request',
   templateUrl: './purchase-request.component.html'
 })
 export class PurchaseRequestComponent implements OnInit {
-
-
   private subs = new SubSink();
   edited: boolean = false;
   modelPR: purchaseRequestHeaderDTO = {};
@@ -35,10 +34,11 @@ export class PurchaseRequestComponent implements OnInit {
   modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
 
-
   model: any;
   searching = false;
   searchFailed = false;
+  formatter = (x: TypeHeadSearchDTO) => x.Name
+  formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
   gridOption: GridOptions = {
     datas: {},
@@ -68,10 +68,13 @@ export class PurchaseRequestComponent implements OnInit {
     ) { this.edited = false; }
 
   ngOnInit(): void {
-
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
-
-      this.modelPR.PurchaseRequestDetail.push(r);
+      if (this.modelPR.PurchaseRequestDetail.filter(x=> x.guid == r.guid).length >0){
+        this.modelPR.PurchaseRequestDetail= this.modelPR.PurchaseRequestDetail.filter(x=> x.guid != r.guid);
+        this.modelPR.PurchaseRequestDetail.push(r);
+      }else{
+        this.modelPR.PurchaseRequestDetail.push(r);
+      }
     });
 
     this.setPage(this.gridOption.searchObject);
@@ -81,18 +84,13 @@ export class PurchaseRequestComponent implements OnInit {
       if (params.id == 0) {
         this.edited = true;
         this.modelPR = new purchaseRequestHeaderDTO();
+        this.model=new TypeHeadSearchDTO();
 
-        this.subs.sink = this.http
-          .get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
-          .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => {
-            this.confirmDialogService.messageBox(environment.APIerror)
-          });
+        this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
+          .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)});
 
         this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
-          r => { this.modelShiptTo = r; }, (error) => {
-            this.confirmDialogService.messageBox(environment.APIerror)
-          });
-
+          r => { this.modelShiptTo = r; }, (error) => {this.confirmDialogService.messageBox(environment.APIerror) });
       } else if (params.id > 0) {
         this.edited = true;
 
@@ -102,13 +100,11 @@ export class PurchaseRequestComponent implements OnInit {
         forkJoin([x, y, z]).subscribe((data) => {
           this.loggedUserDepartments = data[0];
           this.modelShiptTo = data[1];
-          this.modelPR = data[2];;
+          this.modelPR = data[2];
           this.modelSupplier = data[2].Supplier;
           this.modelPR.SupplierId = data[2].SupplierId;
           this.modelPR.Podate = new Date(this.modelPR.Podate);
-        }, (error) => {
-          this.confirmDialogService.messageBox(environment.APIerror)
-        });
+         }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
       } else {
         this.edited = false;
       }
@@ -117,41 +113,26 @@ export class PurchaseRequestComponent implements OnInit {
 
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {
-        this.gridOption.datas = data;
-      }, (error) => {
-        this.confirmDialogService.messageBox(environment.APIerror);
-      });
+      .subscribe((data) => {  this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
   }
 
   Action(item: any) {
-
     if (item == undefined) {
       this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     } else {
-      this.router.navigate(["/request/edit"], {
-        queryParams: { id: item.Id },
-      });
+      this.router.navigate(["/request/edit"], {    queryParams: { id: item.Id } });
     }
     this.edited = true;
   }
 
-  AddRow() {
-    debugger
-    let obj = new PurchaseRequestDetailDTO;
-
-    this.modelPR.PurchaseRequestDetail.push(obj);
-  }
-
   openXl(content) {
-    this.modalService.open(content, { size: 'xl' });
+    const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
   }
 
-  clickme() {
-    ;
-    this.confirmDialogService.messageBox("EROR")
+  editPoDetaisls(obj:PurchaseRequestDetailDTO) {
+    const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
+    modalRef.componentInstance.fromParent = obj;
   }
-
 
   search = (text$: Observable<string>) =>
     text$.pipe(
@@ -161,7 +142,6 @@ export class PurchaseRequestComponent implements OnInit {
       switchMap(term =>
         this.typeheadService.search(term).pipe(
           tap(() => {
-
             this.searchFailed = false;
           }),
           catchError(() => {
@@ -172,64 +152,36 @@ export class PurchaseRequestComponent implements OnInit {
       tap(() => this.searching = false)
     )
 
-
-  public test(a: any) {
-    return '2021-01-15';
-  }
-
-
   selectedItem(item: any) {
-    debugger
-    this.subs.sink = this.http
-      .get<any>(`${environment.APIEndpoint}/Admin/GetSupplierByID/` + item.item.ID)
-      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => {
-        this.confirmDialogService.messageBox(environment.APIerror)
-      });
+    this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/GetSupplierByID/` + item.item.ID)
+      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)  });
   }
 
-  open(content) {
-    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title', size: 'md', backdrop: 'static' }).result.then((result) => {
-      this.closeResult = `Closed with: ${result}`;
-    }, (reason) => {
-      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-    });
-  }
-  getDismissReason(reason: any) {
-    throw new Error('Method not implemented.');
-  }
-
-  formatter = (x: TypeHeadSearchDTO) => x.Name
-  formatterx = (x: TypeHeadSearchDTO) => x.Name;
-
-
-  deleteItem(index:number){
-
+  deleteItem(index:PurchaseRequestDetailDTO){
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-      this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.ItemId != index);
-    },
-     function () { });
+      if(index.PodetId > 0){
+        this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.ItemId != index.ItemId);
+      }else
+      {
+        this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.guid != index.guid);
+      }
+
+    }, function () { });
   }
 
   Save() {
-    debugger
     this.modelPR.PoStatusRefId = 27; //raised po
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
-
         }
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['request']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => {
-        this.confirmDialogService.messageBox(environment.APIerror)
-
-        //this.errorHandler.handleError(error);
-
-      });
+      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
   }
 
   AddRowAttachemtns(){
@@ -238,30 +190,19 @@ export class PurchaseRequestComponent implements OnInit {
   }
 
   addFile(event,i: PurchaseRequestAttachmentsDTO): void {
-    debugger
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
       let formData: FormData = new FormData();
       formData.append('uploadFile', file, file.name);
       this.fileuploadService
-        .upload(file)
-        .subscribe(res => {
-          i.UniqueFileName = String(res);
-        });
+        .upload(file).subscribe(res => { i.UniqueFileName = String(res); });
     }
   }
 
   deleteFile(id:number){
-
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-
         this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
-
-
-    },
-      function () { })
-
+    }, function () { });
   }
-
 }

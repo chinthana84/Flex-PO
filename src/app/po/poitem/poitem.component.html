@@ -1,7 +1,6 @@
 
 <div class="row">
   <div class="col-md-12">
-
     <div class="card">
       <div class="card-header">
         <h3 class="card-title">
@@ -31,7 +30,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
 
                 <label for="accountcodes">Account Codes</label>
@@ -41,13 +40,24 @@
                     {{car.AccountCode}}
                   </ng-option>
                 </ng-select>
+              </div>
+            </div>
 
+         <div class="col-md-4">
+              <div class="form-group">
 
+                <label for="PaymentTypes">PaymentTypes</label>
+                <ng-select [clearable]="false" name="PaymentTypes" [(ngModel)]="this.details.PaymentTypeRefId">
+                  <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                  <ng-option *ngFor="let car of this.PaymentTypes" [value]="car.RefId">
+                    {{car.RefDescription}}
+                  </ng-option>
+                </ng-select>
 
 
               </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
 
                 <label for="jobcodes">Job Codes</label>
@@ -105,7 +115,7 @@
     <div class="card-footer text-muted">
       <div class="btn-group">
         <button type="button"
-        *ngIf="this.modelItem.ItemId>0 && this.details.Qty >0 && this.details.AccountListId >0 && this.details.JobRefId >0 && this.details.UnitPrice >0 "
+        *ngIf="this.modelItem.ItemId>0 && this.details.Qty >0 && this.details.AccountListId >0 && this.details.JobRefId >0 && this.details.UnitPrice >0 && this.details.PaymentTypeRefId >0 "
         (click)="AddITems()" class="btn btn-primary save_button"> Add Item</button>
       </div>
     </div>

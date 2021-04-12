@@ -49,20 +49,20 @@
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
 
 
-  <ul class="nav nav-tabs" role="tablist">
-    <li class="nav-item   ">
-      <a class="nav-link  active" href="#genaralxx" role="tab" data-toggle="tab">Request & Details</a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link" href="#upload" role="tab" data-toggle="tab">Attachments</a>
-    </li>
-  </ul>
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item   ">
+                <a class="nav-link  active" href="#genaralxx" role="tab" data-toggle="tab">Request & Details</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#upload" role="tab" data-toggle="tab">Attachments</a>
+              </li>
+            </ul>
 
 
 
             <!-- Tab panes -->
             <div class="tab-content m-2">
-              <div role="tabpanel" class="tab-pane active "  id="genaralxx">
+              <div role="tabpanel" class="tab-pane active " id="genaralxx">
 
 
                 <div class="row">
@@ -245,6 +245,7 @@
                               <th>Description</th>
                               <th>Account Code</th>
                               <th>Job Code</th>
+                              <th>Payment Type</th>
                               <th>Unit Price</th>
                               <th>Amount</th>
                               <th>
@@ -255,17 +256,21 @@
                             <tbody>
                               <tr *ngFor="let item of this.modelPR.PurchaseRequestDetail; let i=index;"
                                 class="table-hover">
-                                <td>{{ i+1 }}</td>
+                                <td>{{ i+1 }} </td>
                                 <td>{{item.Qty}}</td>
                                 <td>{{item.Reference}}</td>
                                 <td> {{item.Item.ItemDescription}} </td>
                                 <td>{{item.AccountList.AccountCode}}</td>
                                 <td>{{item.JobRef.RefDescription}}</td>
+                                <td>{{item.PaymentTypeRef?.RefDescription}}</td>
                                 <td>{{item.UnitPrice}}</td>
                                 <td>{{item.UnitPrice * item.Qty }}</td>
                                 <td>
-                                  <button type="button" (click)="deleteItem(item.ItemId)" class="btn btn-danger ">
+                                  <button type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
+                                    <span class="fa fa-edit"></span></button>
+                                  <button type="button" (click)="deleteItem(item)" class="btn btn-danger ">
                                     <span class="fa fa-trash"></span></button>
+
 
                                 </td>
                               </tr>

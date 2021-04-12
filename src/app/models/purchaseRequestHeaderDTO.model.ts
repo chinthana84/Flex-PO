@@ -1,3 +1,4 @@
+import { SrvRecord } from 'node:dns';
 import { DepartmentsDTO, ItemsDTO, RefTableDTO, SupplierDTO } from 'src/app/models/refTable.model';
 import { AccountListDTO } from "./refTable.model";
 
@@ -27,18 +28,20 @@ export class PurchaseRequestDetailDTO
     public   PodetId ?: number=0;
     public   PoheaderId ?: number=0;
     public   ItemId ?: number=0;
-
     public   Qty ?: number=0;
     public   AccountListId ?: number=0;
     public   JobRefId ?: number=0;
     public  UnitPrice ?: number=0;
     public   Reference ?:string=""
+    public  PaymentTypeRefId ?: number=0;
 
+    public guid?:string="";
+
+    public     PaymentTypeRef ?: RefTableDTO={};
     public    AccountList?: AccountListDTO={};
     public    Item ?: ItemsDTO;
     public    JobRef ?: RefTableDTO;
     public    Poheader ?:purchaseRequestHeaderDTO;
-
 }
 
 export   class PurchaseRequestAttachmentsDTO

@@ -1,11 +1,12 @@
+import { TypeHeadSearchDTO } from 'src/app/grid/gridModels/typeheadSearch.model';
 import { PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
-import { ItemsDTO } from 'src/app/models/refTable.model';
+import { ItemsDTO, RefTableDTO } from 'src/app/models/refTable.model';
 import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model';
-import { AccountListDTO, RefTableDTO } from './../../models/refTable.model';
+import { AccountListDTO } from './../../models/refTable.model';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { CommonService } from 'src/app/myShared/services/common.service';
@@ -25,8 +26,11 @@ export class PoitemComponent implements OnInit {
   private subs = new SubSink();
   AccountCodes: AccountListDTO[] = [];
   JobCOdes: RefTableDTO[] = [];
-  modelItem :ItemsDTO;
+  PaymentTypes :RefTableDTO[]=[];
+  modelItem: ItemsDTO;
   details: PurchaseRequestDetailDTO;
+
+  @Input() fromParent;
 
   model: any;
   searching = false;
@@ -34,15 +38,22 @@ export class PoitemComponent implements OnInit {
   formatter = (x: TypeHeadSearchDTO) => x.Name
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
-  constructor(private modalService: NgbModal, private confirmDialogService: ConfirmDialogService, private typeheadService: TypeheadService
+  constructor(private modalService: NgbModal
+    , private confirmDialogService: ConfirmDialogService
+    , private typeheadService: TypeheadService
     , private http: HttpClient,
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
-private itemService:ItemService,
-    public commonService: CommonService) { this.modelItem=new ItemsDTO();this.details=new PurchaseRequestDetailDTO(); }
+    private itemService: ItemService,
+    public commonService: CommonService
+    , public activeModal: NgbActiveModal) {
+      this.modelItem = new ItemsDTO();
+      this.details = new PurchaseRequestDetailDTO();
+    }
 
   ngOnInit(): void {
+
     this.subs.sink = this.http
       .get<any>(`${environment.APIEndpoint}/Admin/GetAllAccountList/`)
       .subscribe((data) => { this.AccountCodes = data; }, (error) => {
@@ -53,51 +64,63 @@ private itemService:ItemService,
       r => { this.JobCOdes = r; }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror);
       });
+
+      this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Payment Types').subscribe(
+        r => { this.PaymentTypes = r; }, (error) => {
+          this.confirmDialogService.messageBox(environment.APIerror);
+        });
+
+      if (this.fromParent != undefined){
+        this.details=this.fromParent;
+        this.details.ItemId = this.fromParent.Item.ItemId;
+        this.modelItem=this.fromParent.Item;
+        var x=new TypeHeadSearchDTO();
+        x.ID=this.modelItem.ItemId;
+        x.Name=this.modelItem.ItemDescription;
+        this.model=x;
+      }
   }
 
   AddITems() {
-    //this.confirmDialogService.messageBox("CHECKx")
+    this.details.AccountList = this.AccountCodes.filter(r => r.AccountListId == this.details.AccountListId)[0];
+    this.details.JobRef = this.JobCOdes.filter(r => r.RefId === this.details.JobRefId)[0];
 
-    this.details.AccountList=this.AccountCodes.filter(r=> r.AccountListId == this.details.AccountListId)[0];
-    this.details.JobRef=this.JobCOdes.filter(r=> r.RefId === this.details.JobRefId)[0];
-this.itemService.addItem(this.details);
-this.details=new  PurchaseRequestDetailDTO();
+    this.details.PaymentTypeRef = this.PaymentTypes.filter(r => r.RefId === this.details.PaymentTypeRefId)[0];
+
+    this.details.guid=this.commonService.newGuid();
+    this.itemService.addItem(this.details);
+    this.details = new PurchaseRequestDetailDTO();
+    this.model=new TypeHeadSearchDTO();
   }
 
-  selectedItem(item :any){
-     
+  selectedItem(ID: any) {
     this.subs.sink = this.http
-    .get<any>(`${environment.APIEndpoint}/Admin/GetItemByID/` + item.item.ID)
-    .subscribe((data) => {
-      this.modelItem = data;
-      this.details.ItemId=data.ItemId;
-      this.details.Item=data;
-    }, (error) => {
-      this.confirmDialogService.messageBox(environment.APIerror)
-    });
+      .get<any>(`${environment.APIEndpoint}/Admin/GetItemByID/` + ID.item.ID )
+      .subscribe((data) => {
+        this.modelItem = data;
+        this.details.ItemId = data.ItemId;
+        this.details.Item = data;
+      }, (error) => {
+        this.confirmDialogService.messageBox(environment.APIerror)
+      });
   }
 
 
   searchItems = (text$: Observable<string>) =>
-  text$.pipe(
-    debounceTime(300),
-    distinctUntilChanged(),
-    tap(() => this.searching = true),
-    switchMap(term =>
-      this.typeheadService.TypeHeadSearch(term,2).pipe(
-        tap(() => {
-
-          this.searchFailed = false;
-        }),
-        catchError(() => {
-          this.searchFailed = true;
-          return of([]);
-        }))
-    ),
-    tap(() => this.searching = false)
-  )
-
+    text$.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      tap(() => this.searching = true),
+      switchMap(term =>
+        this.typeheadService.TypeHeadSearch(term, 2).pipe(
+          tap(() => {
+            this.searchFailed = false;
+          }),
+          catchError(() => {
+            this.searchFailed = true;
+            return of([]);
+          }))
+      ),
+      tap(() => this.searching = false)
+    )
 }
-
-
-//GetItemByName
