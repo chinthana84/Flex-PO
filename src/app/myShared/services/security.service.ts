@@ -54,14 +54,15 @@ export class SecurityService {
           this._securityModel2.next(m);
           localStorage.setItem("authenticatedFlex","1");
           localStorage.setItem("todoBearerTokenFlex",m.BearerToken);
+          localStorage.setItem("refreshTokenFlex",m.RefreshToken);
           localStorage.setItem(
             "usernameFlex",
             u.UserName
           )
-          localStorage.setItem(
-            "pwFlex",
-            u.Password
-          )
+          // localStorage.setItem(
+          //   "pwFlex",
+          //   u.Password
+          // )
         } else {
           this._securityModel2.next(new SecurityModel() );
         }
@@ -70,12 +71,13 @@ export class SecurityService {
   }
 
   public logout() {
-     
+
     localStorage.removeItem("todoBearerTokenFlex");
     localStorage.removeItem("usernameFlex");
     localStorage.removeItem("pwFlex");
     localStorage.removeItem("usernameFlex");
     localStorage.removeItem("authenticatedFlex");
+    localStorage.removeItem("refreshTokenFlex");
     this._securityModel2.next(new SecurityModel() );
 
     this.router.navigate(['login']);

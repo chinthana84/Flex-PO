@@ -1,3 +1,4 @@
+import { AuthService } from './myShared/services/auth.service';
 import { Component, OnInit } from '@angular/core';
 import { Router, RoutesRecognized } from '@angular/router';
 import { MyNavigations } from './grid/gridModels/gridOption.model';
@@ -21,6 +22,7 @@ export class AppComponent implements OnInit {
   masterBreadcrumbList: Array<any>;
 
   constructor(
+    public auth:AuthService,
     public securityService: SecurityService,
     public commonService: CommonService,
     private router: Router
@@ -30,33 +32,41 @@ export class AppComponent implements OnInit {
     this.setBreadcrumb();
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-       
+
 
       // if(this.router.url.includes("login")==true){
       //   return
       // }
 
       this.currentObj = r;
-
+ 
 
       if (this.currentObj.IsAuthenticated == false) {
         let u = localStorage.getItem('usernameFlex') ?? '';
         let pw = localStorage.getItem('pwFlex') ?? '';
 
-        if (u.length > 0 && pw.length > 0) {
+        if (u.length > 0  ) {
           let objUser: Login = {};
 
           objUser.UserName = u ?? '';
           objUser.Password = pw ?? '';
 
-          this.securityService.Login(objUser).subscribe(
-            (r) => {
-              this.currentObj = r;
-            },
-            (error) => {
-              this.router.navigate(['login']);
-            }
-          );
+          this.auth.refreshToken().subscribe(
+              (r) => {
+                this.currentObj = r;
+              },
+              (error) => {
+                this.router.navigate(['login']);
+              }
+            );
+          // this.securityService.Login(objUser).subscribe(
+          //   (r) => {
+          //     this.currentObj = r;
+          //   },
+          //   (error) => {
+          //     this.router.navigate(['login']);
+          //   }
+          // );
         } else {
           this.router.navigate(['login']);
         }

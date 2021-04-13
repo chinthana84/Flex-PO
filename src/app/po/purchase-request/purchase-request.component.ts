@@ -24,7 +24,8 @@ import { PoitemComponent } from '../poitem/poitem.component';
 
 @Component({
   selector: 'app-purchase-request',
-  templateUrl: './purchase-request.component.html'
+  templateUrl: './purchase-request.component.html',
+  styleUrls: ['./purchase-request.component.css']
 })
 export class PurchaseRequestComponent implements OnInit {
   private subs = new SubSink();
@@ -33,6 +34,8 @@ export class PurchaseRequestComponent implements OnInit {
   modelSupplier: SupplierDTO = {};
   modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
+
+  mode:string="";
 
   model: any;
   searching = false;
@@ -49,8 +52,8 @@ export class PurchaseRequestComponent implements OnInit {
       pageNo: 1,
       searchColName: '',
       colNames: [{ colName: "PONo", colText: 'PONo' },
-      { colName: "DepartmentName", colText: 'DepartmentName' }
-      ,{ colName: "SupplierName", colText: 'SupplierName' }
+      { colName: "DepartmentName", colText: 'Department' }
+      ,{ colName: "SupplierName", colText: 'Supplier' }
       ,{ colName: "ShipTo", colText: 'ShipTo' }
       ]
     }
@@ -82,38 +85,69 @@ export class PurchaseRequestComponent implements OnInit {
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
 
       if (params.id == 0) {
-        this.edited = true;
-        this.modelPR = new purchaseRequestHeaderDTO();
-        this.model=new TypeHeadSearchDTO();
-
-        this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
-          .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)});
-
-        this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
-          r => { this.modelShiptTo = r; }, (error) => {this.confirmDialogService.messageBox(environment.APIerror) });
+        this.NewPR();
       } else if (params.id > 0) {
-        this.edited = true;
-
-        let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
-        let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
-        let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + params.id);
-        forkJoin([x, y, z]).subscribe((data) => {
-          this.loggedUserDepartments = data[0];
-          this.modelShiptTo = data[1];
-          this.modelPR = data[2];
-          this.modelSupplier = data[2].Supplier;
-          this.modelPR.SupplierId = data[2].SupplierId;
-          this.modelPR.Podate = new Date(this.modelPR.Podate);
-         }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+        this.EditPR(params.id);
       } else {
         this.edited = false;
       }
     });
   }
 
+  EditPR(id:number,isCopy:Boolean=false){
+    this.edited = true;
+    this.mode="Edit";
+
+    let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
+    let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
+    let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + id);
+    forkJoin([x, y, z]).subscribe((data) => {
+      this.loggedUserDepartments = data[0];
+      this.modelShiptTo = data[1];
+      this.modelPR = data[2];
+      this.modelSupplier = data[2].Supplier;
+      this.modelPR.SupplierId = data[2].SupplierId;
+      this.modelPR.Podate = new Date(this.modelPR.Podate);
+
+      if(isCopy){
+        this.mode="Copy PR";
+        this.modelPR.PoheaderId=0;
+        this.modelPR.Pono="";
+        this.modelPR.PurchaseRequestDetail.forEach(r => {
+          r.PoheaderId=0;
+          r.PodetId=0;
+          r.guid=this.commonService.newGuid();
+        });
+
+        this.modelPR.PurchaseRequestAttachments .forEach(r => {
+          r.PoheaderId=0;
+        });
+      }
+
+     }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+  }
+
+  NewPR(){
+    this.mode="New";
+    this.edited = true;
+    this.modelPR = new purchaseRequestHeaderDTO();
+    this.model=new TypeHeadSearchDTO();
+
+    this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
+      .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)});
+
+    this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
+      r => { this.modelShiptTo = r; }, (error) => {this.confirmDialogService.messageBox(environment.APIerror) });
+  }
+
+  ViewOnly(Id:number){
+    this.router.navigate(["/request/edit"], { queryParams: { id: Id } });
+    this.EditPR(Id,false);
+  }
+
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {  this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+      .subscribe((data) => {  console.log(data); this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
   }
 
   Action(item: any) {
@@ -205,4 +239,11 @@ export class PurchaseRequestComponent implements OnInit {
         this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
     }, function () { });
   }
+
+  copyPR(id:number){
+    debugger
+    this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
+    this.EditPR(id,true);
+  }
+
 }

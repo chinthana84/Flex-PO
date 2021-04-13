@@ -11,7 +11,7 @@ export class FileuploadService {
   constructor(private http:HttpClient) { }
 
   public addFile(x: FileList) {
-    debugger
+
     let fileList: FileList = x;
     var ret=""
     if (fileList.length > 0) {
@@ -42,7 +42,7 @@ export class FileuploadService {
         , {
           responseType: 'blob'
         }).subscribe(x=> {
-debugger
+ 
           const url= window.URL.createObjectURL(x);
           window.open(url);
          // return x;

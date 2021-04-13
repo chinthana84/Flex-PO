@@ -1,7 +1,6 @@
 <div class="row">
   <section class="col-lg-12">
     <div class="card">
-
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
@@ -9,31 +8,30 @@
             <table class="table  ">
               <thead>
                 <th>PONo</th>
-                <th>DepartmentName</th>
-                <th>SupplierName</th>
+                <th>Department</th>
+                <th>Supplier</th>
                 <th>ShipTo</th>
-                <th>CreateDate</th>
+                <th>PO Status</th>
+                <th>Date</th>
                 <th>
-                  <button (click)="Action(null)" class="btn btn-primary ">
+                  <button (click)="Action(null)" class="btn btn-primary ">Purchase Request
                     <span class="fa fa-plus"></span></button>
                 </th>
               </thead>
               <tbody>
-
                 <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
                   <td>{{ item.Pono }}</td>
                   <td>{{ item.DepartmentName }}</td>
                   <td>{{ item.SupplierName }}</td>
                   <td>{{ item.ShipTo }}</td>
+                  <td>                <h5>  <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5> </td>
                   <td>{{ item.CreateDate }}</td>
                   <td>
                     <div class="btn-group">
-                      <button (click)="Action(item)" class="btn btn-primary  ">
-                        <span class="fa fa-edit"></span></button>
-
+                      <button *ngIf="item.PoStatusId==27" (click)="Action(item,false)" class="btn btn-primary"> <span class="fa fa-edit"></span></button>
+                      <button *ngIf="item.PoStatusId==30" (click)="copyPR(item.Id)" class="btn btn-warning  ">Copy PR  </button>
+                      <button *ngIf="item.PoStatusId==30" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View  </button>
                     </div>
-
-
                   </td>
                 </tr>
                 <tr *ngIf="this.gridOption.datas.pagedItems==0">
@@ -41,15 +39,11 @@
                 </tr>
               </tbody>
             </table>
-
-            <br />
             <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
-
-
-            <ul class="nav nav-tabs" role="tablist">
+           <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item   ">
                 <a class="nav-link  active" href="#genaralxx" role="tab" data-toggle="tab">Request & Details</a>
               </li>
@@ -58,26 +52,16 @@
               </li>
             </ul>
 
-
-
-            <!-- Tab panes -->
             <div class="tab-content m-2">
               <div role="tabpanel" class="tab-pane active " id="genaralxx">
-
-
                 <div class="row">
                   <div class="col-md-6">
-
                     <div class="card">
                       <div class="card-header">
-                        <h3 class="card-title">
-                          <i class="fas fa-chart-pie mr-1"></i>
-                          {{this.modelPR.Pono}}
-                        </h3>
+                        <h4> {{this.modelPR.Pono}} <span class="badge badge-secondary"> {{this.mode}}</span></h4>
                       </div>
                       <div class="card-body">
                         <div class="tab-content p-0">
-
                           <div class="row">
                             <div class="col-md-12">
                               <div class="form-group">
@@ -90,7 +74,7 @@
                           </div>
                           <div class="row">
                             <div class="col-md-6">
-                              <table class="table table-bordered">
+                              <table class="table table-bordered tt">
                                 <tbody>
                                   <tr>
                                     <td>Name</td>
@@ -112,15 +96,12 @@
                                     <td>Post Code</td>
                                     <td>{{this.modelSupplier.Postcode}}</td>
                                   </tr>
-
-
                                 </tbody>
                               </table>
                             </div>
                             <div class="col-md-6">
-                              <table class="table table-bordered">
+                              <table class="table table-bordered tt">
                                 <tbody>
-
                                   <tr>
                                     <td>Contact</td>
                                     <td>{{this.modelSupplier.Contact}}</td>
@@ -133,8 +114,6 @@
                                     <td>Fax</td>
                                     <td>{{this.modelSupplier.Fax}}</td>
                                   </tr>
-
-
                                   <tr>
                                     <td>Email</td>
                                     <td>{{this.modelSupplier.Email}}</td>
@@ -144,14 +123,9 @@
                               </table>
                             </div>
                           </div>
-
-
                         </div>
                       </div>
                     </div>
-
-
-
                   </div>
 
                   <div class="col-md-6">
@@ -249,7 +223,7 @@
                               <th>Unit Price</th>
                               <th>Amount</th>
                               <th>
-                                <button type="button" (click)="openXl(content)" class="btn btn-primary ">
+                                <button type="button" *ngIf="this.modelPR.PoStatusId==27" (click)="openXl(content)" class="btn btn-primary ">
                                   <span class="fa fa-plus"></span></button>
                               </th>
                             </thead>
@@ -266,10 +240,14 @@
                                 <td>{{item.UnitPrice}}</td>
                                 <td>{{item.UnitPrice * item.Qty }}</td>
                                 <td>
-                                  <button type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
-                                    <span class="fa fa-edit"></span></button>
-                                  <button type="button" (click)="deleteItem(item)" class="btn btn-danger ">
-                                    <span class="fa fa-trash"></span></button>
+
+                                  <div class="btn-group">
+
+                                    <button *ngIf="this.modelPR.PoStatusId==27" type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
+                                      <span class="fa fa-edit"></span></button>
+                                    <button *ngIf="this.modelPR.PoStatusId==27" type="button" (click)="deleteItem(item)" class="btn btn-danger ">
+                                      <span class="fa fa-trash"></span></button>
+                                  </div>
 
 
                                 </td>
@@ -277,7 +255,7 @@
 
                               <tr
                                 *ngIf=" this.modelPR.PurchaseRequestDetail?.length == 0 ||  this.modelPR.PurchaseRequestDetail == undefined">
-                                <td class="datanotfound" colspan="2">Data not found</td>
+                                <td class="datanotfound" colspan="10">Data not found</td>
                               </tr>
                             </tbody>
                           </table>
@@ -289,25 +267,21 @@
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane fade" id="upload">
-
                 <div class="row">
                   <table class="table table-striped">
                     <thead>
-
                       <th>Description</th>
                       <th>Uploader</th>
                       <th>Download</th>
                       <th>
-                        <button type="button" (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit"
+                        <button *ngIf="this.modelPR.PoStatusId==27" type="button" (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit"
                           data-toggle="modal" data-target="#edit">
                           <span class="fa fa-plus"></span>
                         </button>
                       </th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"
-                        class="table-hover mt-0">
-
+                      <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"class="table-hover mt-0">
                         <td>
                           <input [(ngModel)]="i.Description" id="TherNoteTitle{{index}}" name="TherNoteTitle{{index}}"
                             type="text" class="form-control" placeholder="Description" />
@@ -316,38 +290,27 @@
                           <input name="fileuploader{{index}}" type="file" (change)="this.addFile($event,i)" />
                         </td>
                         <td>
-                          <button *ngIf="i.UniqueFileName.length >0" type="button"
-                            (click)="this.fileuploadService.downloadFile(i.UniqueFileName)" class="btn btn-warning">
-                            Download
-                          </button>
-
+                          <button *ngIf="i.UniqueFileName.length >0" type="button"(click)="this.fileuploadService.downloadFile(i.UniqueFileName)" class="btn btn-warning">Download  </button>
                         </td>
                         <td>
-                          <button type="button" class="btn btn-danger" (click)="deleteFile(i.Id)">
+                          <button  *ngIf="this.modelPR.PoStatusId==27" type="button" class="btn btn-danger" (click)="deleteFile(i.Id)">
                             <i class="fa fa-trash"></i>
                           </button>
                         </td>
                       </tr>
-                      <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
-                        <td class="datanotfound" colspan="4">Data not found</td>
-                      </tr>
+                      <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0"><td class="datanotfound" colspan="4">Data not found</td> </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
             </div>
 
-
-
-
             <div class="btn-group">
-              <button type="button" (click)="Save();" class="btn btn-primary save_button"> <span
+              <button type="button"  *ngIf="this.modelPR.PoStatusId==27"  (click)="Save();" class="btn btn-primary save_button"> <span
                   class="fa fa-save"></span> </button>
               <button type="button" (click)="router.navigate(['request']);" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
             </div>
-
-
           </form>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { AuthService } from './services/auth.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SecurityService } from './services/security.service';
@@ -18,7 +19,7 @@ import { SearchPipe } from './pipes/filterFromList.pipe';
     FormsModule
   ],
   exports: [ConfirmDialogComponent,NumericDirective,LoaderComponent,SearchPipe],
-  providers: [LoaderService,SecurityService, ConfirmDialogService,
+  providers: [LoaderService,SecurityService, ConfirmDialogService,AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
   ],
 })

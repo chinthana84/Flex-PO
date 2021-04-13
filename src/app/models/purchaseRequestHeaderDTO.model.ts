@@ -1,4 +1,4 @@
-import { SrvRecord } from 'node:dns';
+ 
 import { DepartmentsDTO, ItemsDTO, RefTableDTO, SupplierDTO } from 'src/app/models/refTable.model';
 import { AccountListDTO } from "./refTable.model";
 

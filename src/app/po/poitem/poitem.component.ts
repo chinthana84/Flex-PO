@@ -1,7 +1,6 @@
 import { TypeHeadSearchDTO } from 'src/app/grid/gridModels/typeheadSearch.model';
 import { PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
 import { ItemsDTO, RefTableDTO } from 'src/app/models/refTable.model';
-import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model';
 import { AccountListDTO } from './../../models/refTable.model';
 import { HttpClient } from '@angular/common/http';
 import { Component, Input, OnInit } from '@angular/core';
