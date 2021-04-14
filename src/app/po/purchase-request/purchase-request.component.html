@@ -14,8 +14,8 @@
                 <th>PO Status</th>
                 <th>Date</th>
                 <th>
-                  <button (click)="Action(null)" class="btn btn-primary ">Purchase Request
-                    <span class="fa fa-plus"></span></button>
+                  <button (click)="Action(null)" class="btn btn-primary ">New Request <span
+                      class="fa fa-plus"></span></button>
                 </th>
               </thead>
               <tbody>
@@ -24,13 +24,18 @@
                   <td>{{ item.DepartmentName }}</td>
                   <td>{{ item.SupplierName }}</td>
                   <td>{{ item.ShipTo }}</td>
-                  <td>                <h5>  <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5> </td>
+                  <td>
+                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
+                  </td>
                   <td>{{ item.CreateDate }}</td>
                   <td>
                     <div class="btn-group">
-                      <button *ngIf="item.PoStatusId==27" (click)="Action(item,false)" class="btn btn-primary"> <span class="fa fa-edit"></span></button>
-                      <button *ngIf="item.PoStatusId==30" (click)="copyPR(item.Id)" class="btn btn-warning  ">Copy PR  </button>
-                      <button *ngIf="item.PoStatusId==30" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View  </button>
+                      <button *ngIf="item.PoStatusId==27" (click)="Action(item,false)" class="btn btn-primary"> <span
+                          class="fa fa-edit"></span></button>
+                      <button *ngIf="item.PoStatusId!=27" (click)="copyPR(item.Id)" class="btn btn-warning  ">Copy PR
+                      </button>
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
+                      </button>
                     </div>
                   </td>
                 </tr>
@@ -43,12 +48,15 @@
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
-           <ul class="nav nav-tabs" role="tablist">
+            <ul class="nav nav-tabs" role="tablist">
               <li class="nav-item   ">
                 <a class="nav-link  active" href="#genaralxx" role="tab" data-toggle="tab">Request & Details</a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#upload" role="tab" data-toggle="tab">Attachments</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#ApprovalFlow" role="tab" data-toggle="tab">ApprovalFlow</a>
               </li>
             </ul>
 
@@ -223,7 +231,9 @@
                               <th>Unit Price</th>
                               <th>Amount</th>
                               <th>
-                                <button type="button" *ngIf="this.modelPR.PoStatusId==27" (click)="openXl(content)" class="btn btn-primary ">
+                                <button type="button"
+                                  *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                  (click)="openXl(content)" class="btn btn-primary ">
                                   <span class="fa fa-plus"></span></button>
                               </th>
                             </thead>
@@ -240,19 +250,26 @@
                                 <td>{{item.UnitPrice}}</td>
                                 <td>{{item.UnitPrice * item.Qty }}</td>
                                 <td>
-
                                   <div class="btn-group">
 
-                                    <button *ngIf="this.modelPR.PoStatusId==27" type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
+                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                      type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
                                       <span class="fa fa-edit"></span></button>
-                                    <button *ngIf="this.modelPR.PoStatusId==27" type="button" (click)="deleteItem(item)" class="btn btn-danger ">
+                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                      type="button" (click)="deleteItem(item)" class="btn btn-danger ">
                                       <span class="fa fa-trash"></span></button>
                                   </div>
 
 
                                 </td>
                               </tr>
-
+                              <tr style="font-weight: bold;">
+                                <td class="datanotfound" colspan="7"></td>
+                                <td>Total</td>
+                                <td>   {{ this.GetTotal()  }}
+                                </td>
+                                <td></td>
+                              </tr>
                               <tr
                                 *ngIf=" this.modelPR.PurchaseRequestDetail?.length == 0 ||  this.modelPR.PurchaseRequestDetail == undefined">
                                 <td class="datanotfound" colspan="10">Data not found</td>
@@ -274,14 +291,16 @@
                       <th>Uploader</th>
                       <th>Download</th>
                       <th>
-                        <button *ngIf="this.modelPR.PoStatusId==27" type="button" (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit"
-                          data-toggle="modal" data-target="#edit">
+                        <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0" type="button"
+                          (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit" data-toggle="modal"
+                          data-target="#edit">
                           <span class="fa fa-plus"></span>
                         </button>
                       </th>
                     </thead>
                     <tbody>
-                      <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"class="table-hover mt-0">
+                      <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"
+                        class="table-hover mt-0">
                         <td>
                           <input [(ngModel)]="i.Description" id="TherNoteTitle{{index}}" name="TherNoteTitle{{index}}"
                             type="text" class="form-control" placeholder="Description" />
@@ -290,24 +309,38 @@
                           <input name="fileuploader{{index}}" type="file" (change)="this.addFile($event,i)" />
                         </td>
                         <td>
-                          <button *ngIf="i.UniqueFileName.length >0" type="button"(click)="this.fileuploadService.downloadFile(i.UniqueFileName)" class="btn btn-warning">Download  </button>
+                          <button *ngIf="i.UniqueFileName.length >0" type="button"
+                            (click)="this.fileuploadService.downloadFile(i.UniqueFileName)"
+                            class="btn btn-warning">Download </button>
                         </td>
                         <td>
-                          <button  *ngIf="this.modelPR.PoStatusId==27" type="button" class="btn btn-danger" (click)="deleteFile(i.Id)">
+                          <button *ngIf="this.modelPR.PoStatusRefId==27" type="button" class="btn btn-danger"
+                            (click)="deleteFile(i.Id)">
                             <i class="fa fa-trash"></i>
                           </button>
                         </td>
                       </tr>
-                      <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0"><td class="datanotfound" colspan="4">Data not found</td> </tr>
+                      <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
+                        <td class="datanotfound" colspan="4">Data not found</td>
+                      </tr>
                     </tbody>
                   </table>
                 </div>
               </div>
+
+              <div role="tabpanel" class="tab-pane fade" id="ApprovalFlow">
+                <br /><br />
+
+                <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
+                  class="badge badge-primary">{{item.ApprovalGroup.Name}}</span>
+
+
+              </div>
             </div>
 
             <div class="btn-group">
-              <button type="button"  *ngIf="this.modelPR.PoStatusId==27"  (click)="Save();" class="btn btn-primary save_button"> <span
-                  class="fa fa-save"></span> </button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                (click)="Save();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
               <button type="button" (click)="router.navigate(['request']);" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
             </div>

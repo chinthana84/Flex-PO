@@ -23,7 +23,7 @@ export class LoaderInterceptor implements HttpInterceptor {
       if (error instanceof HttpErrorResponse && error.status === 401) {
           return this.handle401Error(request, next);
       } else {
-         this.router.navigate(['login']);
+        //  this.router.navigate(['login']);
         return throwError(error);
       }
     }));

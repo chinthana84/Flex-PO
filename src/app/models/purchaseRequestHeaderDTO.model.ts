@@ -1,5 +1,5 @@
- 
-import { DepartmentsDTO, ItemsDTO, RefTableDTO, SupplierDTO } from 'src/app/models/refTable.model';
+
+import { ApprovalGroupsDTO, DepartmentsDTO, ItemsDTO, RefTableDTO, SupplierDTO } from 'src/app/models/refTable.model';
 import { AccountListDTO } from "./refTable.model";
 
 export   class purchaseRequestHeaderDTO
@@ -20,6 +20,7 @@ export   class purchaseRequestHeaderDTO
   public     Supplier ?: SupplierDTO;
   public   PurchaseRequestDetail?: PurchaseRequestDetailDTO[]=[];
    public   PurchaseRequestAttachments ?:PurchaseRequestAttachmentsDTO[]=[];
+   public     PurchaseOrderApproval ?:PurchaseOrderApprovalDTO[]=[];
 }
 
 
@@ -52,4 +53,16 @@ export   class PurchaseRequestAttachmentsDTO
     public   UniqueFileName ?:string="";
 public Description?:string="";
     public    Poheader?:purchaseRequestHeaderDTO;
+}
+
+export class PurchaseOrderApprovalDTO
+{
+    public   ApprovalId ?:Number=0;
+    public   PoheaderId ?:Number=0;
+    public   ApprovalGroupId ?:Number=0;
+    public   ApprovalStatusRefId ?:Number=0;
+    public   OrderLevel ?:Number=0;
+
+    public    ApprovalGroup ?:ApprovalGroupsDTO;
+    public    ApprovalStatusRef ?:RefTableDTO;
 }

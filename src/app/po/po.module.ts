@@ -9,16 +9,20 @@ import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PoitemComponent } from './poitem/poitem.component';
 import { MySharedModule } from '../myShared/my-shared.module';
+import { PurchaseRequestApprovalComponent } from './purchase-request-approval/purchase-request-approval.component';
 
 const routes: Routes = [
   {
-    path: 'request',data:{titleKey: 'request'}, component: PurchaseRequestComponent
+    path: 'request',data:{titleKey: 'Request'}, component: PurchaseRequestComponent
     , children: [{ path: 'edit', component: PurchaseRequestComponent }]
+  },  {
+    path: 'request-approval',data:{titleKey: 'Approval'}, component: PurchaseRequestApprovalComponent
+    , children: [{ path: 'edit', component: PurchaseRequestApprovalComponent }]
   }
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent, PoitemComponent],
+  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent],
 
   imports: [
     CommonModule,
@@ -28,7 +32,6 @@ const routes: Routes = [
     UserModule,
     MySharedModule,
     NgSelectModule,
-
     RouterModule.forChild(routes)
   ]
   ,providers: [

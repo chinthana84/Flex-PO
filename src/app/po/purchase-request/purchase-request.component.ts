@@ -109,10 +109,14 @@ export class PurchaseRequestComponent implements OnInit {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
+   // let sum=  this.modelPR.PurchaseRequestDetail.map(a=> a.Qty * a.UnitPrice).reduce(function(a,b){  return a+b; })
       if(isCopy){
         this.mode="Copy PR";
         this.modelPR.PoheaderId=0;
         this.modelPR.Pono="";
+        this.modelPR.PoStatusRefId=0;
+        this.modelPR.PoStatusRef=null;
+        this.modelPR.PurchaseOrderApproval=[];
         this.modelPR.PurchaseRequestDetail.forEach(r => {
           r.PoheaderId=0;
           r.PodetId=0;
@@ -246,4 +250,12 @@ export class PurchaseRequestComponent implements OnInit {
     this.EditPR(id,true);
   }
 
+  GetTotal(){
+    let sum= 0;
+
+this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
+
+      return sum;
+
+  }
 }

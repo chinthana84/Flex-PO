@@ -1,3 +1,4 @@
+ 
 import { UserDetails } from "./secutiry.model";
 
 export class SecurityGroupsUserDetailsDTO {
@@ -27,6 +28,9 @@ export class ApprovalGroupsDTO {
   public Remarks?: string = "";
   public StatusRefId?: number = 0;
   public StatusRef?: RefTableDTO = {}
+
+  public   PoApprovalRefId?: number = 0;
+public   PoApprovalRef ?:RefTableDTO;
 
   public ApprovalGroupUsers?: ApprovalGroupUsersDTO[] = [];
 }

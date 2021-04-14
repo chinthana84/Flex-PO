@@ -20,7 +20,7 @@ import { AccountsComponent } from './admin/accounts/accounts.component';
 const routes: Routes = [
   {
     path: 'login',
-    data: { titleKey: 'request' },
+    data: { titleKey: 'Request' },
     component: LoginComponent,
   },
   {
@@ -89,6 +89,6 @@ const routes: Routes = [
     GridModule,
     MySharedModule,
   ],
-  exports:[SupplierComponent]
+  exports: [SupplierComponent]
 })
-export class UserModule {}
+export class UserModule { }

@@ -17,6 +17,7 @@
                 <th>Caps</th>
                 <th>Status</th>
                 <th>Remark</th>
+               
                 <th>
                   <button class="btn btn-primary ">
                     <span (click)="Add(null)" class="fa fa-plus"></span></button>
@@ -47,6 +48,7 @@
                     <input [(ngModel)]="item.Remarks" id="Remarks{{ i }}" name="Remarks{{ i }}" class="form-control"
                       type="text" placeholder="Remarks" />
                   </td>
+
                   <td>
                     <button (click)="Save(item)" class="btn btn-primary " data-title="Edit" data-toggle="modal"
                       data-target="#edit">
