@@ -1,6 +1,7 @@
 
 import { ApprovalGroupsDTO, DepartmentsDTO, ItemsDTO, RefTableDTO, SupplierDTO } from 'src/app/models/refTable.model';
 import { AccountListDTO } from "./refTable.model";
+import { UserDetails } from './secutiry.model';
 
 export   class purchaseRequestHeaderDTO
 {
@@ -14,6 +15,8 @@ export   class purchaseRequestHeaderDTO
   public  PoStatusRefId ?: number=0;
   public  Podate?:Date;
 
+  public   ApprovalRemarks  ?:string="";
+
   public    Department?: DepartmentsDTO
   public    PoStatusRef ?: RefTableDTO
   public     ShipToRef ?: RefTableDTO;
@@ -21,6 +24,8 @@ export   class purchaseRequestHeaderDTO
   public   PurchaseRequestDetail?: PurchaseRequestDetailDTO[]=[];
    public   PurchaseRequestAttachments ?:PurchaseRequestAttachmentsDTO[]=[];
    public     PurchaseOrderApproval ?:PurchaseOrderApprovalDTO[]=[];
+   public    UpdatedUserNavigation ?:UserDetails;
+   public     CreatedUserNavigation ?:UserDetails;
 }
 
 
@@ -62,7 +67,13 @@ export class PurchaseOrderApprovalDTO
     public   ApprovalGroupId ?:Number=0;
     public   ApprovalStatusRefId ?:Number=0;
     public   OrderLevel ?:Number=0;
+    public Remarks?:string="";
+    public  ApprovedDate ?: Date;
+    public  PostatusId  ?:Number=0;
 
+    public    Postatus?:RefTableDTO;
+
+    public    ApprovedUser ?:UserDetails;
     public    ApprovalGroup ?:ApprovalGroupsDTO;
     public    ApprovalStatusRef ?:RefTableDTO;
 }

@@ -78,7 +78,7 @@ const routes: Routes = [
     DepartmetnsComponent,
     RefTablesComponent,
     SupplierComponent,
-    ItemsComponent,
+    ItemsComponent ,
     AccountsComponent,
   ],
   imports: [

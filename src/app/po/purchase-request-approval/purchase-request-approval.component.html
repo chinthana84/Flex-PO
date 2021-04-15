@@ -1,1 +1,303 @@
-<p>purchase-request-approval works!</p>
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="tab-content p-0">
+          <div *ngIf="!edited">
+            <!-- <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
+            <table class="table  ">
+              <thead>
+                <th>Pono</th>
+                <th>Podate</th>
+                <th>SupplierName</th>
+                <th>DepartmentName</th>
+                <th>ShipTo</th>
+                <th>Postatus</th>
+                <th>RequestBy</th>
+                <th>Total</th>
+                <th> </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of gridOption?.datas?.pagedItems" class="table-hover">
+                  <td>{{ item.Pono }}</td>
+                  <td>{{ item.Podate }}</td>
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.DepartmentName }}</td>
+                  <td>{{ item.ShipTo }}</td>
+                  <td>
+                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
+                  </td>
+                  <td>{{ item.RequestBy }}</td>
+                  <td>{{ item.Total }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button (click)="Action(item)" class="btn btn-primary  ">
+                        <span class="fa fa-edit"></span></button>
+                    </div>
+                  </td>
+                </tr>
+                <!-- <tr  *ngIf="this.gridOption.datas.pagedItems == undefined || this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr> -->
+              </tbody>
+            </table>
+            <br />
+            <!-- <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager> -->
+          </div>
+
+          <div *ngIf="edited">
+
+
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item   ">
+                <a class="nav-link  active" href="#genaralxx" role="tab" data-toggle="tab">Request & Details</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#upload" role="tab" data-toggle="tab">Attachments</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#ApprovalFlow" role="tab" data-toggle="tab">ApprovalFlow</a>
+              </li>
+            </ul>
+
+            <div class="tab-content m-2">
+              <div role="tabpanel" class="tab-pane active " id="genaralxx">
+                <div class="row">
+                  <div class="col-md-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4> {{this.modelPR.Pono}} <span class="badge badge-secondary">
+                            {{this.modelPR?.PoStatusRef?.RefDescription}}</span></h4>
+
+
+
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content p-0">
+                          <div class="row">
+                            <div class="col-md-4">
+                              <table class="table table-bordered tt">
+                                <tbody>
+                                  <tr>
+                                    <td>REQUESTED BY</td>
+                                    <td>{{ this.modelPR?.CreatedUserNavigation?.UserName }} </td>
+                                  </tr>
+                                  <tr>
+                                    <td>DEPARTMENT</td>
+                                    <td>{{ this.modelPR?.Department?.DepartmentName }}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>SUPPLIER</td>
+                                    <td>{{ this.modelPR?.Supplier?.SupplierName }}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>SHIPTO</td>
+                                    <td>{{ this.modelPR?.ShipToRef?.RefDescription }}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+
+                            <div class="col-md-4">
+                              <table class="table table-bordered tt">
+                                <tbody>
+                                  <tr>
+                                    <td>Quote Ref</td>
+                                    <td>{{ this.modelPR?.Reference }} </td>
+                                  </tr>
+                                  <tr>
+                                    <td>Attachment count</td>
+                                    <td>{{ this.modelPR?.PurchaseRequestAttachments?.length }}</td>
+                                  </tr>
+                                  <!-- <tr>
+                                    <td>SUPPLIER</td>
+                                    <td>{{ this.modelPR?.Supplier?.SupplierName }}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>SHIPTO</td>
+                                    <td>{{ this.modelPR?.ShipToRef?.RefDescription }}</td>
+                                  </tr> -->
+                                </tbody>
+                              </table>
+                            </div>
+
+                            <div class="col-md-4">
+                              <div class="card text-center" style="width: 18rem;">
+                                <div class="card-body">
+                                  <h5 class="card-title ">APPROVE THIS ORDER ?</h5> <br />
+
+                                  <button (click)="Approve(true)" class="btn btn-primary">Yes</button>
+
+                                  <button (click)="Reject(true)" class="btn btn-primary">No</button>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label for="Remarks">Remarks</label>
+                                <input id="Remarks" name="Remarks" [(ngModel)]="this.modelPR.ApprovalRemarks"
+                                  type="text" class="form-control" placeholder="Remarks" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="row">
+                  <section class="col-lg-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">
+                          <i class="fas fa-chart-pie mr-1"></i>
+                          Details
+                        </h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content p-0">
+
+                          <table class="table  ">
+                            <thead>
+                              <th>No</th>
+                              <th>Quantity</th>
+                              <th>Reference</th>
+                              <th>Description</th>
+                              <th>Account Code</th>
+                              <th>Job Code</th>
+                              <th>Payment Type</th>
+                              <th>Unit Price</th>
+                              <th>Amount</th>
+
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of this.modelPR.PurchaseRequestDetail; let i=index;"
+                                class="table-hover">
+                                <td>{{ i+1 }} </td>
+                                <td>{{item.Qty}}</td>
+                                <td>{{item.Reference}}</td>
+                                <td> {{item.Item.ItemDescription}} </td>
+                                <td>{{item.AccountList.AccountCode}}</td>
+                                <td>{{item.JobRef.RefDescription}}</td>
+                                <td>{{item.PaymentTypeRef?.RefDescription}}</td>
+                                <td>{{item.UnitPrice}}</td>
+                                <td>{{item.UnitPrice * item.Qty }}</td>
+
+                              </tr>
+                              <tr style="font-weight: bold;">
+                                <td class="datanotfound" colspan="7"></td>
+                                <td>Total</td>
+                                <td> {{ this.GetTotal() }}
+                                </td>
+                                <td></td>
+                              </tr>
+                              <tr
+                                *ngIf="    this.modelPR.PurchaseRequestDetail == undefined || this.modelPR.PurchaseRequestDetail?.length == 0 " >
+                                <td class="datanotfound" colspan="10">Data not found</td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="upload">
+                <div class="row">
+                  <table class="table table-striped">
+                    <thead>
+                      <th>Description</th>
+                      <th>Uploader</th>
+                      <th>Download</th>
+
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"
+                        class="table-hover mt-0">
+                        <td>
+                          <input [(ngModel)]="i.Description" id="TherNoteTitle{{index}}" name="TherNoteTitle{{index}}"
+                            type="text" class="form-control" placeholder="Description" />
+                        </td>
+                        <td>
+                          <input name="fileuploader{{index}}" type="file" (change)="this.addFile($event,i)" />
+                        </td>
+                        <td>
+                          <button *ngIf="i.UniqueFileName.length >0" type="button"
+                            (click)="this.fileuploadService.downloadFile(i.UniqueFileName)"
+                            class="btn btn-warning">Download </button>
+                        </td>
+
+                      </tr>
+                      <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
+                        <td class="datanotfound" colspan="4">Data not found</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div role="tabpanel" class="tab-pane fade" id="ApprovalFlow">
+                <br />
+
+                <span  *ngFor="let item of this.modelPR.PurchaseOrderApproval"
+                  class="badge badge-primary m-1">{{item.ApprovalGroup.Name}}</span>
+
+                <br />
+
+
+                <table class="table table-striped">
+                  <thead>
+                    <th>Order</th>
+                    <th>Approval Group</th>
+                    <th>Remarks</th>
+                    <th>Approved User</th>
+                    <th>Approved Date</th>
+                    <th>Status</th>
+
+                  </thead>
+<tbody>
+                  <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
+                    <td>
+                      {{ i?.OrderLevel }}
+                    </td>
+                    <td>
+                      {{ i?.ApprovalGroup?.Name }}
+                    </td>
+                    <td>
+                      {{ i?.Remarks }}
+                    </td>
+                    <td>
+                      {{ i?.ApprovedUser?.UserName }}
+                    </td>
+                    <td>
+                      {{ i?.ApprovedDate |date }}
+                    </td>
+                    <td>
+                      {{ i?.Postatus?.RefDescription }}
+                    </td>
+                  </tr>
+                </tbody>
+
+                </table>
+
+
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ApprovalRemarks -->

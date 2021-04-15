@@ -72,6 +72,9 @@ export class PurchaseRequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
+      if(this.modelPR.PurchaseRequestDetail == undefined){
+        this.modelPR.PurchaseRequestDetail=[];
+      }
       if (this.modelPR.PurchaseRequestDetail.filter(x=> x.guid == r.guid).length >0){
         this.modelPR.PurchaseRequestDetail= this.modelPR.PurchaseRequestDetail.filter(x=> x.guid != r.guid);
         this.modelPR.PurchaseRequestDetail.push(r);
@@ -109,7 +112,6 @@ export class PurchaseRequestComponent implements OnInit {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
-   // let sum=  this.modelPR.PurchaseRequestDetail.map(a=> a.Qty * a.UnitPrice).reduce(function(a,b){  return a+b; })
       if(isCopy){
         this.mode="Copy PR";
         this.modelPR.PoheaderId=0;
@@ -125,6 +127,7 @@ export class PurchaseRequestComponent implements OnInit {
 
         this.modelPR.PurchaseRequestAttachments .forEach(r => {
           r.PoheaderId=0;
+          r.Id=0;
         });
       }
 

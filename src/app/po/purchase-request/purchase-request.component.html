@@ -39,7 +39,7 @@
                     </div>
                   </td>
                 </tr>
-                <tr *ngIf="this.gridOption.datas.pagedItems==0">
+                <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
                   <td class="datanotfound" colspan="7">Data not found</td>
                 </tr>
               </tbody>
@@ -333,6 +333,41 @@
 
                 <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
                   class="badge badge-primary">{{item.ApprovalGroup.Name}}</span>
+
+                  <table class="table table-striped">
+                    <thead>
+                      <th>Order</th>
+                      <th>Approval Group</th>
+                      <th>Remarks</th>
+                      <th>Approved User</th>
+                      <th>Approved Date</th>
+                      <th>Status</th>
+
+                    </thead>
+  <tbody>
+                    <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
+                      <td>
+                        {{ i?.OrderLevel }}
+                      </td>
+                      <td>
+                        {{ i?.ApprovalGroup?.Name }}
+                      </td>
+                      <td>
+                        {{ i?.Remarks }}
+                      </td>
+                      <td>
+                        {{ i?.ApprovedUser?.UserName }}
+                      </td>
+                      <td>
+                        {{ i?.ApprovedDate |date }}
+                      </td>
+                      <td>
+                        {{ i?.Postatus?.RefDescription }}
+                      </td>
+                    </tr>
+                  </tbody>
+
+                  </table>
 
 
               </div>

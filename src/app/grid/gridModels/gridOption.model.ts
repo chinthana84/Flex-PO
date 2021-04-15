@@ -14,13 +14,18 @@ export class GridOptions{
 
 
 
+
+
+
+
 export enum GridType {
   ApprovalGroups = 1,
   Departments = 2,
   Supplier = 3,
   Item = 4,
   AccountList = 5,
-  PR=6
+  PR = 6,
+  PRApprove=7
 }
 
   export class MyNavigations {
