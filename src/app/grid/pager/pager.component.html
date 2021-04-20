@@ -1,5 +1,5 @@
 <!-- <ul *ngIf="pagerX.datas.pages && pagerX.datas.pages.length" class="pagination"> -->
-<!-- <ul *ngIf="pagerX?.datas?.totalPages>1" class="pagination">
+<ul *ngIf="pagerX?.datas?.totalPages>1" class="pagination">
   <li [ngClass]="{disabled:pagerX.datas.currentPage === 1}" class="page-item">
     <a class="page-link" (click)="uploadComplete(1)">First</a>
   </li>
@@ -15,6 +15,6 @@
   <li [ngClass]="{disabled:pagerX.datas.currentPage === pagerX.datas.totalPages}" class="page-item">
     <a class="page-link" (click)="uploadComplete(pagerX.datas.totalPages)">Last</a>
   </li>
-</ul> -->
+</ul>
 
 <!-- <pre>{{pagerX | json}}</pre>  -->

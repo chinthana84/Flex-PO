@@ -29,10 +29,10 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     searchObject: {
       girdId: GridType.PRApprove
       , SavedDBColumn: "Name"
-      , defaultSortColumnName: "Name",
+      , defaultSortColumnName: "Pono",
       pageNo: 1,
       searchColName: '',
-      colNames: [{ colName: "Name", colText: 'Name' }]
+      colNames: [{ colName: "Pono", colText: 'Pono' }]
     }
   };
 
@@ -70,10 +70,14 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
       .subscribe((data) => {
-        debugger
-        console.log(data);
-        this.gridOption.datas = data;
-        this.gridOption.searchObject.saveID = 0;
+
+
+          this.gridOption.datas = data;
+        if(this.gridOption.datas.pagedItems ==0 )
+        {
+          this.gridOption.datas.pagedItems =[];
+        }
+
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror);
 
@@ -89,7 +93,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         }
         else {
           this.toastr.success(environment.dataSaved);
-          this.router.navigate(['request-approval']);
+          this.router.navigate(['requestapproval']);
           this.setPage(this.gridOption.searchObject);
         }
       }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
@@ -106,7 +110,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         }
         else {
           this.toastr.success(environment.dataSaved);
-          this.router.navigate(['request-approval']);
+          this.router.navigate(['requestapproval']);
           this.setPage(this.gridOption.searchObject);
         }
       }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
@@ -114,7 +118,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   }
 
   Action(item: any) {
-    this.router.navigate(["/request-approval/edit"], { queryParams: { id: item.PoheaderId } });
+    this.router.navigate(["/requestapproval/edit"], { queryParams: { id: item.PoheaderId } });
     this.edited = true;
   }
 

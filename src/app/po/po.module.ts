@@ -16,7 +16,7 @@ const routes: Routes = [
     path: 'request',data:{titleKey: 'Request'}, component: PurchaseRequestComponent
     , children: [{ path: 'edit', component: PurchaseRequestComponent }]
   },  {
-    path: 'request-approval',data:{titleKey: 'Approval'}, component: PurchaseRequestApprovalComponent
+    path: 'requestapproval',data:{titleKey: 'Approval'}, component: PurchaseRequestApprovalComponent
     , children: [{ path: 'edit', component: PurchaseRequestApprovalComponent }]
   }
 ];

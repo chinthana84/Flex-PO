@@ -3,8 +3,9 @@
     <div class="card">
       <div class="card-body">
         <div class="tab-content p-0">
-          <div *ngIf="!edited">
-            <!-- <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
+          <div *ngIf="!edited"> 
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+
             <table class="table  ">
               <thead>
                 <th>Pono</th>
@@ -36,13 +37,13 @@
                     </div>
                   </td>
                 </tr>
-                <!-- <tr  *ngIf="this.gridOption.datas.pagedItems == undefined || this.gridOption.datas.pagedItems==0">
+                <tr  *ngIf="this.gridOption.datas.pagedItems == undefined || this.gridOption.datas.pagedItems==0">
                   <td class="datanotfound" colspan="7">Data not found</td>
-                </tr> -->
+                </tr>
               </tbody>
             </table>
             <br />
-            <!-- <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager> -->
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
           </div>
 
           <div *ngIf="edited">

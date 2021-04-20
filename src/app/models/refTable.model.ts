@@ -1,4 +1,4 @@
- 
+
 import { UserDetails } from "./secutiry.model";
 
 export class SecurityGroupsUserDetailsDTO {
@@ -116,7 +116,7 @@ export   class ItemsDTO
     public   ItemDescription ?: string = "";
     public    Sih?:number=0;
     public    UnitId? :number = 0;
-    public    UnitPrice:number=0;
+    public    UnitPrice?:number=0;
     public    StatusId?:number=0;
 
     public    Status ?:RefTableDTO={};

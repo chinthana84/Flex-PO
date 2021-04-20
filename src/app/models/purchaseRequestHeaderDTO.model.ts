@@ -17,15 +17,15 @@ export   class purchaseRequestHeaderDTO
 
   public   ApprovalRemarks  ?:string="";
 
-  public    Department?: DepartmentsDTO
-  public    PoStatusRef ?: RefTableDTO
-  public     ShipToRef ?: RefTableDTO;
-  public     Supplier ?: SupplierDTO;
+  public    Department?: DepartmentsDTO={};
+  public    PoStatusRef ?: RefTableDTO={};
+  public     ShipToRef ?: RefTableDTO={};
+  public     Supplier ?: SupplierDTO ={};
   public   PurchaseRequestDetail?: PurchaseRequestDetailDTO[]=[];
    public   PurchaseRequestAttachments ?:PurchaseRequestAttachmentsDTO[]=[];
    public     PurchaseOrderApproval ?:PurchaseOrderApprovalDTO[]=[];
-   public    UpdatedUserNavigation ?:UserDetails;
-   public     CreatedUserNavigation ?:UserDetails;
+   public    UpdatedUserNavigation ?:UserDetails={};
+   public     CreatedUserNavigation ?:UserDetails={};
 }
 
 
@@ -45,8 +45,8 @@ export class PurchaseRequestDetailDTO
 
     public     PaymentTypeRef ?: RefTableDTO={};
     public    AccountList?: AccountListDTO={};
-    public    Item ?: ItemsDTO;
-    public    JobRef ?: RefTableDTO;
+    public    Item ?: ItemsDTO ={};
+    public    JobRef ?: RefTableDTO ={};
     public    Poheader ?:purchaseRequestHeaderDTO;
 }
 
@@ -57,7 +57,7 @@ export   class PurchaseRequestAttachmentsDTO
    // public Filename?:byte[] ;
     public   UniqueFileName ?:string="";
 public Description?:string="";
-    public    Poheader?:purchaseRequestHeaderDTO;
+    public    Poheader?:purchaseRequestHeaderDTO ={};
 }
 
 export class PurchaseOrderApprovalDTO
@@ -71,9 +71,9 @@ export class PurchaseOrderApprovalDTO
     public  ApprovedDate ?: Date;
     public  PostatusId  ?:Number=0;
 
-    public    Postatus?:RefTableDTO;
+    public    Postatus?:RefTableDTO ={};
 
-    public    ApprovedUser ?:UserDetails;
-    public    ApprovalGroup ?:ApprovalGroupsDTO;
-    public    ApprovalStatusRef ?:RefTableDTO;
+    public    ApprovedUser ?:UserDetails ={};
+    public    ApprovalGroup ?:ApprovalGroupsDTO ={};
+    public    ApprovalStatusRef ?:RefTableDTO ={};
 }
