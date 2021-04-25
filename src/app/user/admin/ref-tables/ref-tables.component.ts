@@ -72,6 +72,10 @@ export class RefTablesComponent implements OnInit {
       obj.RefTableName = this.selectedRef;
       this.model.push(obj);
     }
+
+    this.model= this.model.sort(( a, b ) => a.RefId > b.RefId ? 1 : -1 )
+
+
   }
 
   onKey(event: any) {
@@ -92,7 +96,7 @@ export class RefTablesComponent implements OnInit {
           } else {
             this.toasterService.success(environment.dataSaved);
             //this.router.navigate(['masterData']);
-         
+
           }
         },
         (error) => {

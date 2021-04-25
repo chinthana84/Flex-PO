@@ -25,7 +25,8 @@ export enum GridType {
   Item = 4,
   AccountList = 5,
   PR = 6,
-  PRApprove=7
+  PRApprove=7,
+  AssignedToME=8
 }
 
   export class MyNavigations {
@@ -37,6 +38,8 @@ export enum GridType {
     public supplier:string="supplier";
    public items:string="items";
    public accountList="AccountList";
+   public departmentUsers="DepUsers";
+   public myDepartments="MyDeps";
    }
 
 

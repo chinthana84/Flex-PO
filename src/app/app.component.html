@@ -221,6 +221,25 @@
               </ul>
             </li>
 
+            <li class="nav-item menu-open">
+              <a class="nav-link active">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  My Works
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a routerLink="MyDeps" class="nav-link active">
+
+                    <p>My Departments  </p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+
             <li class="nav-item menu-open ">
               <a class="nav-link active">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -249,6 +268,14 @@
                     <p>Departments </p>
                   </a>
                 </li>
+
+                    <li class="nav-item">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link active">
+
+                    <p>departmentUsers </p>
+                  </a>
+                </li>
+
                 <li class="nav-item">
                   <a routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link active">
 

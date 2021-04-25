@@ -1,3 +1,4 @@
+import { MyworksModule } from './myworks/myworks.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
@@ -31,6 +32,7 @@ import { NgbDateAdapter, NgbDateNativeAdapter, NgbModule } from '@ng-bootstrap/n
     UserModule,
     PoModule,
     MySharedModule,
+    MyworksModule,
     ToastrModule.forRoot(),
     NgbModule,
     RouterModule.forRoot([

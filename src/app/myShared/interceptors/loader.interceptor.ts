@@ -14,7 +14,7 @@ export class LoaderInterceptor implements HttpInterceptor {
   constructor(public authService: AuthService,private router: Router,private loaderService :LoaderService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-  //  this.loaderService.show();
+    this.loaderService.show();
     if (this.authService.getJwtToken()) {
       request = this.addToken(request, this.authService.getJwtToken());
     }
@@ -26,7 +26,8 @@ export class LoaderInterceptor implements HttpInterceptor {
         //  this.router.navigate(['login']);
         return throwError(error);
       }
-    }));
+    })).pipe(
+      finalize(() => this.loaderService.hide()))
   }
 
   private addToken(request: HttpRequest<any>, token: string) {

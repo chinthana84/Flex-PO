@@ -1,34 +1,30 @@
+import { GetUsersByDepartmentIDDTO } from './../../../models/refTable.model';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
-import {
-  GridOptions,
-  GridType,
-} from 'src/app/grid/gridModels/gridOption.model';
+import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
-import {
-  DepartmentsDTO,
-  DepWrapper,
-  RefTableDTO,
-  SecurityGroupsDTO,
-} from 'src/app/models/refTable.model';
+import { RefTableDTO, DepartmentsDTO, SecurityGroupsDTO, DepWrapper, DepartmentsSecurityGroupsDTO } from 'src/app/models/refTable.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { CommonService } from 'src/app/myShared/services/common.service';
 import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-departmetns',
-  templateUrl: './departmetns.component.html',
-  styleUrls: ['./departmetns.component.css'],
+  selector: 'app-department-users',
+  templateUrl: './department-users.component.html',
+  styleUrls: ['./department-users.component.css']
 })
-export class DepartmetnsComponent implements OnInit {
+export class DepartmentUsersComponent implements OnInit {
+
   edited: boolean = false;
   statusList: RefTableDTO[] = [];
   model: DepartmentsDTO = {};
   securtyGroups: SecurityGroupsDTO[] = [];
+  getUsersByDepartmentIDDTOobj : GetUsersByDepartmentIDDTO[] = [];
+
 
   checkedSecutiryGroups: SecurityGroupsDTO[] = [];
 
@@ -81,33 +77,25 @@ export class DepartmetnsComponent implements OnInit {
             let x = this.http.get<DepartmentsDTO>(
               `${environment.APIEndpoint}/Admin/GetDepartmentByID/` + params.id
             );
-            let y = this.http.get<SecurityGroupsDTO[]>(
-              `${environment.APIEndpoint}/Admin/GetAllSecurityGroupsByDeparmentid/` +
+            let y = this.http.get<GetUsersByDepartmentIDDTO[]>(
+              `${environment.APIEndpoint}/Admin/GetAllUsersInDepartment/` +
                 params.id
             );
             forkJoin([x, y]).subscribe(
               (data) => {
                 this.model = data[0];
-                this.checkedSecutiryGroups = data[1];
+                this.getUsersByDepartmentIDDTOobj = data[1];
+                console.log( this.model)
+
               },
               (error) => {
                 this.confirmDialogService.messageBox(environment.APIerror);
               }
             );
           } else if (params.id == 0) {
-            let y = this.http.get<SecurityGroupsDTO[]>(
-              `${environment.APIEndpoint}/Admin/GetAllSecurityGroupsByDeparmentid/` +
-                params.id
-            );
-            forkJoin([y]).subscribe(
-              (data) => {
-                this.checkedSecutiryGroups = data[0];
-                this.model = {};
-              },
-              (error) => {
-                this.confirmDialogService.messageBox(environment.APIerror);
-              }
-            );
+
+                this.confirmDialogService.messageBox("Invalid");
+
           }
         },
         (error) => {
@@ -130,9 +118,9 @@ export class DepartmetnsComponent implements OnInit {
 
   Action(obj: any) {
     if (obj == undefined) {
-      this.router.navigate(['/departments/edit'], { queryParams: { id: 0 } });
+      this.router.navigate(['/DepUsers/edit'], { queryParams: { id: 0 } });
     } else {
-      this.router.navigate(['/departments/edit'], {
+      this.router.navigate(['/DepUsers/edit'], {
         queryParams: { id: obj.DepartmentId },
       });
     }
@@ -140,19 +128,17 @@ export class DepartmetnsComponent implements OnInit {
   }
 
   Save() {
-    let obj: DepWrapper = {};
-    obj.dep = this.model;
-    obj.lstSecutiryGropp = this.checkedSecutiryGroups;
+
 
     this.http
-      .post<any>(`${environment.APIEndpoint}/Admin/SaveDepartments`, obj, {})
+      .post<any>(`${environment.APIEndpoint}/Admin/SaveDepartmentUsers`, this.getUsersByDepartmentIDDTOobj, {})
       .subscribe(
         (data) => {
           if (data.IsValid == false) {
             this.confirmDialogService.messageListBox(data.ValidationMessages);
           } else {
             this.toasterService.success(environment.dataSaved);
-            this.router.navigate(['departments']);
+            this.router.navigate(['DepUsers']);
           }
         },
         (error) => {
@@ -160,4 +146,5 @@ export class DepartmetnsComponent implements OnInit {
         }
       );
   }
+
 }

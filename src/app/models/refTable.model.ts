@@ -17,7 +17,7 @@ export class RefTableDTO {
   public RefTableName?: string = "";
   public RefDescription?: string = "";
   public DisplayName?: string = "";
-  public   RefDescription2 ?: string = "";
+  public RefDescription2?: string = "";
 }
 
 
@@ -29,8 +29,8 @@ export class ApprovalGroupsDTO {
   public StatusRefId?: number = 0;
   public StatusRef?: RefTableDTO = {}
 
-  public   PoApprovalRefId?: number = 0;
-public   PoApprovalRef ?:RefTableDTO;
+  public PoApprovalRefId?: number = 0;
+  public PoApprovalRef?: RefTableDTO;
 
   public ApprovalGroupUsers?: ApprovalGroupUsersDTO[] = [];
 }
@@ -89,50 +89,71 @@ export class DepartmentsDTO {
 
   public StatusRef?: RefTableDTO = {};
   public DepartmentsSecurityGroups?: DepartmentsSecurityGroupsDTO[] = [];
+  public DepartmentUserDetails?: DepartmentUserDetailsDTO[] = [];
 }
 
-export class SupplierDTO
-{
-    public   SupplierId ?:number;
-    public   SupplierName ?: string = "";
-    public   SupplierAddress ?: string = "";
-    public   Email ?: string = "";
-    public   Contact ?: string = "";
-    public   City ?: string = "";
-    public   Phone ?: string = "";
-    public   Fax ?: string = "";
-    public   State ?: string = "";
-    public   Postcode?: string = "";
-    public   SupplierStatusId  ?:number=0;
-    public   MyobLink ?: string = "";
+export class SupplierDTO {
+  public SupplierId?: number;
+  public SupplierName?: string = "";
+  public SupplierAddress?: string = "";
+  public Email?: string = "";
+  public Contact?: string = "";
+  public City?: string = "";
+  public Phone?: string = "";
+  public Fax?: string = "";
+  public State?: string = "";
+  public Postcode?: string = "";
+  public SupplierStatusId?: number = 0;
+  public MyobLink?: string = "";
 
 }
 
-export   class ItemsDTO
-{
+export class ItemsDTO {
 
 
-    public   ItemId ?:number=0;
-    public   ItemDescription ?: string = "";
-    public    Sih?:number=0;
-    public    UnitId? :number = 0;
-    public    UnitPrice?:number=0;
-    public    StatusId?:number=0;
+  public ItemId?: number = 0;
+  public ItemDescription?: string = "";
+  public Sih?: number = 0;
+  public UnitId?: number = 0;
+  public UnitPrice?: number = 0;
+  public StatusId?: number = 0;
 
-    public    Status ?:RefTableDTO={};
-    public     Unit ?:RefTableDTO={};
+  public Status?: RefTableDTO = {};
+  public Unit?: RefTableDTO = {};
 }
 
-export class AccountListDTO
-{
-    public   AccountListId ?:number=0;
-    public   AccountCode ?: string = "";
-    public   AccountName ?: string = "";
-    public   AccountDescription?: string = "";
-    public   AccountTypeId ?:number=0;
-    public   AccountStatusId ?:number=0;
+export class AccountListDTO {
+  public AccountListId?: number = 0;
+  public AccountCode?: string = "";
+  public AccountName?: string = "";
+  public AccountDescription?: string = "";
+  public AccountTypeId?: number = 0;
+  public AccountStatusId?: number = 0;
 
 
-    public    AccountStatus ?:RefTableDTO;
-    public   RefTablesDTO ?:RefTableDTO;
+  public AccountStatus?: RefTableDTO;
+  public RefTablesDTO?: RefTableDTO;
+}
+
+export class DepartmentUserDetailsDTO {
+  public DepUserDetailsId?: number = 0;
+  public DepartmentId?: number = 0;
+  public UserId?: number = 0;
+  public SecurityGroupId?: number = 0;
+
+  public Department?: DepartmentsDTO = {};
+  public SecurityGroup?: SecurityGroupsDTO = {};
+
+}
+
+export class GetUsersByDepartmentIDDTO {
+  public SecurityGroupID?: number = 0;
+  public SecurityGroupName?: string = "";
+
+  public UserID?: number = 0;
+  public UserName?: string = "";
+
+  public   depid ?: number = 0;
+
+  public Checked?: Boolean = false;
 }

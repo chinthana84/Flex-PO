@@ -16,6 +16,7 @@ import { CommonService } from '../myShared/services/common.service';
 import { SupplierComponent } from './admin/supplier/supplier.component';
 import { ItemsComponent } from './admin/items/items.component';
 import { AccountsComponent } from './admin/accounts/accounts.component';
+import { DepartmentUsersComponent } from './admin/department-users/department-users.component';
 
 const routes: Routes = [
   {
@@ -62,6 +63,13 @@ const routes: Routes = [
     component: AccountsComponent,
     children: [{ path: 'edit', component: AccountsComponent }],
   },
+
+  {
+    path: new CommonService().GetAllNavigations().departmentUsers,
+    data: { titleKey: 'departmentUsers' },
+    component: DepartmentUsersComponent,
+    children: [{ path: 'edit', component: DepartmentUsersComponent }],
+  },
   {
     path: 'home',
     data: { titleKey: 'home' },
@@ -78,8 +86,9 @@ const routes: Routes = [
     DepartmetnsComponent,
     RefTablesComponent,
     SupplierComponent,
-    ItemsComponent ,
+    ItemsComponent,
     AccountsComponent,
+    DepartmentUsersComponent,
   ],
   imports: [
     CommonModule,
