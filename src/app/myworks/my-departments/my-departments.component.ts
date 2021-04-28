@@ -158,7 +158,7 @@ export class MyDepartmentsComponent implements OnInit {
 
 
   AssignToMe(id:number=0) {
-    debugger
+     
     this.modelPR=new purchaseRequestHeaderDTO();
     this.modelPR.PoheaderId=id;
     this.confirmDialogService.confirmThis("Are you sure ?", () => {

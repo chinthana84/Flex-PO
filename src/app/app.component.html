@@ -18,7 +18,7 @@
 
         <ol class="breadcrumb" style="background-color: #fff;margin-bottom: 1px;">
           <li class="breadcrumb-item">
-            <span class="fa fa-home"></span>
+            <!-- <span class="fa fa-home"></span> -->
             <a class="breadcrumb-text" href="javascript:void(0)" [routerLink]='this.home'>Home</a>
           </li>
           <li *ngFor="let breadLink of displayBreadcrumbList" class="breadcrumb-item active" aria-current="page">
@@ -51,7 +51,8 @@
                 alt="User Image">
 
               <p>
-                Alexander Pierce
+
+                {{this.auth.getUserName() }}
               </p>
             </li>
 
@@ -155,7 +156,7 @@
     </nav>
 
     <!-- Main Sidebar Container -->
-    <aside *ngIf="this.currentObj.IsAuthenticated" class="main-sidebar sidebar-dark-primary elevation-4">
+    <aside *ngIf="this.currentObj.IsAuthenticated" class="main-sidebar sidebar-dark-primary elevation-4" style="overflow: scroll;">
 
 
       <!-- Sidebar -->
@@ -167,14 +168,14 @@
               alt="User Image">
           </div>
           <div class="info">
-            <a href="#" class="d-block">Alexander Pierce</a>
+            <a class="d-block"> {{this.auth.getUserName() }}</a>
           </div>
         </div>
 
 
-        <nav *ngIf="this.currentObj.IsAuthenticated" class="mt-2">
+        <nav id='mainmenu' *ngIf="this.currentObj.IsAuthenticated" class="mt-2">
           <ul class="sidemenuss nav nav-pills nav-sidebar flex-column  " data-widget="treeview" role="menu"
-            data-accordion="false">
+            data-accordion="true">
             <li class="nav-item  ">
               <a routerLink="home" class="nav-link  ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
@@ -184,8 +185,9 @@
               </a>
 
             </li>
+
             <li class="nav-item menu-open">
-              <a class="nav-link active">
+              <a class="nav-link ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Request
@@ -194,7 +196,7 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="request" class="nav-link active">
+                  <a routerLink="request" class="nav-link ">
 
                     <p>Purchase Request </p>
                   </a>
@@ -202,8 +204,8 @@
 
               </ul>
             </li>
-            <li class="nav-item menu-open">
-              <a class="nav-link active">
+            <li class="nav-item menu-open ">
+              <a class="nav-link ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Approval
@@ -212,9 +214,9 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="requestapproval" class="nav-link active">
+                  <a routerLink="requestapproval" class="nav-link ">
 
-                    <p>Approval  </p>
+                    <p>Approval </p>
                   </a>
                 </li>
 
@@ -222,7 +224,7 @@
             </li>
 
             <li class="nav-item menu-open">
-              <a class="nav-link active">
+              <a class="nav-link ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   My Works
@@ -231,17 +233,25 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="MyDeps" class="nav-link active">
+                  <a routerLink="MyDeps" class="nav-link ">
 
-                    <p>My Departments  </p>
+                    <p>My Departments </p>
                   </a>
                 </li>
+
+                <li class="nav-item">
+                  <a routerLink="MyTasks" class="nav-link ">
+
+                    <p>My Tasks </p>
+                  </a>
+                </li>
+
 
               </ul>
             </li>
 
             <li class="nav-item menu-open ">
-              <a class="nav-link active">
+              <a class="nav-link ">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Admin
@@ -250,52 +260,51 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().approvalGroups }}" class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().approvalGroups }}" class="nav-link  ">
 
                     <p>Approval Groups </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().approvalGroupsUsers }}"
-                    class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().approvalGroupsUsers }}" class="nav-link ">
 
                     <p>Approval Groups Users </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().departments }}" class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().departments }}" class="nav-link  ">
 
                     <p>Departments </p>
                   </a>
                 </li>
 
-                    <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link active">
+                <li class="nav-item">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link  ">
 
-                    <p>departmentUsers </p>
+                    <p>Department Users </p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link ">
 
                     <p>Suppliers </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().items }}" class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().items }}" class="nav-link ">
 
                     <p>Items</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().masterData }}" class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().masterData }}" class="nav-link ">
 
                     <p>MasterData </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().accountList }}" class="nav-link active">
+                  <a routerLink="{{  this.commonService.GetAllNavigations().accountList }}" class="nav-link ">
 
                     <p>Accounts </p>
                   </a>
@@ -328,7 +337,7 @@
     </div>
     <!-- /.content-wrapper -->
     <footer class="main-footer">
-      <strong>Copyright &copy; 2014-2021 <a href="https://adminlte.io">AdminLTE.io</a>.</strong>
+      <strong>Copyright &copy; 2014-2021 <a href="#">AdminLTE.io</a>.</strong>
       All rights reserved.
       <div class="float-right d-none d-sm-inline-block">
         <b>Version</b> 3.1.0-rc
@@ -344,10 +353,12 @@
   <!-- ./wrapper -->
 
   <!-- jQuery -->
-  <script src="assets/plugins/jquery/jquery.min.js"></script>
+  <!-- <script src="assets/plugins/jquery/jquery.min.js"></script>
   <!-- jQuery UI 1.11.4 -->
-  <script src="assets/plugins/jquery-ui/jquery-ui.min.js"></script>
+  <script src="assets/plugins/jquery-ui/jquery-ui.min.js"></script> -->
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
+
+  <!-- <script src="assets/plugins/dist/js/adminlte.js"></script> -->
   <script>
     $.widget.bridge('uibutton', $.ui.button)
 
@@ -355,7 +366,7 @@
       var box = $('.sidemenuss li');
       var button = $('.sidemenuss li  ');
       button.on('click', function () {
-        alert('')
+
         box.toggleClass('active');
       });
     });
@@ -382,7 +393,7 @@
   <!-- overlayScrollbars -->
   <script src="assets/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
   <!-- AdminLTE App -->
-  <script src="assets/plugins/dist/js/adminlte.js"></script>
+
   <!-- AdminLTE for demo purposes -->
   <!-- <script src="assets/plugins/dist/js/demo.js"></script> -->
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->

@@ -70,7 +70,10 @@ export class ApprovalComponent implements OnInit {
   }
 
   Save(obj: any) {
-
+    if((obj.Caps==""))
+    {
+      obj.Caps=0;
+    }
     this.http
       .post<any>(`${environment.APIEndpoint}/Admin/SaveApprovalGroups`, obj, {})
       .subscribe((data) => {

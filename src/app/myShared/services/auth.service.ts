@@ -1,6 +1,7 @@
 
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { JwtHelperService } from '@auth0/angular-jwt';
 import { config } from 'process';
 import { Observable, of } from 'rxjs';
 import { tap, mapTo, catchError } from 'rxjs/operators';
@@ -15,10 +16,15 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'refreshTokenFlex';
   private loggedUser: string;
   //todoBearerToken  refreshToken
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,public jwtHelper :JwtHelperService) {}
 
   isLoggedIn() {
     return !!this.getJwtToken();
+  }
+
+  public getUserName(){
+     
+    return localStorage.getItem("usernameFlex");
   }
 
   refreshToken() {
@@ -38,6 +44,12 @@ export class AuthService {
 
   getJwtToken() {
     return localStorage.getItem(this.JWT_TOKEN);
+  }
+
+  public isAuthenticated():boolean{
+    const token=this.getJwtToken();
+
+    return  !this.jwtHelper.isTokenExpired(token);
   }
 
   // private doLoginUser(username: string, tokens: Tokens) {

@@ -11,13 +11,6 @@ export class GridOptions{
     searchID?:number=1
   }
 
-
-
-
-
-
-
-
 export enum GridType {
   ApprovalGroups = 1,
   Departments = 2,
@@ -26,7 +19,8 @@ export enum GridType {
   AccountList = 5,
   PR = 6,
   PRApprove=7,
-  AssignedToME=8
+  AssignedToME=8,
+  MyTasks=9
 }
 
   export class MyNavigations {
@@ -40,6 +34,7 @@ export enum GridType {
    public accountList="AccountList";
    public departmentUsers="DepUsers";
    public myDepartments="MyDeps";
+   public myTasks="MyTasks";
    }
 
 

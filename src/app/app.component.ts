@@ -29,7 +29,9 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+     
     this.setBreadcrumb();
+
 
     this.securityService.currentSecurityObject.subscribe((r) => {
 
@@ -39,7 +41,7 @@ export class AppComponent implements OnInit {
       // }
 
       this.currentObj = r;
- 
+
 
       if (this.currentObj.IsAuthenticated == false) {
         let u = localStorage.getItem('usernameFlex') ?? '';

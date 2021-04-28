@@ -11,6 +11,7 @@ import { LoaderComponent } from './loader/loader.component';
 import { LoaderService } from './services/loader.service';
 import { LoaderInterceptor } from './interceptors/loader.interceptor';
 import { SearchPipe } from './pipes/filterFromList.pipe';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
   declarations: [ConfirmDialogComponent,NumericDirective, LoaderComponent,SearchPipe],

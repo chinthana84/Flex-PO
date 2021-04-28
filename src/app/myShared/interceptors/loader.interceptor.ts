@@ -14,6 +14,7 @@ export class LoaderInterceptor implements HttpInterceptor {
   constructor(public authService: AuthService,private router: Router,private loaderService :LoaderService) { }
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+     
     this.loaderService.show();
     if (this.authService.getJwtToken()) {
       request = this.addToken(request, this.authService.getJwtToken());

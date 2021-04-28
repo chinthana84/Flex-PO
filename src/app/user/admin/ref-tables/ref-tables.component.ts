@@ -96,7 +96,7 @@ export class RefTablesComponent implements OnInit {
           } else {
             this.toasterService.success(environment.dataSaved);
             //this.router.navigate(['masterData']);
-
+            this.getRefTable();
           }
         },
         (error) => {

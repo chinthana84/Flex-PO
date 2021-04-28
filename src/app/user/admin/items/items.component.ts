@@ -20,7 +20,7 @@ export class ItemsComponent implements OnInit {
 
 
   private subs = new SubSink();
-  model: ItemsDTO;
+  model: ItemsDTO={};
   edited: boolean = false;
   statusList: RefTableDTO[] = [];
   unitList: RefTableDTO[] = [];
@@ -73,6 +73,7 @@ export class ItemsComponent implements OnInit {
         let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'UNITS');
         let z = this.http.get<ItemsDTO>(`${environment.APIEndpoint}/Admin/GetItemByID/` + params.id );
         forkJoin([x, y,z]).subscribe((data) => {
+
           this.statusList = data[0];
           this.unitList = data[1];
           this.model=data[2];
@@ -102,15 +103,17 @@ export class ItemsComponent implements OnInit {
     if (item == undefined) {
       this.router.navigate(["/items/edit"], { queryParams: { id: 0 } });
     } else {
-      this.router.navigate(["/items/edit"], {
-        queryParams: { id: item.ItemId },
-      });
+      this.router.navigate(["/items/edit"], { queryParams: { id: item.ItemId }  });
     }
     this.edited = true;
   }
 
   onSubmit(obj: ItemsDTO) {
-     
+debugger
+    if(!isNaN(obj.UnitPrice)){
+      obj.UnitPrice=0;
+    }
+
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/Admin/SaveItem`, obj, {}).subscribe((data) => {
         if (data.IsValid == false) {

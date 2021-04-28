@@ -1,0 +1,397 @@
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="tab-content p-0">
+          <div *ngIf="!edited">
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+            <table class="table  ">
+              <thead>
+                <th>PONo</th>
+                <th>Department</th>
+                <th>Supplier</th>
+                <th>ShipTo</th>
+                <th>PO Status</th>
+                <th>Date</th>
+                <th>
+
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
+                  <td>{{ item.Pono }}</td>
+                  <td>{{ item.DepartmentName }}</td>
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.ShipTo }}</td>
+                  <td>
+                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
+                  </td>
+                  <td>{{ item.CreateDate }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button  (click)="Action(item,false)" class="btn btn-primary"> <span
+                          class="fa fa-edit"></span></button>
+
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+          </div>
+
+          <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
+            <ul class="nav nav-tabs" role="tablist">
+              <li class="nav-item   ">
+                <a class="nav-link  active" href="#genaralxx" role="tab" data-toggle="tab">Request & Details</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#upload" role="tab" data-toggle="tab">Attachments</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#ApprovalFlow" role="tab" data-toggle="tab">ApprovalFlow</a>
+              </li>
+            </ul>
+
+            <div class="tab-content m-2">
+              <div role="tabpanel" class="tab-pane active " id="genaralxx">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="card">
+                      <div class="card-header">
+                        <h4> {{this.modelPR.Pono}} <span class="badge badge-secondary"> {{this.mode}}</span></h4>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content p-0">
+                          <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group">
+                                <label for="Name">Name</label>
+                                <input id="Name" name="Name" type="text" autocomplete="off" [(ngModel)]="model"
+                                  [resultFormatter]="formatter" [inputFormatter]="formatterx" [ngbTypeahead]="search"
+                                  (selectItem)="selectedItem($event)" class="form-control" placeholder="Name" />
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
+                            <div class="col-md-6">
+                              <table class="table table-bordered tt">
+                                <tbody>
+                                  <tr>
+                                    <td>Name</td>
+                                    <td>{{ this.modelSupplier.SupplierName}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Address</td>
+                                    <td>{{ this.modelSupplier.SupplierAddress}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>City </td>
+                                    <td>{{this.modelSupplier.City}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>State</td>
+                                    <td>{{this.modelSupplier.State}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Post Code</td>
+                                    <td>{{this.modelSupplier.Postcode}}</td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                            <div class="col-md-6">
+                              <table class="table table-bordered tt">
+                                <tbody>
+                                  <tr>
+                                    <td>Contact</td>
+                                    <td>{{this.modelSupplier.Contact}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Phone</td>
+                                    <td>{{this.modelSupplier.Phone}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Fax</td>
+                                    <td>{{this.modelSupplier.Fax}}</td>
+                                  </tr>
+                                  <tr>
+                                    <td>Email</td>
+                                    <td>{{this.modelSupplier.Email}}</td>
+                                  </tr>
+
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-md-6">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">
+                          <i class="fas fa-chart-pie mr-1"></i>
+                          Other
+                        </h3>
+                      </div>
+                      <div class="card-body">
+
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="DepartmentId">Department</label>
+                              <ng-select placeholder="Select item" [clearable]="false" name="DepartmentId"
+                                [(ngModel)]="this.modelPR.DepartmentId">
+                                <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                                <ng-option *ngFor="let car of this.loggedUserDepartments" [value]="car.DepartmentId">
+                                  {{car.DepartmentName}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="ShiptTo">ShiptTo</label>
+                              <ng-select [clearable]="false" name="ShiptTo" [(ngModel)]="this.modelPR.ShipToRefId">
+                                <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                                <ng-option *ngFor="let car of this.modelShiptTo" [value]="car.RefId">
+                                  {{car.RefDescription}}
+                                </ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+
+
+
+
+                          <div class="col-md-12">
+
+                            <div class="form-group">
+                              <div class="input-group">
+                                <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+                                  [(ngModel)]="modelPR.Podate" ngbDatepicker #d2="ngbDatepicker">
+                                <div class="input-group-append">
+                                  <button class="btn btn-outline-secondary calendar fa fa-calendar"
+                                    (click)="d2.toggle()" type="button"></button>
+                                </div>
+                              </div>
+                            </div>
+
+                          </div>
+
+
+
+
+
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="City">Quote Ref</label>
+                              <input class="form-control" id="quoteRef" name="quoteRef" type="text"
+                                [(ngModel)]="this.modelPR.Reference" placeholder="quoteRef" />
+                            </div>
+                          </div>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="row">
+                  <section class="col-lg-12">
+                    <div class="card">
+                      <div class="card-header">
+                        <h3 class="card-title">
+                          <i class="fas fa-chart-pie mr-1"></i>
+                          Details
+                        </h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="tab-content p-0">
+
+                          <table class="table  ">
+                            <thead>
+                              <th>No</th>
+                              <th>Quantity</th>
+                              <th>Reference</th>
+                              <th>Description</th>
+                              <th>Account Code</th>
+                              <th>Job Code</th>
+                              <th>Payment Type</th>
+                              <th>Unit Price</th>
+                              <th>Amount</th>
+                              <th>
+                                <button type="button"
+                                  *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                  (click)="openXl(content)" class="btn btn-primary ">
+                                  <span class="fa fa-plus"></span></button>
+                              </th>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let item of this.modelPR.PurchaseRequestDetail; let i=index;"
+                                class="table-hover">
+                                <td>{{ i+1 }} </td>
+                                <td>{{item.Qty}}</td>
+                                <td>{{item.Reference}}</td>
+                                <td> {{item.Item.ItemDescription}} </td>
+                                <td>{{item.AccountList.AccountCode}}</td>
+                                <td>{{item.JobRef.RefDescription}}</td>
+                                <td>{{item.PaymentTypeRef?.RefDescription}}</td>
+                                <td>{{item.UnitPrice}}</td>
+                                <td>{{item.UnitPrice * item.Qty }}</td>
+                                <td>
+                                  <div class="btn-group">
+
+                                    <button
+                                      type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
+                                      <span class="fa fa-edit"></span></button>
+                                    <button
+                                      type="button" (click)="deleteItem(item)" class="btn btn-danger ">
+                                      <span class="fa fa-trash"></span></button>
+                                  </div>
+
+
+                                </td>
+                              </tr>
+                              <tr style="font-weight: bold;">
+                                <td class="datanotfound" colspan="7"></td>
+                                <td>Total</td>
+                                <td>   {{ this.GetTotal()  }}
+                                </td>
+                                <td></td>
+                              </tr>
+                              <tr
+                                *ngIf=" this.modelPR.PurchaseRequestDetail?.length == 0 ||  this.modelPR.PurchaseRequestDetail == undefined">
+                                <td class="datanotfound" colspan="10">Data not found</td>
+                              </tr>
+                            </tbody>
+                          </table>
+
+                        </div>
+                      </div>
+                    </div>
+                  </section>
+                </div>
+              </div>
+              <div role="tabpanel" class="tab-pane fade" id="upload">
+                <div class="row">
+                  <table class="table table-striped">
+                    <thead>
+                      <th>Description</th>
+                      <th>Uploader</th>
+                      <th>Download</th>
+                      <th>
+                        <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0" type="button"
+                          (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit" data-toggle="modal"
+                          data-target="#edit">
+                          <span class="fa fa-plus"></span>
+                        </button>
+                      </th>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"
+                        class="table-hover mt-0">
+                        <td>
+                          <input [(ngModel)]="i.Description" id="TherNoteTitle{{index}}" name="TherNoteTitle{{index}}"
+                            type="text" class="form-control" placeholder="Description" />
+                        </td>
+                        <td>
+                          <input name="fileuploader{{index}}" type="file" (change)="this.addFile($event,i)" />
+                        </td>
+                        <td>
+                          <button *ngIf="i.UniqueFileName.length >0" type="button"
+                            (click)="this.fileuploadService.downloadFile(i.UniqueFileName)"
+                            class="btn btn-warning">Download </button>
+                        </td>
+                        <td>
+                          <button *ngIf="this.modelPR.PoStatusRefId==27" type="button" class="btn btn-danger"
+                            (click)="deleteFile(i.Id)">
+                            <i class="fa fa-trash"></i>
+                          </button>
+                        </td>
+                      </tr>
+                      <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
+                        <td class="datanotfound" colspan="4">Data not found</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+              <div role="tabpanel" class="tab-pane fade" id="ApprovalFlow">
+                <br /><br />
+
+                <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
+                  class="badge badge-primary">{{item.ApprovalGroup.Name}}</span>
+
+                  <table class="table table-striped">
+                    <thead>
+                      <th>Order</th>
+                      <th>Approval Group</th>
+                      <th>Remarks</th>
+                      <th>Approved User</th>
+                      <th>Approved Date</th>
+                      <th>Status</th>
+
+                    </thead>
+  <tbody>
+                    <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
+                      <td>
+                        {{ i?.OrderLevel }}
+                      </td>
+                      <td>
+                        {{ i?.ApprovalGroup?.Name }}
+                      </td>
+                      <td>
+                        {{ i?.Remarks }}
+                      </td>
+                      <td>
+                        {{ i?.ApprovedUser?.UserName }}
+                      </td>
+                      <td>
+                        {{ i?.ApprovedDate |date }}
+                      </td>
+                      <td>
+                        {{ i?.Postatus?.RefDescription }}
+                      </td>
+                    </tr>
+                  </tbody>
+
+                  </table>
+
+
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button"
+                (click)="Save();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
+                <button
+                type="button" (click)="CreatePO(item)" class="btn btn-warning ">
+              Create PO</button>
+              <button type="button" (click)="router.navigate(['MyTasks']);" class="btn btn-primary back_button">
+                <span class="fa fa-arrow-left"></span> </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<ng-template #content let-modal>
+  <app-poitem></app-poitem>
+</ng-template>
+
+
+
+

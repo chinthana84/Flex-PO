@@ -1,3 +1,4 @@
+import { AuthGuardService } from './../myShared/auth/auth-guard.service';
 import { AccountListDTO } from './../models/refTable.model';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -47,7 +48,7 @@ const routes: Routes = [
   },
   {
     path: new CommonService().GetAllNavigations().supplier,
-    data: { titleKey: 'Supplier' },
+    data: { titleKey: 'Suppliers' },
     component: SupplierComponent,
     children: [{ path: 'edit', component: SupplierComponent }],
   },
@@ -59,20 +60,21 @@ const routes: Routes = [
   },
   {
     path: new CommonService().GetAllNavigations().accountList,
-    data: { titleKey: 'accountList' },
+    data: { titleKey: 'Account' },
     component: AccountsComponent,
     children: [{ path: 'edit', component: AccountsComponent }],
   },
 
   {
     path: new CommonService().GetAllNavigations().departmentUsers,
-    data: { titleKey: 'departmentUsers' },
+    data: { titleKey: 'Department Users' },
     component: DepartmentUsersComponent,
     children: [{ path: 'edit', component: DepartmentUsersComponent }],
   },
   {
     path: 'home',
     data: { titleKey: 'home' },
+    // canActivate:[AuthGuardService],
     component: HomeComponent,
   },
 ];
