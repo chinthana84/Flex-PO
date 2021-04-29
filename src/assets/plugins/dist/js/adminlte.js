@@ -11,6 +11,9 @@
 
   function _interopDefaultLegacy (e) { return e && typeof e === 'object' && 'default' in e ? e : { 'default': e }; }
 
+
+
+
   var $__default = /*#__PURE__*/_interopDefaultLegacy($);
 
   /**
@@ -1396,6 +1399,7 @@
     };
 
     _proto._setItemActive = function _setItemActive(href) {
+      debugger;
       $__default['default'](SELECTOR_SIDEBAR_MENU_ITEM + ", " + SELECTOR_HEADER_DROPDOWN_ITEM).removeClass('active');
       $__default['default'](SELECTOR_HEADER_MENU_ITEM).parent().removeClass('active');
       var $headerMenuItem = $__default['default'](SELECTOR_HEADER_MENU_ITEM + "[href$=\"" + href + "\"]");
@@ -1636,6 +1640,7 @@
         _this.fixLayoutHeight();
       });
       $__default['default'](SELECTOR_PUSHMENU_BTN).on('collapsed.lte.pushmenu shown.lte.pushmenu', function () {
+        debugger
         _this.fixLayoutHeight();
       });
       $__default['default'](SELECTOR_CONTROL_SIDEBAR_BTN).on('collapsed.lte.controlsidebar', function () {
@@ -2738,4 +2743,4 @@
   Object.defineProperty(exports, '__esModule', { value: true });
 
 })));
-//# sourceMappingURL=adminlte.js.map
+// # sourceMappingURL=adminlte.js.map

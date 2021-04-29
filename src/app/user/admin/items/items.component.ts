@@ -109,7 +109,7 @@ export class ItemsComponent implements OnInit {
   }
 
   onSubmit(obj: ItemsDTO) {
-debugger
+ 
     if(!isNaN(obj.UnitPrice)){
       obj.UnitPrice=0;
     }

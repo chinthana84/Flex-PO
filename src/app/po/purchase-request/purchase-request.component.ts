@@ -248,7 +248,7 @@ export class PurchaseRequestComponent implements OnInit {
   }
 
   copyPR(id:number){
-    debugger
+
     this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     this.EditPR(id,true);
   }

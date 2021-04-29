@@ -1,0 +1,49 @@
+<table class="table  ">
+  <thead>
+    <th>No</th>
+    <th>Quantity</th>
+    <th>Reference</th>
+    <th>Description</th>
+    <th>Account Code</th>
+    <th>Job Code</th>
+    <th>Payment Type</th>
+    <th>Unit Price</th>
+    <th>Amount</th>
+    <th>
+      <button type="button"
+        *ngIf="this.PassingmodelPR.PoStatusRefId==27 ||this.PassingmodelPR.PoStatusRefId==0"
+        (click)="openXl(content)" class="btn btn-primary ">
+        <span class="fa fa-plus"></span></button>
+    </th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of this.PassingmodelPR.PurchaseRequestDetail; let i=index;"
+      class="table-hover">
+      <td>{{ i+1 }} </td>
+      <td>{{item.Qty}}</td>
+      <td>{{item.Reference}}</td>
+      <td> {{item.Item.ItemDescription}} </td>
+      <td>{{item.AccountList.AccountCode}}</td>
+      <td>{{item.JobRef.RefDescription}}</td>
+      <td>{{item.PaymentTypeRef?.RefDescription}}</td>
+      <td>{{item.UnitPrice}}</td>
+      <td>{{item.UnitPrice * item.Qty }}</td>
+      <td>
+  
+
+
+      </td>
+    </tr>
+    <tr style="font-weight: bold;">
+      <td class="datanotfound" colspan="7"></td>
+      <td>Total</td>
+      <td>
+      </td>
+      <td></td>
+    </tr>
+    <tr
+      *ngIf=" this.PassingmodelPR.PurchaseRequestDetail?.length == 0 ||  this.PassingmodelPR.PurchaseRequestDetail == undefined">
+      <td class="datanotfound" colspan="10">Data not found</td>
+    </tr>
+  </tbody>
+</table>

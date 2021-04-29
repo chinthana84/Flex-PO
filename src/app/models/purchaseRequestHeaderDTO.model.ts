@@ -17,6 +17,8 @@ export   class purchaseRequestHeaderDTO
 
   public   ApprovalRemarks  ?:string="";
 
+  public   CancellRemarks?:string="";
+
   public    Department?: DepartmentsDTO={};
   public    PoStatusRef ?: RefTableDTO={};
   public     ShipToRef ?: RefTableDTO={};

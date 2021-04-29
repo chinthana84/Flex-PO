@@ -1,0 +1,53 @@
+<p>poheader works!</p>
+{{this.PassingmodelPR.Supplier | json}}
+<div class="row">
+  <div class="col-md-3">
+    <table class="table table-bordered tt">
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>{{ this.PassingmodelPR?.Supplier?.SupplierName}}</td>
+        </tr>
+        <tr>
+          <td>Address</td>
+          <td>{{ this.PassingmodelPR?.Supplier?.SupplierAddress}}</td>
+        </tr>
+        <tr>
+          <td>City </td>
+          <td>{{this.PassingmodelPR?.Supplier?.City}}</td>
+        </tr>
+        <tr>
+          <td>State</td>
+          <td>{{this.PassingmodelPR?.Supplier?.State}}</td>
+        </tr>
+        <tr>
+          <td>Post Code</td>
+          <td>{{this.PassingmodelPR?.Supplier?.Postcode}}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="col-md-3">
+    <table class="table table-bordered tt">
+      <tbody>
+        <tr>
+          <td>Contact</td>
+          <td>{{this.PassingmodelPR?.Supplier?.Contact}}</td>
+        </tr>
+        <tr>
+          <td>Phone</td>
+          <td>{{this.PassingmodelPR?.Supplier?.Phone}}</td>
+        </tr>
+        <tr>
+          <td>Fax</td>
+          <td>{{this.PassingmodelPR?.Supplier?.Fax}}</td>
+        </tr>
+        <tr>
+          <td>Email</td>
+          <td>{{this.PassingmodelPR?.Supplier?.Email}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>

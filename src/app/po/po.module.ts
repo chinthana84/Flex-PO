@@ -10,19 +10,25 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { PoitemComponent } from './poitem/poitem.component';
 import { MySharedModule } from '../myShared/my-shared.module';
 import { PurchaseRequestApprovalComponent } from './purchase-request-approval/purchase-request-approval.component';
+import { AmmendPoComponent } from './ammend-po/ammend-po.component';
+import { PoheaderComponent } from './poheader/poheader.component';
+import { PodetailsComponent } from './podetails/podetails.component';
 
 const routes: Routes = [
   {
-    path: 'request',data:{titleKey: 'Request'}, component: PurchaseRequestComponent
+    path: 'request', data: { titleKey: 'Request' }, component: PurchaseRequestComponent
     , children: [{ path: 'edit', component: PurchaseRequestComponent }]
-  },  {
-    path: 'requestapproval',data:{titleKey: 'Approval'}, component: PurchaseRequestApprovalComponent
+  }, {
+    path: 'requestapproval', data: { titleKey: 'Approval' }, component: PurchaseRequestApprovalComponent
     , children: [{ path: 'edit', component: PurchaseRequestApprovalComponent }]
+  }, {
+    path: 'ammendPO', data: { titleKey: 'PO Ammend' }, component: AmmendPoComponent
+    , children: [{ path: 'edit', component: AmmendPoComponent }]
   }
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent],
+  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent],
 
   imports: [
     CommonModule,
@@ -34,7 +40,7 @@ const routes: Routes = [
     NgSelectModule,
     RouterModule.forChild(routes)
   ]
-  ,providers: [
+  , providers: [
 
     //{provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}
   ],

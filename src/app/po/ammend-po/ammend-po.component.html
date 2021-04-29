@@ -1,0 +1,100 @@
+<div class="row">
+  <section class="col-lg-12">
+    <div class="card">
+      <div class="card-body">
+        <div class="tab-content p-0">
+          <div *ngIf="!edited">
+            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+            <table class="table  ">
+              <thead>
+                <th>PONo</th>
+                <th>Department</th>
+                <th>Supplier</th>
+                <th>ShipTo</th>
+                <th>PO Status</th>
+                <th>Date</th>
+                <th>
+
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
+                  <td>{{ item.Pono }}</td>
+                  <td>{{ item.DepartmentName }}</td>
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.ShipTo }}</td>
+                  <td>
+                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
+                  </td>
+                  <td>{{ item.CreateDate }}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button (click)="ViewOnly(item.Id)" class="btn btn-info  ">Action
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+          </div>
+
+          <div *ngIf="edited">
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-secondary  ">
+                <input type="radio" (click)="this.actionID=1" name="options" id="option1" autocomplete="off" checked>
+                Cancel PO
+              </label>
+
+              <label class="btn btn-secondary">
+                <input type="radio" (click)="this.actionID=2;this.getallUsers();" name="options" id="option2" autocomplete="off"> Re-Assign
+                Request
+              </label>
+            </div>
+            <app-poheader *ngIf="this.modelPR" [PassingmodelPR]="this.modelPR"></app-poheader>
+            <app-podetails [PassingmodelPR]="this.modelPR"></app-podetails>
+
+            <div class="row" *ngIf="this.actionID==1">
+
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label for="CancellRemarks">Cancell Remarks</label>
+                    <input class="form-control" id="CancellRemarks" name="CancellRemarks" type="text"
+                      [(ngModel)]="this.modelPR.CancellRemarks" placeholder="CancellRemarks" />
+                  </div>
+
+              </div>
+            </div>
+
+            <div class="row" *ngIf="this.actionID==2 ">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label for="ShiptTo">ShiptTo</label>
+                  <ng-select [clearable]="false" name="ShiptTo" [(ngModel)]="this.selectedUserID">
+                    <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                    <ng-option *ngFor="let car of this.userDetaills" [value]="car.UserId">
+                      {{car.UserName}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+            </div>
+
+            <div class="btn-group">
+              <button type="button" *ngIf="this.actionID>0" (click)="this.save();" class="btn btn-primary save_button"> <span
+                  class="fa fa-save"></span> </button>
+
+              <button type="button" (click)="router.navigate(['ammendPO']);" class="btn btn-primary back_button">
+                <span class="fa fa-arrow-left"></span> </button>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
