@@ -13,6 +13,7 @@ import { PurchaseRequestApprovalComponent } from './purchase-request-approval/pu
 import { AmmendPoComponent } from './ammend-po/ammend-po.component';
 import { PoheaderComponent } from './poheader/poheader.component';
 import { PodetailsComponent } from './podetails/podetails.component';
+import { GrnComponent } from './grn/grn.component';
 
 const routes: Routes = [
   {
@@ -25,10 +26,14 @@ const routes: Routes = [
     path: 'ammendPO', data: { titleKey: 'PO Ammend' }, component: AmmendPoComponent
     , children: [{ path: 'edit', component: AmmendPoComponent }]
   }
+  , {
+    path: 'grn', data: { titleKey: 'GRN' }, component: GrnComponent
+    , children: [{ path: 'edit', component: GrnComponent }]
+  }
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent],
+  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent],
 
   imports: [
     CommonModule,

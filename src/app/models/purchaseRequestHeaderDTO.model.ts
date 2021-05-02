@@ -17,6 +17,8 @@ export   class purchaseRequestHeaderDTO
 
   public   ApprovalRemarks  ?:string="";
 
+  public  AssignedToMeUserId ?:number=0;
+
   public   CancellRemarks?:string="";
 
   public    Department?: DepartmentsDTO={};

@@ -52,7 +52,7 @@
 
               <p>
 
-                {{this.auth.getUserName() }}
+                {{this.auth.getUserName() |uppercase}}
               </p>
             </li>
 
@@ -168,7 +168,7 @@
               alt="User Image">
           </div>
           <div class="info">
-            <a class="d-block"> {{this.auth.getUserName() }}</a>
+            <a class="d-block"> {{this.auth.getUserName() |uppercase}}</a>
           </div>
         </div>
 
@@ -190,7 +190,7 @@
               <a class="nav-link submain">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  Request
+                  PR Handler
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
@@ -227,12 +227,32 @@
 
               </ul>
             </li>
+            <li class="nav-item  ">
+              <a class="nav-link submain">
+                <i class="nav-icon fas fa-tachometer-alt"></i>
+                <p>
+                  Finance
+                  <i class="right fas fa-angle-left"></i>
+                </p>
+              </a>
+              <ul class="nav nav-treeview">
+                <li class="nav-item">
+                  <a routerLink="grn" class="nav-link ">
+
+                    <p>GRN </p>
+                  </a>
+                </li>
+
+              </ul>
+            </li>
+
+
 
             <li class="nav-item ">
               <a class="nav-link submain">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
-                  My Works
+                  My Workspace
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>

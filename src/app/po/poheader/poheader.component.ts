@@ -13,7 +13,7 @@ export class PoheaderComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log(this.PassingmodelPR)
+    
   }
 
 }

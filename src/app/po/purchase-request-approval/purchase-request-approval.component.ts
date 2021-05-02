@@ -20,7 +20,7 @@ import { SubSink } from 'subsink';
 })
 export class PurchaseRequestApprovalComponent implements OnInit {
   private subs = new SubSink();
-  modelPR: purchaseRequestHeaderDTO={};
+  modelPR: purchaseRequestHeaderDTO = {};
 
   edited: boolean = false;
 
@@ -43,7 +43,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     private toastr: ToastrService,
     private confirmDialogService: ConfirmDialogService,
     public commonService: CommonService,
-    public fileuploadService:FileuploadService
+    public fileuploadService: FileuploadService
   ) {
     this.edited = false;
   }
@@ -53,9 +53,9 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id > 0) {
         this.edited = true;
-        this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + params.id ).subscribe(r=>{
+        this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + params.id).subscribe(r => {
 
-          this.modelPR=r;
+          this.modelPR = r;
 
         }, (error) => {
           this.confirmDialogService.messageBox(environment.APIerror);
@@ -70,21 +70,16 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
       .subscribe((data) => {
-
-
-          this.gridOption.datas = data;
-        if(this.gridOption.datas.pagedItems ==0 )
-        {
-          this.gridOption.datas.pagedItems =[];
+        this.gridOption.datas = data;
+        if (this.gridOption.datas.pagedItems == 0) {
+          this.gridOption.datas.pagedItems = [];
         }
-
       }, (error) => {
         this.confirmDialogService.messageBox(environment.APIerror);
-
       });
   }
 
-  Approve(isApproved:Boolean){
+  Approve(isApproved: Boolean) {
 
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/ApprovRequest`, this.modelPR, {}).subscribe((data) => {
@@ -96,12 +91,12 @@ export class PurchaseRequestApprovalComponent implements OnInit {
           this.router.navigate(['requestapproval']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
   }
 
 
-  Reject(isApproved:Boolean){
+  Reject(isApproved: Boolean) {
 
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/RejectRequest`, this.modelPR, {}).subscribe((data) => {
@@ -113,7 +108,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
           this.router.navigate(['requestapproval']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
   }
 
@@ -125,12 +120,12 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   ngOnDestroy(): void {
     this.subs.unsubscribe();
   }
-  GetTotal(){
-    let sum= 0;
+  GetTotal() {
+    let sum = 0;
 
-this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
+    this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
 
-      return sum;
+    return sum;
 
   }
 }

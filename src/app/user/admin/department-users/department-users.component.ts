@@ -85,7 +85,7 @@ export class DepartmentUsersComponent implements OnInit {
               (data) => {
                 this.model = data[0];
                 this.getUsersByDepartmentIDDTOobj = data[1];
-                console.log( this.model)
+              
 
               },
               (error) => {

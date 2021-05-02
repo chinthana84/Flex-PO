@@ -20,7 +20,8 @@ export enum GridType {
   PR = 6,
   PRApprove=7,
   AssignedToME=8,
-  MyTasks=9
+  MyTasks=9,
+  GRN=10
 }
 
   export class MyNavigations {

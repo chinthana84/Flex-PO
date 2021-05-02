@@ -3,7 +3,7 @@ import { ItemService } from './../../myShared/services/item.service';
 import { PurchaseRequestAttachmentsDTO, PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
 import { SupplierDTO } from './../../models/refTable.model';
 import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model';
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, AfterContentChecked, Component, OnInit } from '@angular/core';
 import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
@@ -28,6 +28,7 @@ import { PoitemComponent } from '../poitem/poitem.component';
   styleUrls: ['./purchase-request.component.css']
 })
 export class PurchaseRequestComponent implements OnInit {
+
   private subs = new SubSink();
   edited: boolean = false;
   modelPR: purchaseRequestHeaderDTO = {};
@@ -154,7 +155,7 @@ export class PurchaseRequestComponent implements OnInit {
 
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {  console.log(data); this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+      .subscribe((data) => {   this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
   }
 
   Action(item: any) {
@@ -166,7 +167,9 @@ export class PurchaseRequestComponent implements OnInit {
     this.edited = true;
   }
 
-  openXl(content) {
+  openXl(content,event) {
+    event.srcElement.blur();
+    event.preventDefault();
     const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
   }
 

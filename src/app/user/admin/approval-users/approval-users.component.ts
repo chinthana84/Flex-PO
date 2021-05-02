@@ -134,7 +134,7 @@ else{
         else {
           this.toasterService.success(environment.dataSaved);
           this.router.navigate(['approvalGroupsUsers']);
-
+          window.location.reload();
         }
       }, (error) => {
 

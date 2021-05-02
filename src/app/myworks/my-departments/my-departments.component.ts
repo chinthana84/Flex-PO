@@ -69,8 +69,17 @@ export class MyDepartmentsComponent implements OnInit {
   ) { this.edited = false; }
 
   ngOnInit(): void {
-
+ 
     this.setPage(this.gridOption.searchObject);
+    this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
+
+      if (params.id > 0) {
+         this.EditPR(params.id);
+       } else {
+         this.setPage(this.gridOption.searchObject);
+         this.edited = false;
+       }
+     });
 
    }
 
@@ -158,7 +167,7 @@ export class MyDepartmentsComponent implements OnInit {
 
 
   AssignToMe(id:number=0) {
-     
+
     this.modelPR=new purchaseRequestHeaderDTO();
     this.modelPR.PoheaderId=id;
     this.confirmDialogService.confirmThis("Are you sure ?", () => {

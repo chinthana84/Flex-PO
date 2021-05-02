@@ -12,6 +12,7 @@
                 <th>Supplier</th>
                 <th>ShipTo</th>
                 <th>PO Status</th>
+                <th>Created User</th>
                 <th>Date</th>
                 <th>
                   <button (click)="Action(null)" class="btn btn-primary ">New Request <span
@@ -27,6 +28,7 @@
                   <td>
                     <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
                   </td>
+                  <td>{{ item.UserName}}</td>
                   <td>{{ item.CreateDate }}</td>
                   <td>
                     <div class="btn-group">
@@ -228,12 +230,14 @@
                               <th>Account Code</th>
                               <th>Job Code</th>
                               <th>Payment Type</th>
+
                               <th>Unit Price</th>
+
                               <th>Amount</th>
                               <th>
                                 <button type="button"
                                   *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
-                                  (click)="openXl(content)" class="btn btn-primary ">
+                                  (click)="openXl(content,$event)" class="btn btn-primary ">
                                   <span class="fa fa-plus"></span></button>
                               </th>
                             </thead>
@@ -247,8 +251,9 @@
                                 <td>{{item.AccountList.AccountCode}}</td>
                                 <td>{{item.JobRef.RefDescription}}</td>
                                 <td>{{item.PaymentTypeRef?.RefDescription}}</td>
+
                                 <td>{{item.UnitPrice}}</td>
-                                <td>{{item.UnitPrice * item.Qty }}</td>
+                                <td>{{item.UnitPrice * item.Qty  | number : '1.2-2'}}</td>
                                 <td>
                                   <div class="btn-group">
 
@@ -263,10 +268,10 @@
 
                                 </td>
                               </tr>
-                              <tr style="font-weight: bold;">
+                              <tr style="font-weight: bold;" *ngIf=" this.modelPR.PurchaseRequestDetail?.length > 0" >
                                 <td class="datanotfound" colspan="7"></td>
                                 <td>Total</td>
-                                <td>   {{ this.GetTotal()  }}
+                                <td> {{ this.GetTotal()  | number : '1.2-2' }}
                                 </td>
                                 <td></td>
                               </tr>
@@ -334,17 +339,17 @@
                 <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
                   class="badge badge-primary">{{item.ApprovalGroup.Name}}</span>
 
-                  <table class="table table-striped">
-                    <thead>
-                      <th>Order</th>
-                      <th>Approval Group</th>
-                      <th>Remarks</th>
-                      <th>Approved User</th>
-                      <th>Approved Date</th>
-                      <th>Status</th>
+                <table class="table table-striped">
+                  <thead>
+                    <th>Order</th>
+                    <th>Approval Group</th>
+                    <th>Remarks</th>
+                    <th>Approved User</th>
+                    <th>Approved Date</th>
+                    <th>Status</th>
 
-                    </thead>
-  <tbody>
+                  </thead>
+                  <tbody>
                     <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
                       <td>
                         {{ i?.OrderLevel }}
@@ -367,7 +372,7 @@
                     </tr>
                   </tbody>
 
-                  </table>
+                </table>
 
 
               </div>

@@ -13,7 +13,7 @@ import { MyTasksComponent } from './my-tasks/my-tasks.component';
 const routes: Routes = [
 
   {
-    path: new CommonService().GetAllNavigations().myDepartments,  data: { titleKey: 'myDepartments' }, component: MyDepartmentsComponent , children: [{ path: 'edit', component: MyDepartmentsComponent } ]
+    path: new CommonService().GetAllNavigations().myDepartments,  data: { titleKey: 'My Departments' }, component: MyDepartmentsComponent , children: [{ path: 'edit', component: MyDepartmentsComponent } ]
   },
   {
     path: new CommonService().GetAllNavigations().myTasks,  data: { titleKey: 'myTasks' }, component: MyTasksComponent , children: [{ path: 'edit', component: MyTasksComponent } ]

@@ -55,7 +55,7 @@ export class RefTablesComponent implements OnInit {
       .subscribe(
         (data) => {
           this.model = data;
-          console.log(data);
+       
         },
         (error) => {
           this.confirmDialogService.messageBox(environment.APIerror);

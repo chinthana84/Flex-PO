@@ -35,7 +35,7 @@
                       </button>
 
 
-                      <button   (click)="AssignToMe(item.Id)" class="btn btn-warning  ">Assigned To Me
+                      <button (click)="AssignToMe(item.Id)" class="btn btn-warning  ">Assigned To Me
                       </button>
                     </div>
                   </td>
@@ -240,7 +240,7 @@
                                 <td>{{item.JobRef.RefDescription}}</td>
                                 <td>{{item.PaymentTypeRef?.RefDescription}}</td>
                                 <td>{{item.UnitPrice}}</td>
-                                <td>{{item.UnitPrice * item.Qty }}</td>
+                                <td>{{item.UnitPrice * item.Qty  | number : '1.2-2'}}</td>
                                 <td>
                                   <div class="btn-group">
 
@@ -258,7 +258,7 @@
                               <tr style="font-weight: bold;">
                                 <td class="datanotfound" colspan="7"></td>
                                 <td>Total</td>
-                                <td>   {{ this.GetTotal()  }}
+                                <td> {{ this.GetTotal()  | number : '1.2-2' }}
                                 </td>
                                 <td></td>
                               </tr>
@@ -326,17 +326,17 @@
                 <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
                   class="badge badge-primary">{{item.ApprovalGroup.Name}}</span>
 
-                  <table class="table table-striped">
-                    <thead>
-                      <th>Order</th>
-                      <th>Approval Group</th>
-                      <th>Remarks</th>
-                      <th>Approved User</th>
-                      <th>Approved Date</th>
-                      <th>Status</th>
+                <table class="table table-striped">
+                  <thead>
+                    <th>Order</th>
+                    <th>Approval Group</th>
+                    <th>Remarks</th>
+                    <th>Approved User</th>
+                    <th>Approved Date</th>
+                    <th>Status</th>
 
-                    </thead>
-  <tbody>
+                  </thead>
+                  <tbody>
                     <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
                       <td>
                         {{ i?.OrderLevel }}
@@ -359,7 +359,7 @@
                     </tr>
                   </tbody>
 
-                  </table>
+                </table>
 
 
               </div>
@@ -382,7 +382,3 @@
 <ng-template #content let-modal>
   <app-poitem></app-poitem>
 </ng-template>
-
-
-
-

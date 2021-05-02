@@ -246,7 +246,7 @@
                                 <td>{{item.JobRef.RefDescription}}</td>
                                 <td>{{item.PaymentTypeRef?.RefDescription}}</td>
                                 <td>{{item.UnitPrice}}</td>
-                                <td>{{item.UnitPrice * item.Qty }}</td>
+                                <td>{{item.UnitPrice * item.Qty  | number : '1.2-2'}}</td>
                                 <td>
                                   <div class="btn-group">
 
@@ -264,7 +264,7 @@
                               <tr style="font-weight: bold;">
                                 <td class="datanotfound" colspan="7"></td>
                                 <td>Total</td>
-                                <td>   {{ this.GetTotal()  }}
+                                <td>   {{ this.GetTotal() | number : '1.2-2' }}
                                 </td>
                                 <td></td>
                               </tr>

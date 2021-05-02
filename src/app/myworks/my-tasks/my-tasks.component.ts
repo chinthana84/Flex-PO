@@ -139,7 +139,7 @@ export class MyTasksComponent implements OnInit {
 
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {  console.log(data); this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+      .subscribe((data) => {  this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
   }
 
   Action(item: any) {
