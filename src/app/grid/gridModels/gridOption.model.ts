@@ -24,6 +24,21 @@ export enum GridType {
   GRN=10
 }
 
+export enum PO_Status
+{
+    PR_Raised = 27,
+    Rejected = 46,
+    AssigedToMe = 51,
+    CreatePO = 52,
+    Cancelled = 62,
+    Order_Partially_Received = 63,
+    Order_Receievd_in_Full = 64,
+    Pending_Payment = 67,
+    Paid_Fully = 68,
+    Paid_Partilly = 69,
+    Completed = 70
+}
+
   export class MyNavigations {
     public login: string="login";
     public approvalGroups: string="approvalGroups";

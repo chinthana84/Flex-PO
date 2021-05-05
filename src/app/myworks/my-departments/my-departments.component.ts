@@ -10,6 +10,7 @@ import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { TypeHeadSearchDTO } from 'src/app/grid/gridModels/typeheadSearch.model';
 import { purchaseRequestHeaderDTO, PurchaseRequestDetailDTO, PurchaseRequestAttachmentsDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { SupplierDTO, RefTableDTO } from 'src/app/models/refTable.model';
+import { UserDetails } from 'src/app/models/secutiry.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { CommonService } from 'src/app/myShared/services/common.service';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
@@ -41,6 +42,9 @@ export class MyDepartmentsComponent implements OnInit {
   formatter = (x: TypeHeadSearchDTO) => x.Name
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
+  userDetaills: UserDetails[] = [];
+  selectedUserID: number = 0;
+
   gridOption: GridOptions = {
     datas: {},
     searchObject: {
@@ -69,19 +73,20 @@ export class MyDepartmentsComponent implements OnInit {
   ) { this.edited = false; }
 
   ngOnInit(): void {
- 
+
     this.setPage(this.gridOption.searchObject);
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
 
       if (params.id > 0) {
-         this.EditPR(params.id);
-       } else {
-         this.setPage(this.gridOption.searchObject);
-         this.edited = false;
-       }
-     });
+        this.EditPR(params.id);
+        this.getallUsers();
+      } else {
+        this.setPage(this.gridOption.searchObject);
+        this.edited = false;
+      }
+    });
 
-   }
+  }
 
   EditPR(id: number, isCopy: Boolean = false) {
     this.edited = true;
@@ -130,18 +135,15 @@ export class MyDepartmentsComponent implements OnInit {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
       .subscribe((data) => {
         this.gridOption.datas = data;
-        if(this.gridOption.datas.pagedItems ==0 )
-        {
-          this.gridOption.datas.pagedItems =[];
+        if (this.gridOption.datas.pagedItems == 0) {
+          this.gridOption.datas.pagedItems = [];
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
-
-
   }
 
   Action(item: any) {
 
-      this.router.navigate(["/MyDeps/edit"], { queryParams: { id: item.Id } });
+    this.router.navigate(["/MyDeps/edit"], { queryParams: { id: item.Id } });
 
     this.edited = true;
   }
@@ -149,9 +151,21 @@ export class MyDepartmentsComponent implements OnInit {
 
 
   Save() {
+    this.subs.sink = this.http
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPR, {}).subscribe((data) => {
+        if (data.IsValid == false) {
+          this.confirmDialogService.messageListBox(data.ValidationMessages)
+        }
+        else {
+          this.toastr.success(environment.dataSaved);
+          this.router.navigate(['MyDeps']);
+          this.setPage(this.gridOption.searchObject);
+        }
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+  }
 
-
-
+  Save2() {
+    this.modelPR.AssignedToMeUserId=this.selectedUserID;
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
@@ -166,17 +180,21 @@ export class MyDepartmentsComponent implements OnInit {
   }
 
 
-  AssignToMe(id:number=0) {
 
-    this.modelPR=new purchaseRequestHeaderDTO();
-    this.modelPR.PoheaderId=id;
+  AssignToMe(id: number = 0) {
+
+    this.modelPR = new purchaseRequestHeaderDTO();
+    this.modelPR.PoheaderId = id;
     this.confirmDialogService.confirmThis("Are you sure ?", () => {
       this.Save();
     }, function () { });
   }
 
 
-
+  getallUsers() {
+    this.http.get<any>(`${environment.APIEndpoint}/Admin/GetAllUsers`)
+      .subscribe((data) => { this.selectedUserID = 0; this.userDetaills = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
+  }
 
 
 

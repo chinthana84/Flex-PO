@@ -43,12 +43,12 @@
           </div>
 
           <div *ngIf="edited">
-
+            {{this.modelPR?.PoStatusRef?.RefDescription}}
             <app-poheader *ngIf="this.modelPR" [PassingmodelPR]="this.modelPR"></app-poheader>
             <app-podetails [PassingmodelPR]="this.modelPR"></app-podetails>
 
 
-            <div class="row"  >
+            <div class="row" *ngIf="this.modelPR?.PoStatusRefId != 70">
               <div class="col-md-4">
                 <div class="form-group">
                   <label for="ShiptTo">Status</label>
@@ -63,7 +63,8 @@
             </div>
 
             <div class="btn-group">
-              <button type="button" *ngIf="this.actionID>0" (click)="this.save();" class="btn btn-primary save_button"> <span
+              <button type="button" *ngIf="this.selectedStatusID > 0 && this.modelPR?.PoStatusRefId != 70"
+                (click)="this.FinalSaveStepsOnPO();" class="btn btn-primary save_button"> <span
                   class="fa fa-save"></span> </button>
 
               <button type="button" (click)="router.navigate(['grn']);" class="btn btn-primary back_button">
@@ -77,4 +78,3 @@
     </div>
   </section>
 </div>
-

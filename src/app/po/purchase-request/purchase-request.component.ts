@@ -113,6 +113,8 @@ export class PurchaseRequestComponent implements OnInit {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
+      console.log(this.modelPR)
+
       if(isCopy){
         this.mode="Copy PR";
         this.modelPR.PoheaderId=0;
@@ -218,15 +220,32 @@ export class PurchaseRequestComponent implements OnInit {
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
-          this.confirmDialogService.messageListBox(data.ValidationMessages)
+          this.confirmDialogService.messageListBox(data.ValidationMessages);
+          this.modelPR.PoStatusRefId = 0;
         }
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['request']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.modelPR.PoStatusRefId = 0;this.confirmDialogService.messageBox(environment.APIerror)});
   }
+  SaveDrafts() {
+    this.modelPR.PoStatusRefId = 66; //drafts
+    this.subs.sink = this.http
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
+        if (data.IsValid == false) {
+          this.confirmDialogService.messageListBox(data.ValidationMessages)
+          this.modelPR.PoStatusRefId = 0;
+        }
+        else {
+          this.toastr.success(environment.dataSaved);
+          this.router.navigate(['request']);
+          this.setPage(this.gridOption.searchObject);
+        }
+      }, (error) => { this.modelPR.PoStatusRefId = 0;this.confirmDialogService.messageBox(environment.APIerror)});
+  }
+
 
   AddRowAttachemtns(){
     let obj=new PurchaseRequestAttachmentsDTO();
@@ -258,10 +277,7 @@ export class PurchaseRequestComponent implements OnInit {
 
   GetTotal(){
     let sum= 0;
-
-this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
-
+     this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
       return sum;
-
   }
 }

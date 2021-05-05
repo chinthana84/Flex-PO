@@ -8,11 +8,13 @@ export class LoaderService {
 
   constructor() { }
 
-  isLoading = new Subject<boolean>();
+  isLoadingRequest = new Subject<boolean>();
+
+  main$ = this.isLoadingRequest.asObservable();
   show() {
-      this.isLoading.next(true);
+      this.isLoadingRequest.next(true);
   }
   hide() {
-      this.isLoading.next(false);
+      this.isLoadingRequest.next(false);
   }
 }

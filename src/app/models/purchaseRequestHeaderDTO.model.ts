@@ -19,6 +19,8 @@ export   class purchaseRequestHeaderDTO
 
   public  AssignedToMeUserId ?:number=0;
 
+  public  PoOrderRefId  ?:number=0;
+
   public   CancellRemarks?:string="";
 
   public    Department?: DepartmentsDTO={};

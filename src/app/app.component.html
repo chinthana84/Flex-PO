@@ -198,15 +198,10 @@
                 <li class="nav-item">
                   <a routerLink="request" class="nav-link ">
 
-                    <p>Purchase Request </p>
+                    <p>MY Purchase Requests </p>
                   </a>
                 </li>
-                <li class="nav-item">
-                  <a routerLink="ammendPO" class="nav-link ">
 
-                    <p>Ammend PO </p>
-                  </a>
-                </li>
               </ul>
             </li>
             <li class="nav-item  ">
@@ -222,6 +217,12 @@
                   <a routerLink="requestapproval" class="nav-link ">
 
                     <p>Approval </p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a routerLink="ammendPO" class="nav-link ">
+
+                    <p>Ammend PO </p>
                   </a>
                 </li>
 
@@ -267,7 +268,7 @@
                 <li class="nav-item">
                   <a routerLink="MyTasks" class="nav-link ">
 
-                    <p>My Tasks </p>
+                    <p>My Tasks (PO Create) </p>
                   </a>
                 </li>
 
@@ -345,15 +346,15 @@
       </div>
       <!-- /.sidebar -->
     </aside>
-    <app-confirm-dialog></app-confirm-dialog>
+     <app-confirm-dialog></app-confirm-dialog>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <section class="content">
         <div class="container-fluid  ">
           <br />
-          <app-loader> </app-loader>
+<app-loader> </app-loader>
           <router-outlet> </router-outlet>
-
+ <!--  -->
 
           <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->

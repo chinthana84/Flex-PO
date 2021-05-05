@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
-import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
+import { GridOptions, GridType, PO_Status } from 'src/app/grid/gridModels/gridOption.model';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { purchaseRequestHeaderDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { RefTableDTO } from 'src/app/models/refTable.model';
@@ -28,10 +28,10 @@ export class GrnComponent implements OnInit {
   private subs = new SubSink();
   edited: boolean = false;
   modelPR: purchaseRequestHeaderDTO = {};
-  actionID :number=0;
+  actionID: number = 0;
 
-   status:RefTableDTO[]=[];
-  selectedStatusID:number=0;
+  status: RefTableDTO[] = [];
+  selectedStatusID: number = 0;
 
   gridOption: GridOptions = {
     datas: {},
@@ -43,8 +43,8 @@ export class GrnComponent implements OnInit {
       searchColName: '',
       colNames: [{ colName: "PONo", colText: 'PONo' },
       { colName: "DepartmentName", colText: 'Department' }
-      ,{ colName: "SupplierName", colText: 'Supplier' }
-      ,{ colName: "ShipTo", colText: 'ShipTo' }
+        , { colName: "SupplierName", colText: 'Supplier' }
+        , { colName: "ShipTo", colText: 'ShipTo' }
       ]
     }
   };
@@ -57,19 +57,19 @@ export class GrnComponent implements OnInit {
     private toastr: ToastrService,
     private itemService: ItemService,
     public commonService: CommonService,
-    public fileuploadService:FileuploadService
-    ) { this.edited = false; }
+    public fileuploadService: FileuploadService
+  ) { this.edited = false; }
 
   ngOnInit(): void {
 
 
     this.setPage(this.gridOption.searchObject);
-this.getStatusPO();
+
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
 
-       if (params.id > 0) {
-       // this.getStatus();
+      if (params.id > 0) {
+        // this.getStatus();
         this.EditPR(params.id);
       } else {
         this.edited = false;
@@ -77,42 +77,67 @@ this.getStatusPO();
     });
   }
 
-  EditPR(id:number){
+  EditPR(id: number) {
     this.edited = true;
-
+    //  this.getStatusPO();
 
     let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + id);
-    forkJoin([ z]).subscribe((data) => {
+    let a = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'PO_STATUS');
+    forkJoin([z, a]).subscribe((data) => {
 
-      this.modelPR = data[0]; 
-
+      this.modelPR = data[0];
       this.modelPR.Podate = new Date(this.modelPR.Podate);
+      //this.selectedStatusID = this.modelPR.PoStatusRefId;
+debugger
+      if (this.modelPR.PoStatusRefId == PO_Status.CreatePO) {
+
+        this.status = data[1].filter(r => r.RefId === PO_Status.Order_Partially_Received || r.RefId == PO_Status.Order_Receievd_in_Full);
+      }
+      else if (this.modelPR.PoStatusRefId ==  PO_Status.Order_Partially_Received || this.modelPR.PoStatusRefId ==  PO_Status.Order_Receievd_in_Full) {
+        this.status = data[1].filter(r =>   r.RefId == PO_Status.Pending_Payment  );
+      }
+      else if (this.modelPR.PoStatusRefId == PO_Status.Pending_Payment){
+        this.status = data[1].filter(r => r.RefId == PO_Status.Paid_Fully || r.RefId== PO_Status.Paid_Partilly  );
+      }
+
+      console.log(this.modelPR )
 
 
 
-     }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+
+
+    }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
 
 
-  ViewOnly(Id:number){
+  ViewOnly(Id: number) {
     this.router.navigate(["/grn/edit"], { queryParams: { id: Id } });
-   // this.EditPR(Id);
+    // this.EditPR(Id);
   }
 
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
       .subscribe((data) => {
-         this.gridOption.datas = data;
-        }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+        this.gridOption.datas = data;
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
   }
 
 
 
 
-  Cancel() {
+  FinalSaveStepsOnPO() {
+debugger
+    // if (this.modelPR.PoStatusRefId === PO_Status.CreatePO)
+    // {
+    //   this.modelPR.PoStatusRefId = this.selectedStatusID;
+    // }
+    // else if (this.modelPR.PoStatusRefId === PO_Status.Order_Partially_Received || this.modelPR.PoStatusRefId === PO_Status.Order_Receievd_in_Full){
+    //   this.modelPR.PoStatusRefId = this.selectedStatusID;
+    // }
+    this.modelPR.PoStatusRefId = this.selectedStatusID;
     this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CancelPO`, this.modelPR, {}).subscribe((data) => {
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/FinalSaveStepsOnPO`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
@@ -121,21 +146,21 @@ this.getStatusPO();
           this.router.navigate(['grn']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
 
-  getStatusPO(){
-    this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'PO_STATUS')
-    .subscribe((data) => {
+  // getStatusPO(){
+  //   this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'PO_STATUS')
+  //   .subscribe((data) => {
 
-       this.status=data.filter(r=> r.RefId === 63 || r.RefId == 64);
+  //      this.status=data.filter(r=> r.RefId === 63 || r.RefId == 64);
 
 
-    }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
-  }
+  //   }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+  // }
 
-  save(){
+  save() {
     // if(this.actionID==1){
     //   this.confirmDialogService.confirmThis("Are you sure to Cancel this?", () => {
     //     this.Cancel();
@@ -149,35 +174,36 @@ this.getStatusPO();
     // }
   }
 
-  isCanCancel(){
+  isCanCancel() {
 
-    const statusid= this.modelPR.PoStatusRefId;
+    const statusid = this.modelPR.PoStatusRefId;
 
-    if(statusid==27 || statusid==51 || statusid==52){
+    if (statusid == 27 || statusid == 51 || statusid == 52) {
+      return true;
+    }
+
+    return false;
+   
+  }
+
+  isCanReassinged() {
+
+    const statusid = this.modelPR.PoStatusRefId;
+
+    if (statusid == 51) {
       return true;
     }
 
     return false;
   }
 
-  isCanReassinged(){
 
-    const statusid= this.modelPR.PoStatusRefId;
+  GetTotal() {
+    let sum = 0;
 
-    if(  statusid==51  ){
-      return true;
-    }
+    this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
 
-    return false;
-  }
-
-
-  GetTotal(){
-    let sum= 0;
-
-this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
-
-      return sum;
+    return sum;
 
   }
 

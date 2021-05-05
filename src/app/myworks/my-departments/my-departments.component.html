@@ -31,7 +31,7 @@
                     <div class="btn-group">
 
 
-                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">Assigne
                       </button>
 
 
@@ -365,9 +365,24 @@
               </div>
             </div>
 
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="userss">User</label>
+                  <ng-select [clearable]="false" name="userss" [(ngModel)]="this.selectedUserID">
+                    <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                    <ng-option *ngFor="let car of this.userDetaills" [value]="car.UserId">
+                      {{car.UserName}}
+                    </ng-option>
+                  </ng-select>
+                </div>
+              </div>
+
+            </div>
+
             <div class="btn-group">
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
-                (click)="Save();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
+              <button type="button" *ngIf="this.selectedUserID >0"
+                (click)="Save2();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
               <button type="button" (click)="router.navigate(['MyDeps']);" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
             </div>
