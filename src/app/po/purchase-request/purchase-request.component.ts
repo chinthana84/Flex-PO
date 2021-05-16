@@ -1,9 +1,10 @@
+import { LoaderService } from './../../myShared/services/loader.service';
 import { RefTableDTO } from 'src/app/models/refTable.model';
 import { ItemService } from './../../myShared/services/item.service';
 import { PurchaseRequestAttachmentsDTO, PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
 import { SupplierDTO } from './../../models/refTable.model';
 import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model';
-import {ChangeDetectorRef, AfterContentChecked, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, AfterContentChecked, Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
@@ -20,6 +21,8 @@ import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { environment } from 'src/environments/environment';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
 import { PoitemComponent } from '../poitem/poitem.component';
+import { ApprovalOfficersDTO } from 'src/app/models/secutiry.model';
+import { SearchComponent } from 'src/app/grid/search/search.component';
 
 
 @Component({
@@ -29,6 +32,8 @@ import { PoitemComponent } from '../poitem/poitem.component';
 })
 export class PurchaseRequestComponent implements OnInit {
 
+  @ViewChild(SearchComponent) searchComponent: SearchComponent;
+
   private subs = new SubSink();
   edited: boolean = false;
   modelPR: purchaseRequestHeaderDTO = {};
@@ -36,7 +41,9 @@ export class PurchaseRequestComponent implements OnInit {
   modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
 
-  mode:string="";
+  officers: [ApprovalOfficersDTO[]] = [[]];
+
+  mode: string = "";
 
   model: any;
   searching = false;
@@ -54,32 +61,53 @@ export class PurchaseRequestComponent implements OnInit {
       searchColName: '',
       colNames: [{ colName: "PONo", colText: 'PONo' },
       { colName: "DepartmentName", colText: 'Department' }
-      ,{ colName: "SupplierName", colText: 'Supplier' }
-      ,{ colName: "ShipTo", colText: 'ShipTo' }
+        , { colName: "SupplierName", colText: 'Supplier' }
+        , { colName: "ShipTo", colText: 'ShipTo' }
+        , { colName: "POStatus", colText: 'PRStatus' }
       ]
     }
   };
   closeResult: string;
 
-  constructor(private modalService: NgbModal, private confirmDialogService: ConfirmDialogService, private typeheadService: TypeheadService
+
+
+  constructor(
+    private loaderService: LoaderService,
+    private modalService: NgbModal
+    , private confirmDialogService: ConfirmDialogService
+    , private typeheadService: TypeheadService
     , private http: HttpClient,
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
     private itemService: ItemService,
     public commonService: CommonService,
-    public fileuploadService:FileuploadService
-    ) { this.edited = false; }
+    public fileuploadService: FileuploadService
+  ) {
+    this.edited = false;
+  }
+
+
+
 
   ngOnInit(): void {
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
-      if(this.modelPR.PurchaseRequestDetail == undefined){
-        this.modelPR.PurchaseRequestDetail=[];
+      this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
+        this.officers = r;
+        this.modelPR.TLApproval = 0;
+        this.modelPR.MApproval = 0;
+        this.modelPR.CSMApproval = 0;
+        this.modelPR.CEOApproval = 0;
+        this.modelPR.BoardApproval = 0
+      });
+
+      if (this.modelPR.PurchaseRequestDetail == undefined) {
+        this.modelPR.PurchaseRequestDetail = [];
       }
-      if (this.modelPR.PurchaseRequestDetail.filter(x=> x.guid == r.guid).length >0){
-        this.modelPR.PurchaseRequestDetail= this.modelPR.PurchaseRequestDetail.filter(x=> x.guid != r.guid);
+      if (this.modelPR.PurchaseRequestDetail.filter(x => x.guid == r.guid).length > 0) {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(x => x.guid != r.guid);
         this.modelPR.PurchaseRequestDetail.push(r);
-      }else{
+      } else {
         this.modelPR.PurchaseRequestDetail.push(r);
       }
     });
@@ -98,13 +126,24 @@ export class PurchaseRequestComponent implements OnInit {
     });
   }
 
-  EditPR(id:number,isCopy:Boolean=false){
+  DepaertmentChange() {
+    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
+      debugger
+      this.officers = r;
+
+      console.log(this.officers)
+
+    });
+  }
+
+  EditPR(id: number, isCopy: Boolean = false) {
     this.edited = true;
-    this.mode="Edit";
+    this.mode = "Edit";
 
     let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
     let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
     let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + id);
+
     forkJoin([x, y, z]).subscribe((data) => {
       this.loggedUserDepartments = data[0];
       this.modelShiptTo = data[1];
@@ -113,70 +152,105 @@ export class PurchaseRequestComponent implements OnInit {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
-      console.log(this.modelPR)
+      this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
+        this.officers = r;
 
-      if(isCopy){
-        this.mode="Copy PR";
-        this.modelPR.PoheaderId=0;
-        this.modelPR.Pono="";
-        this.modelPR.PoStatusRefId=0;
-        this.modelPR.PoStatusRef=null;
-        this.modelPR.PurchaseOrderApproval=[];
+      });
+
+      if (isCopy) {
+        this.mode = "Copy PR";
+        this.modelPR.PoheaderId = 0;
+        this.modelPR.Pono = "";
+        this.modelPR.PoStatusRefId = 0;
+        this.modelPR.PoStatusRef = null;
+        this.modelPR.PurchaseOrderApproval = [];
         this.modelPR.PurchaseRequestDetail.forEach(r => {
-          r.PoheaderId=0;
-          r.PodetId=0;
-          r.guid=this.commonService.newGuid();
+          r.PoheaderId = 0;
+          r.PodetId = 0;
+          r.guid = this.commonService.newGuid();
         });
 
-        this.modelPR.PurchaseRequestAttachments .forEach(r => {
-          r.PoheaderId=0;
-          r.Id=0;
+        this.modelPR.PurchaseRequestAttachments.forEach(r => {
+          r.PoheaderId = 0;
+          r.Id = 0;
+        });
+
+        this.modelPR.PurchaseRequestDetail.forEach(r => {
+          r.PrdetailsAttachments.forEach(s => {
+            s.PodetId = 0;
+            s.PrdetAttachmentId = 0;
+
+          })
         });
       }
 
-     }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+    }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  NewPR(){
-    this.mode="New";
+  NewPR() {
+    this.mode = "New";
     this.edited = true;
     this.modelPR = new purchaseRequestHeaderDTO();
-    this.model=new TypeHeadSearchDTO();
+    this.model = new TypeHeadSearchDTO();
+    this.officers = [[]];
 
     this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
-      .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)});
+      .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
     this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
-      r => { this.modelShiptTo = r; }, (error) => {this.confirmDialogService.messageBox(environment.APIerror) });
+      r => { this.modelShiptTo = r; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  ViewOnly(Id:number){
+  ViewOnly(Id: number) {
     this.router.navigate(["/request/edit"], { queryParams: { id: Id } });
-    this.EditPR(Id,false);
+    this.EditPR(Id, false);
   }
 
   setPage(obj: SearchObject) {
     this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {   this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+      .subscribe((data) => {
+        this.gridOption.datas = data;
+        console.log(data)
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
+  }
+
+  OrderByList(colname: string) {
+    debugger
+    this.gridOption.searchObject.defaultSortColumnName = colname;
+    if (this.gridOption.searchObject.aseOrDesc == undefined) {
+      this.gridOption.searchObject.aseOrDesc = "ASC"
+    }
+
+    if (this.gridOption.searchObject.aseOrDesc == "ASC") {
+      this.gridOption.searchObject.aseOrDesc = "DESC"
+    }
+    else if (this.gridOption.searchObject.aseOrDesc == "DESC") {
+      this.gridOption.searchObject.aseOrDesc = "ASC"
+    }
+
+
+    this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
+    this.gridOption.searchObject.searchText = this.searchComponent.searchText;
+
+    this.setPage(this.gridOption.searchObject);
   }
 
   Action(item: any) {
     if (item == undefined) {
       this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     } else {
-      this.router.navigate(["/request/edit"], {    queryParams: { id: item.Id } });
+      this.router.navigate(["/request/edit"], { queryParams: { id: item.Id } });
     }
     this.edited = true;
   }
 
-  openXl(content,event) {
-    event.srcElement.blur();
-    event.preventDefault();
-    const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
+  openXl(content, event) {
+    const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
   }
 
-  editPoDetaisls(obj:PurchaseRequestDetailDTO) {
-    const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
+  editPoDetaisls(obj: PurchaseRequestDetailDTO) {
+    debugger
+    const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
     modalRef.componentInstance.fromParent = obj;
   }
 
@@ -200,16 +274,15 @@ export class PurchaseRequestComponent implements OnInit {
 
   selectedItem(item: any) {
     this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/GetSupplierByID/` + item.item.ID)
-      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)  });
+      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  deleteItem(index:PurchaseRequestDetailDTO){
+  deleteItem(index: PurchaseRequestDetailDTO) {
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-      if(index.PodetId > 0){
-        this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.ItemId != index.ItemId);
-      }else
-      {
-        this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.guid != index.guid);
+      if (index.PodetId > 0) {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(r => r.ItemId != index.ItemId);
+      } else {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(r => r.guid != index.guid);
       }
 
     }, function () { });
@@ -228,8 +301,9 @@ export class PurchaseRequestComponent implements OnInit {
           this.router.navigate(['request']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => { this.modelPR.PoStatusRefId = 0;this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
   }
+
   SaveDrafts() {
     this.modelPR.PoStatusRefId = 66; //drafts
     this.subs.sink = this.http
@@ -243,16 +317,16 @@ export class PurchaseRequestComponent implements OnInit {
           this.router.navigate(['request']);
           this.setPage(this.gridOption.searchObject);
         }
-      }, (error) => { this.modelPR.PoStatusRefId = 0;this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
 
-  AddRowAttachemtns(){
-    let obj=new PurchaseRequestAttachmentsDTO();
+  AddRowAttachemtns() {
+    let obj = new PurchaseRequestAttachmentsDTO();
     this.modelPR.PurchaseRequestAttachments.push(obj);
   }
 
-  addFile(event,i: PurchaseRequestAttachmentsDTO): void {
+  addFile(event, i: PurchaseRequestAttachmentsDTO): void {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
@@ -263,21 +337,21 @@ export class PurchaseRequestComponent implements OnInit {
     }
   }
 
-  deleteFile(id:number){
+  deleteFile(id: number) {
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-        this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
+      this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
     }, function () { });
   }
 
-  copyPR(id:number){
+  copyPR(id: number) {
 
     this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
-    this.EditPR(id,true);
+    this.EditPR(id, true);
   }
 
-  GetTotal(){
-    let sum= 0;
-     this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
-      return sum;
+  GetTotal() {
+    let sum = 0;
+    this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
+    return sum;
   }
 }

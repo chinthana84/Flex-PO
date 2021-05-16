@@ -6,6 +6,7 @@ export class SearchObject {
   pageNo?: number;
   girdId?: number;
   defaultSortColumnName?: string;
+  aseOrDesc?:string="";
   passingId?: number;
   passingString?: string;
   colNames?:   Grid[]=[];

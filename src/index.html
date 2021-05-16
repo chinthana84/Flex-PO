@@ -65,18 +65,29 @@
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 
+ 
+
   <script>
     $(document).ready(function(e){
 
 
 
 $(document).on("click","#heees .submain",function(xx){
-   
+
+  $(".main-sidebar a").removeClass("active");
   $(".nav-item").removeClass("menu-open");
  $(this).parent().addClass('menu-open')
+ $(this).addClass("active")
 
 })
 
+
+$(document).on("click","#heees .nav .nav-treeview a"  ,function(xx){
+
+  $("#heees .nav .nav-treeview a").removeClass('active')
+$(this).addClass('active')
+
+})
 
 
 

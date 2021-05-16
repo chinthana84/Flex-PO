@@ -1,7 +1,7 @@
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
 import { purchaseRequestHeaderDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin } from 'rxjs';
@@ -12,6 +12,8 @@ import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-di
 import { CommonService } from 'src/app/myShared/services/common.service';
 import { environment } from 'src/environments/environment';
 import { SubSink } from 'subsink';
+
+
 
 @Component({
   selector: 'app-purchase-request-approval',
@@ -35,6 +37,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
       colNames: [{ colName: "Pono", colText: 'Pono' }]
     }
   };
+
 
   constructor(
     private http: HttpClient,

@@ -32,6 +32,12 @@ export   class purchaseRequestHeaderDTO
    public     PurchaseOrderApproval ?:PurchaseOrderApprovalDTO[]=[];
    public    UpdatedUserNavigation ?:UserDetails={};
    public     CreatedUserNavigation ?:UserDetails={};
+
+   public  TLApproval       ?:number=0;
+   public  MApproval?:number=0;
+   public  CSMApproval?:number=0;
+   public  CEOApproval?:number=0;
+   public  BoardApproval?:number=0;
 }
 
 
@@ -54,6 +60,19 @@ export class PurchaseRequestDetailDTO
     public    Item ?: ItemsDTO ={};
     public    JobRef ?: RefTableDTO ={};
     public    Poheader ?:purchaseRequestHeaderDTO;
+
+    public   PrdetailsAttachments?:PrdetailsAttachmentsDTO[]=[];
+}
+
+export class PrdetailsAttachmentsDTO
+{
+    public   PrdetAttachmentId ?: number=0;
+    public   PodetId ?: number=0;
+    public   Description ?: string=""
+
+    public   UniqueFileName ?: string=""
+
+    public    Podet?:PurchaseRequestDetailDTO={};
 }
 
 export   class PurchaseRequestAttachmentsDTO
@@ -83,3 +102,5 @@ export class PurchaseOrderApprovalDTO
     public    ApprovalGroup ?:ApprovalGroupsDTO ={};
     public    ApprovalStatusRef ?:RefTableDTO ={};
 }
+
+

@@ -25,6 +25,7 @@ export class PagerComponent implements OnInit {
     this.searchObject.pageNo=pageno;
      this.searchObject.girdId=this.pagerX.searchObject?.girdId;
      this.searchObject.defaultSortColumnName=this.pagerX.searchObject?.defaultSortColumnName;
+     this.searchObject.aseOrDesc=this.pagerX.searchObject.aseOrDesc;
     this.pagedClicked.emit(this.searchObject);
 
   }

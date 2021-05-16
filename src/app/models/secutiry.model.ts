@@ -27,3 +27,17 @@ export class TokenApiModel
 
     public   RefreshToken ?:string="";
 }
+
+
+export class ApprovalOfficersWrapperDTO
+{
+    public  Officers?:[ApprovalOfficersDTO[]]
+}
+
+export class ApprovalOfficersDTO
+{
+    public   UserID ?: number = 0;
+    public   UserName ?: number = 0;
+    public   ApprovalGroupID ?: number = 0;
+    public   ApprovalGroupName?: number = 0;
+}

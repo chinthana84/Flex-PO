@@ -1,7 +1,6 @@
-
 <div class="row">
   <div class="col-md-12">
-    <div class="card">
+    <div class="card" style="margin-bottom: 0px;">
       <div class="card-header">
         <h3 class="card-title">
           <i class="fas fa-chart-pie mr-1"></i>
@@ -9,116 +8,181 @@
         </h3>
       </div>
       <div class="card-body">
-        <div class="tab-content p-0">
 
-          <div class="row">
-            <div class="col-md-10">
-              <div class="form-group">
-                <label for="Name">Item Description</label>
-                <input id="ItemDescription" name="ItemDescription" type="text" autocomplete="off" class="form-control"
-                  placeholder="Item Description" autocomplete="off" [(ngModel)]="model" [resultFormatter]="formatter"
-                  [inputFormatter]="formatterx" [ngbTypeahead]="searchItems" (selectItem)="selectedItem($event)" />
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home"
+              aria-selected="true">Items</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+              aria-selected="false">Attachments</a>
+          </li>
 
-              </div>
+        </ul>
+        <div class="tab-content  " id="myTabContent">
+          <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
+            <div class="tab-content  ">
+
+
+
+                  <div class="row mt-2" >
+                    <div class="col-md-10">
+                      <div class="form-group">
+                        <label for="Name">Item Description</label>
+                        <input id="ItemDescription" name="ItemDescription" type="text" autocomplete="off"
+                          class="form-control" placeholder="Item Description" autocomplete="off" [(ngModel)]="model"
+                          [resultFormatter]="formatter" [inputFormatter]="formatterx" [ngbTypeahead]="searchItems"
+                          (selectItem)="selectedItem($event)" />
+
+                      </div>
+                    </div>
+                    <div class="col-md-2">
+                      <div class="form-group">
+                        <label for="ItemUnit">Item Unit</label>
+                        <input id="ItemUnit" disabled name="ItemUnit" type="text" autocomplete="off" class="form-control"
+                          [(ngModel)]="this.modelItem.Unit.RefDescription" placeholder="ItemUnit" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-4">
+                      <div class="form-group">
+
+                        <label for="accountcodes">Account Codes</label>
+                        <ng-select [clearable]="false" name="accountcodes" [(ngModel)]="this.details.AccountListId">
+                          <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                          <ng-option *ngFor="let car of this.AccountCodes" [value]="car.AccountListId">
+                            {{car.AccountCode}}
+                          </ng-option>
+                        </ng-select>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4">
+                      <div class="form-group">
+
+                        <label for="PaymentTypes">PaymentTypes</label>
+                        <ng-select [clearable]="false" name="PaymentTypes" [(ngModel)]="this.details.PaymentTypeRefId">
+                          <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                          <ng-option *ngFor="let car of this.PaymentTypes" [value]="car.RefId">
+                            {{car.RefDescription}}
+                          </ng-option>
+                        </ng-select>
+
+
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-group">
+
+                        <label for="jobcodes">Job Codes</label>
+                        <ng-select [clearable]="false" name="jobcodes" [(ngModel)]="this.details.JobRefId">
+                          <ng-option [value]="0" disabled selected>Please Select</ng-option>
+                          <ng-option *ngFor="let car of this.JobCOdes" [value]="car.RefId">
+                            {{car.RefDescription}}
+                          </ng-option>
+                        </ng-select>
+
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="poitemQuantity">Quantity</label>
+
+                        <input class="form-control" id="poitemQuantity" name="poitemQuantity" placeholder="Quantity"
+                          [(ngModel)]="this.details.Qty" numeric decimals="2" />
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label for="poUnitpRice">Unit Price</label>
+                        <input class="form-control" id="poUnitpRice" name="poUnitpRice" placeholder="UnitpRice"
+                          [(ngModel)]="this.details.UnitPrice" numeric decimals="2" />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label for="poitemReference">Reference</label>
+                        <input class="form-control" id="poitemReference" name="poitemReference" type="text"
+                          placeholder="Reference" [(ngModel)]="this.details.Reference" />
+                      </div>
+                    </div>
+                  </div>
+
+
+
+
+
             </div>
-            <div class="col-md-2">
-              <div class="form-group">
-                <label for="ItemUnit">Item Unit</label>
-                <input id="ItemUnit" disabled name="ItemUnit" type="text" autocomplete="off" class="form-control"
-                  [(ngModel)]="this.modelItem.Unit.RefDescription" placeholder="ItemUnit" />
-              </div>
-            </div>
+
           </div>
-          <div class="row">
-            <div class="col-md-4">
-              <div class="form-group">
-
-                <label for="accountcodes">Account Codes</label>
-                <ng-select [clearable]="false" name="accountcodes" [(ngModel)]="this.details.AccountListId">
-                  <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                  <ng-option *ngFor="let car of this.AccountCodes" [value]="car.AccountListId">
-                    {{car.AccountCode}}
-                  </ng-option>
-                </ng-select>
-              </div>
-            </div>
-
-         <div class="col-md-4">
-              <div class="form-group">
-
-                <label for="PaymentTypes">PaymentTypes</label>
-                <ng-select [clearable]="false" name="PaymentTypes" [(ngModel)]="this.details.PaymentTypeRefId">
-                  <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                  <ng-option *ngFor="let car of this.PaymentTypes" [value]="car.RefId">
-                    {{car.RefDescription}}
-                  </ng-option>
-                </ng-select>
+          <div class="tab-pane fade  " id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
 
-              </div>
-            </div>
-            <div class="col-md-4">
-              <div class="form-group">
+                <table class="table table-bordered mt-2  ">
+                  <thead class="thead-light">
+                    <th>Description</th>
+                    <th>Uploader</th>
+                    <th>Download</th>
+                    <th>
+                      <button type="button" (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit"
+                        data-toggle="modal" data-target="#edit">
+                        <span class="fa fa-plus"></span>
+                      </button>
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of details.PrdetailsAttachments let index = index" class="table-hover mt-0">
+                      <td>
+                        <input [(ngModel)]="i.Description" id="poitem{{index}}" name="poitem{{index}}" type="text"
+                          class="form-control" placeholder="Description" />
+                      </td>
+                      <td>
+                        <input name="poitem{{index}}" type="file" (change)="this.addFile($event,i)" />
+                      </td>
+                      <td>
+                        <button *ngIf="i.UniqueFileName.length >0" type="button"
+                          (click)="this.fileuploadService.downloadFile(i.UniqueFileName)"
+                          class="btn btn-warning">Download </button>
+                      </td>
+                      <td>
+                        <button type="button" class="btn btn-danger" (click)="deleteFile(i.PrdetAttachmentId)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr *ngIf="this.details.PrdetailsAttachments?.length == 0">
+                      <td class="datanotfound" colspan="4">Data not found</td>
+                    </tr>
+                  </tbody>
+                </table>
 
-                <label for="jobcodes">Job Codes</label>
-                <ng-select [clearable]="false" name="jobcodes" [(ngModel)]="this.details.JobRefId">
-                  <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                  <ng-option *ngFor="let car of this.JobCOdes" [value]="car.RefId">
-                    {{car.RefDescription}}
-                  </ng-option>
-                </ng-select>
 
 
-              </div>
-            </div>
+
           </div>
 
+        </div>
 
 
-          <div class="row">
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="poitemQuantity">Quantity</label>
-
-                <input class="form-control" id="poitemQuantity" name="poitemQuantity" placeholder="Quantity" [(ngModel)]="this.details.Qty" numeric decimals="2" />
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="form-group">
-                <label for="poUnitpRice">Unit Price</label>
-                <input class="form-control" id="poUnitpRice" name="poUnitpRice"  placeholder="UnitpRice" [(ngModel)]="this.details.UnitPrice"  numeric decimals="2"/>
-              </div>
-            </div>
-          </div>
-
-
-
-
-          <div class="row">
-            <div class="col-md-12">
-              <div class="form-group">
-                <label for="poitemReference">Reference</label>
-                <input class="form-control" id="poitemReference" name="poitemReference" type="text" placeholder="Reference" [(ngModel)]="this.details.Reference" />
-              </div>
-            </div>
-          </div>
-
-
-
-
-
+      </div>
+      <div class="card-footer text-muted">
+        <div class="btn-group">
+          <button type="button"
+            *ngIf="this.modelItem.ItemId>0 && this.details.Qty >0 && this.details.AccountListId >0 && this.details.JobRefId >0 && this.details.UnitPrice >0 && this.details.PaymentTypeRefId >0 "
+            (click)="AddITems()" class="btn btn-primary save_button">ADD ITEM</button>
         </div>
       </div>
     </div>
 
-    <div class="card-footer text-muted">
-      <div class="btn-group">
-        <button type="button"
-        *ngIf="this.modelItem.ItemId>0 && this.details.Qty >0 && this.details.AccountListId >0 && this.details.JobRefId >0 && this.details.UnitPrice >0 && this.details.PaymentTypeRefId >0 "
-        (click)="AddITems()" class="btn btn-primary save_button"> Add Item</button>
-      </div>
-    </div>
+
 
   </div>
 
