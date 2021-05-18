@@ -15,4 +15,6 @@ export class SearchObject {
   saveID?:number=0;
   SavedDBColumn?:string="";
 
+  postatusid?:string="";
+
 }

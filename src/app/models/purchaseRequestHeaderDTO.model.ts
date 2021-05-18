@@ -38,6 +38,8 @@ export   class purchaseRequestHeaderDTO
    public  CSMApproval?:number=0;
    public  CEOApproval?:number=0;
    public  BoardApproval?:number=0;
+
+   public IsApproval?:boolean=false;
 }
 
 

@@ -1,3 +1,4 @@
+
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SearchObject } from '../gridModels/searchObject.model';
@@ -20,17 +21,30 @@ export class PagerComponent implements OnInit {
 
 
   uploadComplete(pageno:number) {
+debugger
+    // this.gridService.currentData.subscribe(x => this.searchObject = x)
+    // this.searchObject.pageNo=pageno;
+    //  this.searchObject.girdId=this.pagerX.searchObject?.girdId;
+    //  this.searchObject.defaultSortColumnName=this.pagerX.searchObject?.defaultSortColumnName;
+    //  this.searchObject.aseOrDesc=this.pagerX.searchObject.aseOrDesc;
+    // this.pagedClicked.emit(this.searchObject);
 
-    this.gridService.currentData.subscribe(x => this.searchObject = x)
-    this.searchObject.pageNo=pageno;
-     this.searchObject.girdId=this.pagerX.searchObject?.girdId;
-     this.searchObject.defaultSortColumnName=this.pagerX.searchObject?.defaultSortColumnName;
-     this.searchObject.aseOrDesc=this.pagerX.searchObject.aseOrDesc;
-    this.pagedClicked.emit(this.searchObject);
+debugger
+this.gridoption.searchObject.pageNo=pageno;
+this.gridService.initGrid(this.gridoption)
 
   }
 
-  constructor(private gridService:GridService) { }
+  gridoption:GridOptions={};
+
+  constructor(private gridService:GridService) {
+
+    this.gridService.getGridOptions().subscribe(r=>{
+      debugger
+      this.gridoption=r;
+    });
+
+   }
 
   ngOnInit() {}
 

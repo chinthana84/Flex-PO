@@ -1,28 +1,27 @@
+import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { LoaderService } from './../../myShared/services/loader.service';
 import { RefTableDTO } from 'src/app/models/refTable.model';
 import { ItemService } from './../../myShared/services/item.service';
 import { PurchaseRequestAttachmentsDTO, PurchaseRequestDetailDTO } from './../../models/purchaseRequestHeaderDTO.model';
 import { SupplierDTO } from './../../models/refTable.model';
 import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model';
-import { ChangeDetectorRef, AfterContentChecked, Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { OperatorFunction, Observable, of, forkJoin } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { TypeheadService } from 'src/app/myShared/services/typehead.service';
-import { NgbDate, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { SubSink } from 'subsink';
 import { purchaseRequestHeaderDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { HttpClient } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { CommonService } from 'src/app/myShared/services/common.service';
-import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { environment } from 'src/environments/environment';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
 import { PoitemComponent } from '../poitem/poitem.component';
 import { ApprovalOfficersDTO } from 'src/app/models/secutiry.model';
-import { SearchComponent } from 'src/app/grid/search/search.component';
 
 
 @Component({
@@ -30,9 +29,10 @@ import { SearchComponent } from 'src/app/grid/search/search.component';
   templateUrl: './purchase-request.component.html',
   styleUrls: ['./purchase-request.component.css']
 })
-export class PurchaseRequestComponent implements OnInit {
-
-  @ViewChild(SearchComponent) searchComponent: SearchComponent;
+export class PurchaseRequestComponent implements OnInit,OnDestroy  {
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
 
   private subs = new SubSink();
   edited: boolean = false;
@@ -52,6 +52,7 @@ export class PurchaseRequestComponent implements OnInit {
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
   gridOption: GridOptions = {
+
     datas: {},
     searchObject: {
       girdId: GridType.PR
@@ -67,31 +68,30 @@ export class PurchaseRequestComponent implements OnInit {
       ]
     }
   };
+
+
+
   closeResult: string;
-
-
 
   constructor(
     private loaderService: LoaderService,
-    private modalService: NgbModal
-    , private confirmDialogService: ConfirmDialogService
-    , private typeheadService: TypeheadService
-    , private http: HttpClient,
+    private modalService: NgbModal,
+    private confirmDialogService: ConfirmDialogService,
+    private typeheadService: TypeheadService,
+    private http: HttpClient,
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
     private itemService: ItemService,
     public commonService: CommonService,
-    public fileuploadService: FileuploadService
+    public fileuploadService: FileuploadService,
+    public gridService: GridService
   ) {
     this.edited = false;
   }
 
-
-
-
   ngOnInit(): void {
-    this.subs.sink = this.itemService.itemAdded().subscribe(r => {
+      this.subs.sink = this.itemService.itemAdded().subscribe(r => {
       this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
         this.officers = r;
         this.modelPR.TLApproval = 0;
@@ -112,16 +112,16 @@ export class PurchaseRequestComponent implements OnInit {
       }
     });
 
-    this.setPage(this.gridOption.searchObject);
+     this.gridService.initGrid(this.gridOption) ;
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
-
       if (params.id == 0) {
         this.NewPR();
       } else if (params.id > 0) {
         this.EditPR(params.id);
       } else {
         this.edited = false;
+        this.gridService.initGrid(this.gridOption) ;
       }
     });
   }
@@ -206,14 +206,6 @@ export class PurchaseRequestComponent implements OnInit {
     this.EditPR(Id, false);
   }
 
-  setPage(obj: SearchObject) {
-    this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {
-        this.gridOption.datas = data;
-        console.log(data)
-      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
-  }
-
   OrderByList(colname: string) {
     debugger
     this.gridOption.searchObject.defaultSortColumnName = colname;
@@ -229,13 +221,14 @@ export class PurchaseRequestComponent implements OnInit {
     }
 
 
-    this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
-    this.gridOption.searchObject.searchText = this.searchComponent.searchText;
+    // this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
+    // this.gridOption.searchObject.searchText = this.searchComponent.searchText;
 
-    this.setPage(this.gridOption.searchObject);
+   // this.setPage(this.gridOption.searchObject);
   }
 
   Action(item: any) {
+    debugger
     if (item == undefined) {
       this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     } else {
@@ -249,7 +242,7 @@ export class PurchaseRequestComponent implements OnInit {
   }
 
   editPoDetaisls(obj: PurchaseRequestDetailDTO) {
-    debugger
+
     const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
     modalRef.componentInstance.fromParent = obj;
   }
@@ -297,9 +290,10 @@ export class PurchaseRequestComponent implements OnInit {
           this.modelPR.PoStatusRefId = 0;
         }
         else {
-          this.toastr.success(environment.dataSaved);
+          this.edited=false;
           this.router.navigate(['request']);
-          this.setPage(this.gridOption.searchObject);
+          this.gridService.initGrid(this.gridOption) ;
+          this.toastr.success(environment.dataSaved);
         }
       }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
   }
@@ -313,9 +307,10 @@ export class PurchaseRequestComponent implements OnInit {
           this.modelPR.PoStatusRefId = 0;
         }
         else {
-          this.toastr.success(environment.dataSaved);
+          this.edited=false;
           this.router.navigate(['request']);
-          this.setPage(this.gridOption.searchObject);
+          this.gridService.initGrid(this.gridOption) ;
+          this.toastr.success(environment.dataSaved);
         }
       }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
   }
@@ -354,4 +349,5 @@ export class PurchaseRequestComponent implements OnInit {
     this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
     return sum;
   }
+
 }

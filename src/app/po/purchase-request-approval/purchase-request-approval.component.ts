@@ -1,5 +1,6 @@
+import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
-import { purchaseRequestHeaderDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
+import { PurchaseRequestDetailDTO, purchaseRequestHeaderDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { HttpClient } from '@angular/common/http';
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -12,6 +13,9 @@ import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-di
 import { CommonService } from 'src/app/myShared/services/common.service';
 import { environment } from 'src/environments/environment';
 import { SubSink } from 'subsink';
+import { PoitemComponent } from '../poitem/poitem.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ItemService } from 'src/app/myShared/services/item.service';
 
 
 
@@ -46,13 +50,45 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     private toastr: ToastrService,
     private confirmDialogService: ConfirmDialogService,
     public commonService: CommonService,
-    public fileuploadService: FileuploadService
+    public fileuploadService: FileuploadService,
+    private modalService: NgbModal,
+    private itemService: ItemService,
+    private gridService :GridService
   ) {
     this.edited = false;
   }
 
   ngOnInit() {
-    this.setPage(this.gridOption.searchObject);
+
+    this.gridService.initGrid(this.gridOption) ;
+    this.subs.sink = this.itemService.itemAdded().subscribe(r => {
+
+      if (this.modelPR.PurchaseRequestDetail == undefined) {
+        this.modelPR.PurchaseRequestDetail = [];
+      }
+      if (this.modelPR.PurchaseRequestDetail.filter(x => x.guid == r.guid).length > 0) {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(x => x.guid != r.guid);
+        this.modelPR.PurchaseRequestDetail.push(r);
+      } else {
+        this.modelPR.PurchaseRequestDetail.push(r);
+      }
+
+      this.modelPR.IsApproval=true;
+      this.subs.sink = this.http
+        .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
+          if (data.IsValid == false) {
+            this.confirmDialogService.messageListBox(data.ValidationMessages);
+          }
+          else {
+
+          }
+        }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
+
+
+    });
+
+
+ //   this.setPage(this.gridOption.searchObject);
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id > 0) {
         this.edited = true;
@@ -66,20 +102,28 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         });
       } else {
         this.edited = false;
+        this.gridService.initGrid(this.gridOption) ;
       }
     });
   }
 
-  setPage(obj: SearchObject) {
-    this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {
-        this.gridOption.datas = data;
-        if (this.gridOption.datas.pagedItems == 0) {
-          this.gridOption.datas.pagedItems = [];
-        }
-      }, (error) => {
-        this.confirmDialogService.messageBox(environment.APIerror);
-      });
+  // setPage(obj: SearchObject) {
+  //   this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
+  //     .subscribe((data) => {
+  //       this.gridOption.datas = data;
+  //       console.log(data)
+  //       if (this.gridOption.datas.pagedItems == 0) {
+  //         this.gridOption.datas.pagedItems = [];
+  //       }
+  //     }, (error) => {
+  //       this.confirmDialogService.messageBox(environment.APIerror);
+  //     });
+  // }
+
+  editPoDetaisls(obj: PurchaseRequestDetailDTO) {
+
+    const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
+    modalRef.componentInstance.fromParent = obj;
   }
 
   Approve(isApproved: Boolean) {
@@ -92,7 +136,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['requestapproval']);
-          this.setPage(this.gridOption.searchObject);
+         // this.setPage(this.gridOption.searchObject);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
@@ -109,7 +153,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['requestapproval']);
-          this.setPage(this.gridOption.searchObject);
+         // this.setPage(this.gridOption.searchObject);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 

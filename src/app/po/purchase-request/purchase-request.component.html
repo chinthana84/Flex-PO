@@ -4,10 +4,11 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-            <app-search  #test (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+            <!-- <app-search [searchID]="100"  #test (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
+            <app-search [searchID]="100"  #test></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th (click)="this.OrderByList('PONo')">PONo</th>
+                <th (click)="this.gridService.OrderByList(this.gridOption, 'PONo')">PONo</th>
                 <th (click)="this.OrderByList('DepartmentName')">Department</th>
                 <th (click)="this.OrderByList('SupplierName')">Supplier</th>
                 <th (click)="this.OrderByList('ShipTo')">ShipTo</th>
@@ -19,7 +20,8 @@
                 </th>
               </thead>
               <tbody>
-                <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
+                <tr *ngFor="let item of  this.gridOption?.datas?.pagedItems" class="table-hover">
+                  <!-- <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover"> -->
                   <td>{{ item.Pono }}</td>
                   <td>{{ item.DepartmentName }}</td>
                   <td>{{ item.SupplierName }}</td>
@@ -46,7 +48,7 @@
                 </tr>
               </tbody>
             </table>
-            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+            <app-pager></app-pager>
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
@@ -237,7 +239,7 @@
                               <th>Amount</th>
                               <th>
                                 <button type="button"
-                                  *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                  *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                                   (click)="openXl(content,$event)" class="btn btn-primary ">
                                   <span class="fa fa-plus"></span></button>
                               </th>
@@ -258,10 +260,10 @@
                                 <td>
                                   <div class="btn-group">
 
-                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                                       type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
                                       <span class="fa fa-edit"></span></button>
-                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
+                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                                       type="button" (click)="deleteItem(item)" class="btn btn-danger ">
                                       <span class="fa fa-trash"></span></button>
                                   </div>
@@ -363,9 +365,7 @@
               </div>
 
               <div role="tabpanel" class="tab-pane fade" id="upload">
-                <!-- <div class="card">
-                  <div class="card-body "> </div>
-                </div> -->
+
 
                       <table class="table table-bordered  ">
                         <thead class="thead-light">
@@ -470,7 +470,7 @@
                   <button type="button" *ngIf="this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                     (click)="SaveDrafts();" class="btn btn-warning save_button"> Save as drafts</button>
                   &nbsp;
-                  <button type="button" (click)="router.navigate(['request']);" class="btn btn-primary back_button">
+                  <button type="button" (click)="this.gridService.gotoback('request')" class="btn btn-primary back_button">
                     <span class="fa fa-arrow-left"></span> </button>
                 </div>
 

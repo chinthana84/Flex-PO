@@ -1,4 +1,69 @@
- <div  class="row"  >
+
+<div  class="row mb-2" *ngIf=" this.searchID==100">
+
+
+  <div class="col-md-12">
+     <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+    <label class="btn btn-warning active ">
+      <input type="radio" name="options" id="option1" (change)="this.ChangeSearch() "  value="0"  [(ngModel)]=" this.selectedSummaryID" autocomplete="off" checked> All
+    </label>
+    <label class="btn btn-warning ">
+      <input type="radio" name="options" id="option2"  (change)="this.ChangeSearch() "  value="27"  [(ngModel)]=" this.selectedSummaryID" autocomplete="off"> Pending
+    </label>
+    <label class="btn btn-warning ">
+      <input type="radio" name="options" id="option3" (change)="this.ChangeSearch() "  value="66"  [(ngModel)]=" this.selectedSummaryID"  autocomplete="off"> Drafts
+    </label>
+    <label class="btn btn-warning ">
+      <input type="radio" name="options" id="option4" (change)="this.ChangeSearch() "  value="27"  [(ngModel)]=" this.selectedSummaryID"  autocomplete="off"> Denied
+    </label>
+    <label class="btn btn-warning ">
+      <input type="radio" name="options" id="option5" (change)="this.ChangeSearch() "  value="27"  [(ngModel)]=" this.selectedSummaryID"  autocomplete="off"> Purchased
+    </label>
+    <label class="btn btn-warning ">
+      <input type="radio" name="options" id="option6" (change)="this.ChangeSearch() "  value="27"  [(ngModel)]=" this.selectedSummaryID"  autocomplete="off"> Recevied
+    </label>
+  </div>
+  </div>
+
+</div>
+
+<div  class="row" *ngIf=" this.searchID==100" >
+
+    <div class="col-md-4 col-sm-4 form-horizontal">
+      <div class="form-group">
+        <div class="form-group">
+          <select class="form-control"  [(ngModel)]="searchColumn" >
+              <option *ngFor="let x of this.gridoption?.searchObject?.colNames;
+               let index = index" [value]="x.colName"  >
+                {{x.colText }}
+              </option>
+          </select>
+      </div>
+      </div>
+    </div>
+
+
+    <div class="col-md-6 col-sm-5 form-horizontal">
+      <div class="form-group">
+        <div class="col-md-12 col-sm-12">
+          <input id="textinput" name="textinput" type="text" [(ngModel)]="searchText" placeholder="Search Text" class="form-control">
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-2 col-sm-12 form-horizontal">
+      <div class="form-group">
+        <div class="col-md-12 col-sm-12">
+          <button id="button1id100" name="button1id" class="btn btn-success btn-block " (click)='searchClickNew(searchColumn,this.searchText)' >
+            <span class="fa fa-search"></span>
+             </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div  class="row" *ngIf="this.searchID !=100" >
+
     <div class="col-md-4 col-sm-4 form-horizontal">
       <div class="form-group">
         <div class="form-group">
@@ -10,21 +75,8 @@
           </select>
       </div>
       </div>
-
-
-
     </div>
-      <!-- <div class="col-md-3 col-sm-3 form-horizontal">
-      <div class="form-group">
-        <label class="col-sm-2 col-md-2 control-label">Sort</label>
-        <div class="col-sm-10 col-md-10">
-          <select class="form-control">
-            <option> Asc</option>
-            <option> Dsc</option>
-          </select>
-        </div>
-      </div>
-    </div> -->
+
 
     <div class="col-md-6 col-sm-5 form-horizontal">
       <div class="form-group">
@@ -44,5 +96,7 @@
       </div>
     </div>
   </div>
+
+
 
 

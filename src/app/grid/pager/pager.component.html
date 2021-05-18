@@ -1,19 +1,24 @@
 <!-- <ul *ngIf="pagerX.datas.pages && pagerX.datas.pages.length" class="pagination"> -->
-<ul *ngIf="pagerX?.datas?.totalPages>1" class="pagination">
-  <li [ngClass]="{disabled:pagerX.datas.currentPage === 1}" class="page-item">
+<ul *ngIf="this.gridoption?.datas?.totalPages>1" class="pagination">
+  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === 1}" class="page-item">
     <a class="page-link" (click)="uploadComplete(1)">First</a>
   </li>
-  <li [ngClass]="{disabled:pagerX.datas.currentPage === 1}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(pagerX.datas.currentPage - 1)">Previous</a>
+  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === 1}" class="page-item">
+    <a class="page-link" (click)="uploadComplete(gridoption.datas.currentPage - 1)">Previous</a>
   </li>
-  <li *ngFor="let page of pagerX.datas.pages" [ngClass]="{active:pagerX.datas.currentPage === page}" class="page-item">
+
+
+  <li *ngFor="let page of this.gridoption?.datas?.pages"    [ngClass]="{active:gridoption?.datas?.currentPage === page}" class="page-item">
     <a class="page-link" (click)="uploadComplete(page)">{{page}}</a>
   </li>
-  <li [ngClass]="{disabled:pagerX.datas.currentPage === pagerX.datas.totalPages}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(pagerX.datas.currentPage + 1)">Next</a>
+  <!-- *ngFor="let page of pagerX.datas.pages" [ -->
+  <!-- [ngClass]="{active:pagerX.datas.currentPage === page}" -->
+
+  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === gridoption?.datas?.totalPages}" class="page-item">
+    <a class="page-link" (click)="uploadComplete(gridoption?.datas?.currentPage + 1)">Next</a>
   </li>
-  <li [ngClass]="{disabled:pagerX.datas.currentPage === pagerX.datas.totalPages}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(pagerX.datas.totalPages)">Last</a>
+  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === gridoption?.datas?.totalPages}" class="page-item">
+    <a class="page-link" (click)="uploadComplete(gridoption?.datas?.totalPages)">Last</a>
   </li>
 </ul>
 
