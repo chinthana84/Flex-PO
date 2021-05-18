@@ -8,12 +8,12 @@
             <app-search [searchID]="100"  #test></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th (click)="this.gridService.OrderByList(this.gridOption, 'PONo')">PONo</th>
-                <th (click)="this.OrderByList('DepartmentName')">Department</th>
-                <th (click)="this.OrderByList('SupplierName')">Supplier</th>
-                <th (click)="this.OrderByList('ShipTo')">ShipTo</th>
-                <th (click)="this.OrderByList('POStatus')">PR Status</th>
-                <th (click)="this.OrderByList('CreateDate')">Date</th>
+                <th (click)="this.gridService.OrderByList( 'PONo')">PONo</th>
+                <th (click)="this.gridService.OrderByList('DepartmentName')">Department</th>
+                <th (click)="this.gridService.OrderByList('SupplierName')">Supplier</th>
+                <th (click)="this.gridService.OrderByList('ShipTo')">ShipTo</th>
+                <th (click)="this.gridService.OrderByList('POStatus')">PR Status</th>
+                <th (click)="this.gridService.OrderByList('CreateDate')">Date</th>
                 <th>
                   <button (click)="Action(null)" class="btn btn-primary ">New Request <span
                       class="fa fa-plus"></span></button>

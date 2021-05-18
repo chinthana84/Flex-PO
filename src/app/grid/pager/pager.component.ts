@@ -31,7 +31,7 @@ debugger
 
 debugger
 this.gridoption.searchObject.pageNo=pageno;
-this.gridService.initGrid(this.gridoption)
+this.gridService.reloadGrid(this.gridoption)
 
   }
 
@@ -39,13 +39,16 @@ this.gridService.initGrid(this.gridoption)
 
   constructor(private gridService:GridService) {
 
+
+
+   }
+
+  ngOnInit() {
     this.gridService.getGridOptions().subscribe(r=>{
       debugger
       this.gridoption=r;
     });
 
-   }
-
-  ngOnInit() {}
+  }
 
 }

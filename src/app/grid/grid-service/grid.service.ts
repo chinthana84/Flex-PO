@@ -10,6 +10,16 @@ import { SearchObject } from '../gridModels/searchObject.model';
 @Injectable()
 export class GridService{
 
+  private _bar:GridOptions = {};
+
+  get bar():GridOptions {
+    return this._bar;
+  }
+
+  set bar(theBar:GridOptions) {
+    this._bar = theBar;
+  }
+
   ngOnDestroy() {
     alert('Service destroy')
   }
@@ -24,6 +34,7 @@ debugger
     this.http.post<any>(`${environment.APIEndpoint}/grid`, gridoption.searchObject, {}).subscribe(r=>{
       gridoption.datas=r;
       this.setGridOptions(gridoption);
+      this.bar=gridoption;
 
     });
      return this.myGridOption.asObservable();
@@ -34,23 +45,10 @@ debugger
     this.http.post<any>(`${environment.APIEndpoint}/grid`, gridoption.searchObject, {}).subscribe(r=>{
       gridoption.datas=r;
       this.setGridOptions(gridoption);
-
+      this.bar=gridoption;
     });
     return this.myGridOption.asObservable();
   }
-
-  // constructor() { }
-
-  // private detail=new Subject<PurchaseRequestDetailDTO>();
-
-  // addItem(obj:PurchaseRequestDetailDTO){
-  //   this.detail.next(obj);
-  // }
-
-  // itemAdded(){
-  //   return this.detail.asObservable();
-  // }
-
 
   setGridOptions(gridoption:GridOptions){
 
@@ -61,9 +59,12 @@ debugger
     return this.myGridOption.asObservable();
   }
 
-  OrderByList(grid:GridOptions, colname: string) {
+  OrderByList(  colname: string) {
     debugger
 
+    let grid=this.bar;
+    grid.datas={}
+    grid.searchObject.pageNo=1;
 
       grid.searchObject.defaultSortColumnName = colname;
     if (grid.searchObject.aseOrDesc == undefined) {
@@ -77,7 +78,8 @@ debugger
       grid.searchObject.aseOrDesc = "ASC"
     }
 
-    this.reloadGrid(grid); 
+
+    this.reloadGrid(grid);
 
 
 
