@@ -1,3 +1,4 @@
+import { Grid2Service } from './../../grid/grid-service/grid2.service';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { LoaderService } from './../../myShared/services/loader.service';
 import { RefTableDTO } from 'src/app/models/refTable.model';
@@ -69,6 +70,23 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     }
   };
 
+  gridOption2: GridOptions = {
+
+    datas: {},
+    searchObject: {
+      girdId: GridType.PR
+      , SavedDBColumn: "SupplierID"
+      , defaultSortColumnName: "PONo",
+      pageNo: 1,
+      searchColName: '',
+      colNames: [{ colName: "PONo", colText: 'PONo' },
+      { colName: "DepartmentName", colText: 'Department' }
+        , { colName: "SupplierName", colText: 'Supplier' }
+        , { colName: "ShipTo", colText: 'ShipTo' }
+        , { colName: "POStatus", colText: 'PRStatus' }
+      ]
+    }
+  };
 
 
   closeResult: string;
@@ -85,21 +103,14 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     private itemService: ItemService,
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
-    public gridService: GridService
+    public gridService: GridService,
+    public gridService2 :Grid2Service
   ) {
     this.edited = false;
   }
 
   ngOnInit(): void {
       this.subs.sink = this.itemService.itemAdded().subscribe(r => {
-      this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
-        this.officers = r;
-        this.modelPR.TLApproval = 0;
-        this.modelPR.MApproval = 0;
-        this.modelPR.CSMApproval = 0;
-        this.modelPR.CEOApproval = 0;
-        this.modelPR.BoardApproval = 0
-      });
 
       if (this.modelPR.PurchaseRequestDetail == undefined) {
         this.modelPR.PurchaseRequestDetail = [];
@@ -113,6 +124,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     });
 
      this.gridService.initGrid(this.gridOption) ;
+     this.gridService2.initGrid(this.gridOption2) ;
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id == 0) {
@@ -122,6 +134,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       } else {
         this.edited = false;
         this.gridService.initGrid(this.gridOption) ;
+        this.gridService2.initGrid(this.gridOption2) ;
       }
     });
   }
@@ -206,26 +219,26 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     this.EditPR(Id, false);
   }
 
-  OrderByList(colname: string) {
-    debugger
-    this.gridOption.searchObject.defaultSortColumnName = colname;
-    if (this.gridOption.searchObject.aseOrDesc == undefined) {
-      this.gridOption.searchObject.aseOrDesc = "ASC"
-    }
+  // OrderByList(colname: string) {
+  //   debugger
+  //   this.gridOption.searchObject.defaultSortColumnName = colname;
+  //   if (this.gridOption.searchObject.aseOrDesc == undefined) {
+  //     this.gridOption.searchObject.aseOrDesc = "ASC"
+  //   }
 
-    if (this.gridOption.searchObject.aseOrDesc == "ASC") {
-      this.gridOption.searchObject.aseOrDesc = "DESC"
-    }
-    else if (this.gridOption.searchObject.aseOrDesc == "DESC") {
-      this.gridOption.searchObject.aseOrDesc = "ASC"
-    }
+  //   if (this.gridOption.searchObject.aseOrDesc == "ASC") {
+  //     this.gridOption.searchObject.aseOrDesc = "DESC"
+  //   }
+  //   else if (this.gridOption.searchObject.aseOrDesc == "DESC") {
+  //     this.gridOption.searchObject.aseOrDesc = "ASC"
+  //   }
 
 
-    // this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
-    // this.gridOption.searchObject.searchText = this.searchComponent.searchText;
+  //   // this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
+  //   // this.gridOption.searchObject.searchText = this.searchComponent.searchText;
 
-   // this.setPage(this.gridOption.searchObject);
-  }
+  //  // this.setPage(this.gridOption.searchObject);
+  // }
 
   Action(item: any) {
     debugger
@@ -279,6 +292,13 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       }
 
     }, function () { });
+  }
+
+  IsShowSave(){
+    if(this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66){
+      return true;
+    }
+    return false;
   }
 
   Save() {

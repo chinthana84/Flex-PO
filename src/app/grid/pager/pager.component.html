@@ -1,25 +1,54 @@
 <!-- <ul *ngIf="pagerX.datas.pages && pagerX.datas.pages.length" class="pagination"> -->
-<ul *ngIf="this.gridoption?.datas?.totalPages>1" class="pagination">
-  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === 1}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(1)">First</a>
-  </li>
-  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === 1}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(gridoption.datas.currentPage - 1)">Previous</a>
-  </li>
+<div *ngIf="this.serviceID==undefined || this.serviceID==0">
+  <ul *ngIf="this.gridoption?.datas?.totalPages>1" class="pagination">
+    <li [ngClass]="{disabled:gridoption?.datas?.currentPage === 1}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(1)">First</a>
+    </li>
+    <li [ngClass]="{disabled:gridoption?.datas?.currentPage === 1}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(gridoption.datas.currentPage - 1)">Previous</a>
+    </li>
 
 
-  <li *ngFor="let page of this.gridoption?.datas?.pages"    [ngClass]="{active:gridoption?.datas?.currentPage === page}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(page)">{{page}}</a>
-  </li>
-  <!-- *ngFor="let page of pagerX.datas.pages" [ -->
-  <!-- [ngClass]="{active:pagerX.datas.currentPage === page}" -->
+    <li *ngFor="let page of this.gridoption?.datas?.pages" [ngClass]="{active:gridoption?.datas?.currentPage === page}"
+      class="page-item">
+      <a class="page-link" (click)="uploadComplete(page)">{{page}}</a>
+    </li>
+    <!-- *ngFor="let page of pagerX.datas.pages" [ -->
+    <!-- [ngClass]="{active:pagerX.datas.currentPage === page}" -->
 
-  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === gridoption?.datas?.totalPages}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(gridoption?.datas?.currentPage + 1)">Next</a>
-  </li>
-  <li [ngClass]="{disabled:gridoption?.datas?.currentPage === gridoption?.datas?.totalPages}" class="page-item">
-    <a class="page-link" (click)="uploadComplete(gridoption?.datas?.totalPages)">Last</a>
-  </li>
-</ul>
+    <li [ngClass]="{disabled:gridoption?.datas?.currentPage === gridoption?.datas?.totalPages}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(gridoption?.datas?.currentPage + 1)">Next</a>
+    </li>
+    <li [ngClass]="{disabled:gridoption?.datas?.currentPage === gridoption?.datas?.totalPages}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(gridoption?.datas?.totalPages)">Last</a>
+    </li>
+  </ul>
+</div>
 
+
+<div *ngIf="this.serviceID==2">
+  <ul *ngIf="this.gridoption2?.datas?.totalPages>1" class="pagination">
+    <li [ngClass]="{disabled:gridoption2?.datas?.currentPage === 1}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(1)">First</a>
+    </li>
+    <li [ngClass]="{disabled:gridoption2?.datas?.currentPage === 1}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(gridoption2.datas.currentPage - 1)">Previous</a>
+    </li>
+
+
+    <li *ngFor="let page of this.gridoption2?.datas?.pages"
+      [ngClass]="{active:gridoption2?.datas?.currentPage === page}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(page)">{{page}}</a>
+    </li>
+    <!-- *ngFor="let page of pagerX.datas.pages" [ -->
+    <!-- [ngClass]="{active:pagerX.datas.currentPage === page}" -->
+
+    <li [ngClass]="{disabled:gridoption2?.datas?.currentPage === gridoption2?.datas?.totalPages}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(gridoption2?.datas?.currentPage + 1)">Next</a>
+    </li>
+    <li [ngClass]="{disabled:gridoption2?.datas?.currentPage === gridoption2?.datas?.totalPages}" class="page-item">
+      <a class="page-link" (click)="uploadComplete(gridoption2?.datas?.totalPages)">Last</a>
+    </li>
+  </ul>
+</div>
 <!-- <pre>{{pagerX | json}}</pre>  -->

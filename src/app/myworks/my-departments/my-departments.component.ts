@@ -1,3 +1,4 @@
+import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -69,20 +70,21 @@ export class MyDepartmentsComponent implements OnInit {
     private toastr: ToastrService,
     private itemService: ItemService,
     public commonService: CommonService,
-    public fileuploadService: FileuploadService
+    public fileuploadService: FileuploadService,
+    public gridService:GridService
   ) { this.edited = false; }
 
   ngOnInit(): void {
 
-    this.setPage(this.gridOption.searchObject);
+
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
 
       if (params.id > 0) {
         this.EditPR(params.id);
         this.getallUsers();
       } else {
-        this.setPage(this.gridOption.searchObject);
-        this.edited = false;
+        this.gridService.initGrid(this.gridOption) ;
+        this.edited = false; 
       }
     });
 
@@ -131,15 +133,7 @@ export class MyDepartmentsComponent implements OnInit {
     this.EditPR(Id, false);
   }
 
-  setPage(obj: SearchObject) {
-    this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {
-        this.gridOption.datas = data;
-        if (this.gridOption.datas.pagedItems == 0) {
-          this.gridOption.datas.pagedItems = [];
-        }
-      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
-  }
+
 
   Action(item: any) {
 
@@ -157,9 +151,11 @@ export class MyDepartmentsComponent implements OnInit {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-          this.toastr.success(environment.dataSaved);
+          this.edited=false;
           this.router.navigate(['MyDeps']);
-          this.setPage(this.gridOption.searchObject);
+          this.gridService.initGrid(this.gridOption) ;
+          this.toastr.success(environment.dataSaved);
+
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
@@ -172,9 +168,10 @@ export class MyDepartmentsComponent implements OnInit {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-          this.toastr.success(environment.dataSaved);
+          this.edited=false;
           this.router.navigate(['MyDeps']);
-          this.setPage(this.gridOption.searchObject);
+          this.gridService.initGrid(this.gridOption) ;
+          this.toastr.success(environment.dataSaved);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }

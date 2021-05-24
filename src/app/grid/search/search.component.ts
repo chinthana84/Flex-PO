@@ -1,3 +1,4 @@
+import { Grid2Service } from './../grid-service/grid2.service';
 import { Subject } from 'rxjs';
 import { GridOptions } from 'src/app/grid/gridModels/gridOption.model';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
@@ -10,86 +11,79 @@ import { SearchObject } from '../gridModels/searchObject.model';
   templateUrl: './search.component.html'
 })
 export class SearchComponent implements OnInit {
-  gridoption: GridOptions={};
+  gridoption: GridOptions = {};
+  gridoption2: GridOptions = {};
 
-  dropDonwDefautlSelected = 1;
+  searchColumn?: string = '';
+  searchColumn2?: string = '';
 
-    searchColumn? :string= '';
-    searchText?:string = '';
+  searchText?: string = '';
 
-  @Input()
-  searchOptionsX?: any = {};
-
-  @Input()
-     search  :  SearchObject ={colNames: []=[]};
+  selectedSummaryID: string = "";
+  selectedSummaryID2: string = "";
 
   @Input()
-  searchID: number=0;
+  serviceID?: number = 0;
+
+  @Input()
+  searchID: number = 0;
 
 
-  @Output()
-  searchClicked: EventEmitter<any> = new EventEmitter<any>();
 
-  selectedSummaryID:string="";
+  constructor(private gridService: GridService, private gridSercie2: Grid2Service) { }
 
-  constructor(private gridService: GridService) { }
+  searchClickNew(obj: any, s: string = "") {
+    debugger
 
-  searchClickNew(obj:any,s:string=""){
-    // const x: SearchObject = {
-    //   pageNo: 1,
-    //   searchColName: obj ,//this.searchColumn,
-    //   searchText: this.searchText,
-    //   defaultSortColumnName:this.search?.defaultSortColumnName,
-    //   girdId:this.search?.girdId,
-    //   postatusid:this.selectedSummaryID
-    // };
-debugger
-    this.gridoption.searchObject.pageNo=1;
-    this.gridoption.searchObject.searchColName=obj;
-    this.gridoption.searchObject.searchText=this.searchText;
-   // this.gridoption.searchObject.defaultSortColumnName=this.search?.defaultSortColumnName;
-    //this.gridoption.searchObject.girdId=this.search?.girdId;
-    this.gridoption.searchObject.postatusid=this.selectedSummaryID;
+    if (this.serviceID == 2) {
+      this.gridoption2.searchObject.pageNo = 1;
+      this.gridoption2.searchObject.searchColName = obj;
+      this.gridoption2.searchObject.searchText = this.searchText;
+      this.gridoption2.searchObject.postatusid = this.selectedSummaryID2;
 
-    this.gridService.reloadGrid(this.gridoption);
+      this.gridSercie2.reloadGrid(this.gridoption2);
+    } else {
+
+      this.gridoption.searchObject.pageNo = 1;
+      this.gridoption.searchObject.searchColName = obj;
+      this.gridoption.searchObject.searchText = this.searchText;
+      this.gridoption.searchObject.postatusid = this.selectedSummaryID;
+
+      this.gridService.reloadGrid(this.gridoption);
+    }
+
+
   }
 
-  searchClick(obj: any, s: string="") {
-    const x: SearchObject = {
-      pageNo: 1,
-      searchColName: obj ,//this.searchColumn,
-      searchText: this.searchText,
-      defaultSortColumnName:this.search?.defaultSortColumnName,
-      girdId:this.search?.girdId,
-      postatusid:this.selectedSummaryID
-    };
-    // this.gridService.updateMessage(x);
-    // this.searchClicked.emit(x);
-  }
+
 
   ngOnInit() {
 
-    this.gridService.getGridOptions().subscribe(r=>{
+    this.gridService.getGridOptions().subscribe(r => {
       debugger
-      this.gridoption=r;
+      this.gridoption = r;
       this.searchColumn = this.gridoption.searchObject.colNames[0].colName;
       console.log(r)
     });
 
-    // if(this.search?.colNames){
-    //   debugger
-
-    //   // this.searchColumn = this.search.colNames[0].colName;
-    // }else
-    // {
-    //   this.searchColumn = ""
-    // }
+    this.gridSercie2.getGridOptions().subscribe(r => {
+      debugger
+      this.gridoption2 = r;
+      this.searchColumn2 = this.gridoption2.searchObject.colNames[0].colName;
+      console.log(r)
+    });
 
 
   }
 
-  ChangeSearch(){
-    sessionStorage.setItem("filterid",this.selectedSummaryID.toString())
+  ChangeSearch() {
+    if (this.serviceID == 2) {
+
+    }
+    else{
+      
+    }
+    sessionStorage.setItem("filterid", this.selectedSummaryID.toString())
 
     document.getElementById("button1id100").click();
 

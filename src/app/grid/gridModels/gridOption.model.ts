@@ -30,13 +30,16 @@ export enum PO_Status
     Rejected = 46,
     AssigedToMe = 51,
     CreatePO = 52,
+    PO_Raised_Via_emial=72,
     Cancelled = 62,
     Order_Partially_Received = 63,
     Order_Receievd_in_Full = 64,
     Pending_Payment = 67,
+    Drafts=66,
     Paid_Fully = 68,
     Paid_Partilly = 69,
-    Completed = 70
+    Completed = 70,
+    Finance_Approved=43
 }
 
   export class MyNavigations {

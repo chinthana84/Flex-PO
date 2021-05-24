@@ -1,0 +1,37 @@
+<table class="table table-bordered  ">
+  <thead class="thead-light">
+    <th>Order</th>
+    <th>Approval Group</th>
+    <th>Remarks</th>
+    <th>Approved User</th>
+    <th>Approved Date</th>
+    <th>Status</th>
+  </thead>
+  <tbody>
+    <tr *ngFor="let i of this.approval_flow_data let index = index" class="table-hover mt-0">
+      <td>
+        {{ i?.OrderLevel }}
+      </td>
+      <td>
+        {{ i?.ApprovalGroup?.Name }}
+      </td>
+      <td>
+        {{ i?.Remarks }}
+      </td>
+      <td>
+        {{ i?.ApprovedUser?.UserName }}
+      </td>
+      <td>
+        {{ i?.ApprovedDate |date }}
+      </td>
+      <td>
+        {{ i?.Postatus?.RefDescription }}
+      </td>
+    </tr>
+    <tr
+      *ngIf=" this.approval_flow_data?.length == 0 ||  this.approval_flow_data == undefined">
+      <td class="datanotfound" colspan="6">Data not found</td>
+    </tr>
+  </tbody>
+
+</table>

@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment';
 import { SearchObject } from '../gridModels/searchObject.model';
 
 @Injectable()
-export class GridService{
+export class Grid2Service{
 
   private _bar:GridOptions = {};
 
@@ -26,7 +26,6 @@ export class GridService{
   private myGridOption =new Subject<GridOptions>();
 
   initGrid(gridoption:GridOptions){
-
     sessionStorage.setItem("filterid", "0");
     this.myGridOption=new Subject<GridOptions>();
     gridoption.searchObject.searchText="";
@@ -36,7 +35,7 @@ debugger
       gridoption.datas=r;
       this.setGridOptions(gridoption);
       this.bar=gridoption;
-      console.log(this.bar)
+
     });
      return this.myGridOption.asObservable();
   }
@@ -112,43 +111,6 @@ debugger
       window.location.reload();
     });
   }
-
-  // public resetGrid(grid, path) {
-  //   sessionStorage.setItem("filterid", "0")
-  //   let d: any = {};
-  //   this.router.navigate([path]);
-
-  //   this.updateMessage(grid);
-  //   return this.http.post<any>(`${environment.APIEndpoint}/grid`, grid.searchObject, {})
-  // }
-
-  // public gotoback(path) {
-  //   sessionStorage.setItem("filterid", "0");
-  //   this.router.navigate([path]).then(r => {
-  //     window.location.reload();
-  //   });
-  // }
-
-  // OrderByList(colname: string) {
-  //   debugger
-  //   this.gridOption.searchObject.defaultSortColumnName = colname;
-  //   if (this.gridOption.searchObject.aseOrDesc == undefined) {
-  //     this.gridOption.searchObject.aseOrDesc = "ASC"
-  //   }
-
-  //   if (this.gridOption.searchObject.aseOrDesc == "ASC") {
-  //     this.gridOption.searchObject.aseOrDesc = "DESC"
-  //   }
-  //   else if (this.gridOption.searchObject.aseOrDesc == "DESC") {
-  //     this.gridOption.searchObject.aseOrDesc = "ASC"
-  //   }
-
-
-  //   this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
-  //   this.gridOption.searchObject.searchText = this.searchComponent.searchText;
-
-  //   this.setPage(this.gridOption.searchObject);
-  // }
 
 
 

@@ -66,14 +66,26 @@
 
     <div class="col-md-4 col-sm-4 form-horizontal">
       <div class="form-group">
-        <div class="form-group">
+        <div class="form-group" *ngIf="this.serviceID==2" >
+
+            <select class="form-control"  [(ngModel)]="searchColumn2" >
+                <option *ngFor="let x of this.gridoption2?.searchObject?.colNames;
+                 let index = index" [value]="x.colName"  >
+                  {{x.colText }}
+                </option>
+            </select>
+
+      </div>
+      <div class="form-group" *ngIf="this.serviceID!=2" >
+
           <select class="form-control"  [(ngModel)]="searchColumn" >
-              <option *ngFor="let x of this.search?.colNames;
+              <option *ngFor="let x of this.gridoption?.searchObject?.colNames;
                let index = index" [value]="x.colName"  >
                 {{x.colText }}
               </option>
           </select>
-      </div>
+
+    </div>
       </div>
     </div>
 
@@ -89,7 +101,7 @@
     <div class="col-md-2 col-sm-12 form-horizontal">
       <div class="form-group">
         <div class="col-md-12 col-sm-12">
-          <button id="button1id" name="button1id" class="btn btn-success btn-block " (click)='searchClick(searchColumn,this.searchText)' >
+          <button id="button1id" name="button1id" class="btn btn-success btn-block " (click)='searchClickNew(searchColumn,this.searchText)' >
             <span class="fa fa-search"></span>
              </button>
         </div>

@@ -4,9 +4,9 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
-            <table class="table  ">
-              <thead>
+            <app-search></app-search>
+            <table class="table table-bordered  ">
+              <thead class="thead-light">
                 <th>PONo</th>
                 <th>Department</th>
                 <th>Supplier</th>
@@ -29,7 +29,7 @@
                   <td>{{ item.CreateDate }}</td>
                   <td>
                     <div class="btn-group">
-                      <button  (click)="Action(item,false)" class="btn btn-primary"> <span
+                      <button (click)="Action(item,false)" class="btn btn-primary"> <span
                           class="fa fa-edit"></span></button>
 
                       <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
@@ -42,7 +42,7 @@
                 </tr>
               </tbody>
             </table>
-            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+            <app-pager></app-pager>
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
@@ -250,11 +250,9 @@
                                 <td>
                                   <div class="btn-group">
 
-                                    <button
-                                      type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
+                                    <button type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
                                       <span class="fa fa-edit"></span></button>
-                                    <button
-                                      type="button" (click)="deleteItem(item)" class="btn btn-danger ">
+                                    <button type="button" (click)="deleteItem(item)" class="btn btn-danger ">
                                       <span class="fa fa-trash"></span></button>
                                   </div>
 
@@ -264,7 +262,7 @@
                               <tr style="font-weight: bold;">
                                 <td class="datanotfound" colspan="7"></td>
                                 <td>Total</td>
-                                <td>   {{ this.GetTotal() | number : '1.2-2' }}
+                                <td> {{ this.GetTotal() | number : '1.2-2' }}
                                 </td>
                                 <td></td>
                               </tr>
@@ -332,17 +330,17 @@
                 <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
                   class="badge badge-primary">{{item.ApprovalGroup.Name}}</span>
 
-                  <table class="table table-striped">
-                    <thead>
-                      <th>Order</th>
-                      <th>Approval Group</th>
-                      <th>Remarks</th>
-                      <th>Approved User</th>
-                      <th>Approved Date</th>
-                      <th>Status</th>
+                <table class="table table-striped">
+                  <thead>
+                    <th>Order</th>
+                    <th>Approval Group</th>
+                    <th>Remarks</th>
+                    <th>Approved User</th>
+                    <th>Approved Date</th>
+                    <th>Status</th>
 
-                    </thead>
-  <tbody>
+                  </thead>
+                  <tbody>
                     <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
                       <td>
                         {{ i?.OrderLevel }}
@@ -365,20 +363,25 @@
                     </tr>
                   </tbody>
 
-                  </table>
+                </table>
 
 
               </div>
             </div>
+            <pre>
+
+            </pre>
 
             <div class="btn-group">
-              <button type="button"
-                (click)="Save();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
-                <button
-                type="button" (click)="CreatePO(item)" class="btn btn-warning ">
-              Create PO</button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==this.myEnum.AssigedToMe" (click)="Save();" class="btn btn-primary save_button"> <span
+                  class="fa fa-save"></span> </button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe"(click)="Approve()" class="btn btn-warning ">  Approve</button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Reject()" class="btn btn-warning ">  Reject</button>
               <button type="button" (click)="router.navigate(['MyTasks']);" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
+
+                <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.Finance_Approved  "
+                 (click)="RaisePO()" class="btn btn-warning ">  Raise PO</button>
             </div>
           </form>
         </div>
@@ -391,7 +394,3 @@
 <ng-template #content let-modal>
   <app-poitem></app-poitem>
 </ng-template>
-
-
-
-

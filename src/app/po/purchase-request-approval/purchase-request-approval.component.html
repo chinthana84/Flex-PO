@@ -5,9 +5,8 @@
         <div class="tab-content p-0">
           <div *ngIf="!edited">
             <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
-
-            <table class="table  ">
-              <thead>
+            <table class="table table-bordered  ">
+              <thead class="thead-light">
                 <th>Pono</th>
                 <th>Podate</th>
                 <th>Supplier</th>
@@ -16,6 +15,7 @@
                 <th>Postatus</th>
                 <th>Next</th>
                 <th>RequestBy</th>
+                <!-- <th>Assinged</th> -->
                 <th>Total</th>
                 <th> </th>
               </thead>
@@ -33,6 +33,7 @@
                     <h5> <span class="badge badge-warning"> {{ item.NextStatus}} </span></h5>
                   </td>
                   <td>{{ item.RequestBy }}</td>
+                  <!-- <td>{{item.Assinged}}</td> -->
                   <td>{{ item.Total   | number : '1.2-2' }}</td>
                   <td>
                     <div class="btn-group">
@@ -42,7 +43,7 @@
                   </td>
                 </tr>
                 <tr *ngIf="this.gridOption.datas.pagedItems == undefined || this.gridOption.datas.pagedItems==0">
-                  <td class="datanotfound" colspan="7">Data not found</td>
+                  <td class="datanotfound" colspan="11">Data not found</td>
                 </tr>
               </tbody>
             </table>
@@ -189,7 +190,7 @@
                               <th>Payment Type</th>
                               <th>Unit Price</th>
                               <th>Amount</th>
-<th></th>>
+                              <th></th>>
                             </thead>
                             <tbody>
                               <tr *ngFor="let item of this.modelPR.PurchaseRequestDetail; let i=index;"
@@ -206,8 +207,7 @@
                                 <td>
                                   <div class="btn-group">
 
-                                    <button
-                                      type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
+                                    <button type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
                                       <span class="fa fa-edit"></span></button>
                                     <!-- <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0"
                                       type="button" (click)="deleteItem(item)" class="btn btn-danger ">
@@ -237,6 +237,34 @@
                     </div>
                   </section>
                 </div>
+
+
+
+
+                <div class="card">
+                  <div class="card-footer ">
+
+
+                    <div class=" btn-group">
+
+                      <button type="button" (click)="this.gridService.gotoback('requestapproval')"
+                        class="btn btn-primary back_button">
+                        <span class="fa fa-arrow-left"></span> </button>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
               </div>
               <div role="tabpanel" class="tab-pane fade" id="upload">
                 <div class="row">
@@ -274,60 +302,12 @@
 
               <div role="tabpanel" class="tab-pane fade" id="ApprovalFlow">
                 <br />
-
-                <span *ngFor="let item of this.modelPR.PurchaseOrderApproval"
-                  class="badge badge-primary m-1">{{item.ApprovalGroup.Name}}</span>
-
-                <br />
-
-
-                <table class="table table-striped">
-                  <thead>
-                    <th>Order</th>
-                    <th>Approval Group</th>
-                    <th>Remarks</th>
-                    <th>Approved User</th>
-                    <th>Approved Date</th>
-                    <th>Status</th>
-
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
-                      <td>
-                        {{ i?.OrderLevel }}
-                      </td>
-                      <td>
-                        {{ i?.ApprovalGroup?.Name }}
-                      </td>
-                      <td>
-                        {{ i?.Remarks }}
-                      </td>
-                      <td>
-                        {{ i?.ApprovedUser?.UserName }}
-                      </td>
-                      <td>
-                        {{ i?.ApprovedDate |date }}
-                      </td>
-                      <td>
-                        {{ i?.Postatus?.RefDescription }}
-                      </td>
-                    </tr>
-                  </tbody>
-
-                </table>
-
-
+                <app-approval-flow [approval_flow_data]=" this.modelPR.PurchaseOrderApproval"></app-approval-flow>
               </div>
             </div>
-
-
-
           </div>
         </div>
       </div>
     </div>
   </section>
 </div>
-
-
-<!-- ApprovalRemarks -->

@@ -3,9 +3,12 @@
     <div class="card">
       <div class="card-body">
         <div class="tab-content p-0">
+
+
+
           <div *ngIf="!edited">
             <!-- <app-search [searchID]="100"  #test (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
-            <app-search [searchID]="100"  #test></app-search>
+            <app-search [searchID]="100" #test></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
                 <th (click)="this.gridService.OrderByList( 'PONo')">PONo</th>
@@ -14,6 +17,7 @@
                 <th (click)="this.gridService.OrderByList('ShipTo')">ShipTo</th>
                 <th (click)="this.gridService.OrderByList('POStatus')">PR Status</th>
                 <th (click)="this.gridService.OrderByList('CreateDate')">Date</th>
+                <th>Assinged User</th>
                 <th>
                   <button (click)="Action(null)" class="btn btn-primary ">New Request <span
                       class="fa fa-plus"></span></button>
@@ -21,6 +25,55 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of  this.gridOption?.datas?.pagedItems" class="table-hover">
+                  <!-- <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover"> -->
+                  <td>{{ item.Pono }}</td>
+                  <td>{{ item.DepartmentName }}</td>
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.ShipTo }}</td>
+                  <td>
+                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
+                  </td>
+
+                  <td>{{ item.CreateDate }}</td>
+                  <td>{{ item.AssingedUser}}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button *ngIf="item.PoStatusId==27  || item.PoStatusId==66" (click)="Action(item,false)"
+                        class="btn btn-primary"> <span class="fa fa-edit"></span></button>
+                      <button *ngIf="item.PoStatusId!=27 || item.PoStatusId!=66" (click)="copyPR(item.Id)"
+                        class="btn btn-warning  ">Copy PR
+                      </button>
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="7">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+            <app-pager></app-pager>
+          </div>
+
+          <div style="display: none;" *ngIf="!edited">
+            <!-- <app-search [searchID]="100"  #test (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
+            <app-search [serviceID]="2"></app-search>
+            <table class="table table-bordered  ">
+              <thead class="thead-light">
+                <th>PONo</th>
+                <th>Department</th>
+                <th>Supplier</th>
+                <th>ShipTo</th>
+                <th>PR Status</th>
+                <th>Date</th>
+                <th>
+                  <button (click)="Action(null)" class="btn btn-primary ">New Request <span
+                      class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of  this.gridOption2?.datas?.pagedItems" class="table-hover">
                   <!-- <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover"> -->
                   <td>{{ item.Pono }}</td>
                   <td>{{ item.DepartmentName }}</td>
@@ -48,7 +101,7 @@
                 </tr>
               </tbody>
             </table>
-            <app-pager></app-pager>
+            <app-pager [serviceID]="2"></app-pager>
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
@@ -260,10 +313,12 @@
                                 <td>
                                   <div class="btn-group">
 
-                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
+                                    <button
+                                      *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                                       type="button" (click)="editPoDetaisls(item)" class="btn btn-primary">
                                       <span class="fa fa-edit"></span></button>
-                                    <button *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
+                                    <button
+                                      *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                                       type="button" (click)="deleteItem(item)" class="btn btn-danger ">
                                       <span class="fa fa-trash"></span></button>
                                   </div>
@@ -291,124 +346,53 @@
                   </section>
                 </div>
 
-                <div class="card" *ngIf="this.GetTotal() > 0">
-                  <div class="card-header card-title">Approval officers</div>
-                  <div class="card-body">
-                    <div class="row">
-                      <div class="col-md-3" *ngIf=" this?.officers[0].length>0">
-                        <div class="form-group">
-                          <label for="DepartmentId"> Team Lead </label>
-                          <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdasadfs"
-                            [(ngModel)]="this.modelPR.TLApproval">
-                            <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                            <ng-option *ngFor="let car of let item of this?.officers[0]" [value]="car.UserID">
-                              {{car.UserName}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
 
-                      <div class="col-md-3" *ngIf=" this?.officers[1]!= undefined">
-                        <div class="form-group">
-                          <label for="DepartmentId"> Manager Approval </label>
-                          <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdasadfsManager"
-                            [(ngModel)]="this.modelPR.MApproval">
-                            <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                            <ng-option *ngFor="let car of let item of this?.officers[1]" [value]="car.UserID">
-                              {{car.UserName}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-
-                      <div class="col-md-3" *ngIf=" this?.officers[2]!= undefined">
-                        <div class="form-group">
-                          <label for="DepartmentId"> CSM </label>
-                          <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdasadCSMApproval"
-                            [(ngModel)]="this.modelPR.CSMApproval">
-                            <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                            <ng-option *ngFor="let car of let item of this?.officers[2]" [value]="car.UserID">
-                              {{car.UserName}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                      <div class="col-md-3" *ngIf=" this?.officers[3]!= undefined">
-                        <div class="form-group">
-                          <label for="DepartmentId"> CEO </label>
-                          <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdasadCEOApproval"
-                            [(ngModel)]="this.modelPR.CEOApproval">
-                            <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                            <ng-option *ngFor="let car of let item of this?.officers[3]" [value]="car.UserID">
-                              {{car.UserName}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-                      <div class="col-md-3" *ngIf=" this?.officers[4]!= undefined">
-                        <div class="form-group">
-                          <label for="DepartmentId"> Board </label>
-                          <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdasadBoardApproval"
-                            [(ngModel)]="this.modelPR.BoardApproval">
-                            <ng-option [value]="0" disabled selected>Please Select</ng-option>
-                            <ng-option *ngFor="let car of let item of this?.officers[4]" [value]="car.UserID">
-                              {{car.UserName}}
-                            </ng-option>
-                          </ng-select>
-                        </div>
-                      </div>
-
-                    </div>
-                  </div>
-
-                </div>
               </div>
 
               <div role="tabpanel" class="tab-pane fade" id="upload">
 
 
-                      <table class="table table-bordered  ">
-                        <thead class="thead-light">
-                          <th>Description</th>
-                          <th>Uploader</th>
-                          <th>Download</th>
-                          <th>
-                            <button
-                              *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 || this.modelPR.PoStatusRefId==66"
-                              type="button" (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit"
-                              data-toggle="modal" data-target="#edit">
-                              <span class="fa fa-plus"></span>
-                            </button>
-                          </th>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"
-                            class="table-hover mt-0">
-                            <td>
-                              <input [(ngModel)]="i.Description" id="TherNoteTitle{{index}}"
-                                name="TherNoteTitle{{index}}" type="text" class="form-control"
-                                placeholder="Description" />
-                            </td>
-                            <td>
-                              <input name="fileuploader{{index}}" type="file" (change)="this.addFile($event,i)" />
-                            </td>
-                            <td>
-                              <button *ngIf="i.UniqueFileName.length >0" type="button"
-                                (click)="this.fileuploadService.downloadFile(i.UniqueFileName)"
-                                class="btn btn-warning">Download </button>
-                            </td>
-                            <td>
-                              <button *ngIf="this.modelPR.PoStatusRefId==27 || this.modelPR.PoStatusRefId==66"
-                                type="button" class="btn btn-danger" (click)="deleteFile(i.Id)">
-                                <i class="fa fa-trash"></i>
-                              </button>
-                            </td>
-                          </tr>
-                          <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
-                            <td class="datanotfound" colspan="4">Data not found</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                <table class="table table-bordered  ">
+                  <thead class="thead-light">
+                    <th>Description</th>
+                    <th>Uploader</th>
+                    <th>Download</th>
+                    <th>
+                      <button
+                        *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 || this.modelPR.PoStatusRefId==66"
+                        type="button" (click)="AddRowAttachemtns()" class="btn btn-primary" data-title="Edit"
+                        data-toggle="modal" data-target="#edit">
+                        <span class="fa fa-plus"></span>
+                      </button>
+                    </th>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of this.modelPR.PurchaseRequestAttachments let index = index"
+                      class="table-hover mt-0">
+                      <td>
+                        <input [(ngModel)]="i.Description" id="TherNoteTitle{{index}}" name="TherNoteTitle{{index}}"
+                          type="text" class="form-control" placeholder="Description" />
+                      </td>
+                      <td>
+                        <input name="fileuploader{{index}}" type="file" (change)="this.addFile($event,i)" />
+                      </td>
+                      <td>
+                        <button *ngIf="i.UniqueFileName.length >0" type="button"
+                          (click)="this.fileuploadService.downloadFile(i.UniqueFileName)"
+                          class="btn btn-warning">Download </button>
+                      </td>
+                      <td>
+                        <button *ngIf="this.modelPR.PoStatusRefId==27 || this.modelPR.PoStatusRefId==66" type="button"
+                          class="btn btn-danger" (click)="deleteFile(i.Id)">
+                          <i class="fa fa-trash"></i>
+                        </button>
+                      </td>
+                    </tr>
+                    <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
+                      <td class="datanotfound" colspan="4">Data not found</td>
+                    </tr>
+                  </tbody>
+                </table>
 
 
 
@@ -417,42 +401,7 @@
               <div role="tabpanel" class="tab-pane fade" id="ApprovalFlow">
 
 
-                <table class="table table-bordered  ">
-                  <thead class="thead-light">
-                    <th>Order</th>
-                    <th>Approval Group</th>
-                    <th>Remarks</th>
-                    <th>Approved User</th>
-                    <th>Approved Date</th>
-                    <th>Status</th>
-
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let i of this.modelPR.PurchaseOrderApproval let index = index" class="table-hover mt-0">
-                      <td>
-                        {{ i?.OrderLevel }}
-                      </td>
-                      <td>
-                        {{ i?.ApprovalGroup?.Name }}
-                      </td>
-                      <td>
-                        {{ i?.Remarks }}
-                      </td>
-                      <td>
-                        {{ i?.ApprovedUser?.UserName }}
-                      </td>
-                      <td>
-                        {{ i?.ApprovedDate |date }}
-                      </td>
-                      <td>
-                        {{ i?.Postatus?.RefDescription }}
-                      </td>
-                    </tr>
-                  </tbody>
-
-                </table>
-
-
+<app-approval-flow [approval_flow_data]=" this.modelPR.PurchaseOrderApproval"></app-approval-flow>
               </div>
             </div>
 
@@ -462,25 +411,17 @@
 
 
                 <div class=" btn-group">
-                  <button type="button"
-                    *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
-                    (click)="Save();" class="btn btn-primary save_button"> <span class="fa fa-save"></span>
+                  <button type="button" *ngIf="this.IsShowSave()" (click)="Save();" class="btn btn-primary save_button">
+                    <span class="fa fa-save"></span>
                     {{this.mode}}
                     PR</button> &nbsp;
-                  <button type="button" *ngIf="this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
+                  <button type="button" *ngIf="this.modelPR.PoStatusRefId==undefind || this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                     (click)="SaveDrafts();" class="btn btn-warning save_button"> Save as drafts</button>
                   &nbsp;
-                  <button type="button" (click)="this.gridService.gotoback('request')" class="btn btn-primary back_button">
+                  <button type="button" (click)="this.gridService.gotoback('request')"
+                    class="btn btn-primary back_button">
                     <span class="fa fa-arrow-left"></span> </button>
                 </div>
-
-
-
-
-
-
-
-
               </div>
             </div>
 
@@ -491,7 +432,6 @@
     </div>
   </section>
 </div>
-
 
 <ng-template #content let-modal>
   <app-poitem></app-poitem>

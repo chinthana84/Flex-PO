@@ -59,8 +59,6 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   }
 
   ngOnInit() {
-
-    this.gridService.initGrid(this.gridOption) ;
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
 
       if (this.modelPR.PurchaseRequestDetail == undefined) {
@@ -83,52 +81,31 @@ export class PurchaseRequestApprovalComponent implements OnInit {
 
           }
         }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
-
-
     });
 
-
- //   this.setPage(this.gridOption.searchObject);
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id > 0) {
         this.edited = true;
         this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + params.id).subscribe(r => {
-
           this.modelPR = r;
-
         }, (error) => {
           this.confirmDialogService.messageBox(environment.APIerror);
-
         });
       } else {
         this.edited = false;
-        this.gridService.initGrid(this.gridOption) ;
+      this.gridService.initGrid(this.gridOption) ;
       }
     });
   }
 
-  // setPage(obj: SearchObject) {
-  //   this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-  //     .subscribe((data) => {
-  //       this.gridOption.datas = data;
-  //       console.log(data)
-  //       if (this.gridOption.datas.pagedItems == 0) {
-  //         this.gridOption.datas.pagedItems = [];
-  //       }
-  //     }, (error) => {
-  //       this.confirmDialogService.messageBox(environment.APIerror);
-  //     });
-  // }
-
   editPoDetaisls(obj: PurchaseRequestDetailDTO) {
-
     const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
     modalRef.componentInstance.fromParent = obj;
   }
 
   Approve(isApproved: Boolean) {
-
-    this.subs.sink = this.http
+    this.confirmDialogService.confirmThis("Are you sure to APPROVE?", () => {
+      this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/ApprovRequest`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
@@ -136,16 +113,16 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['requestapproval']);
-         // this.setPage(this.gridOption.searchObject);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+    }, function () { });
+
 
   }
 
-
   Reject(isApproved: Boolean) {
-
-    this.subs.sink = this.http
+    this.confirmDialogService.confirmThis("Are you sure to REJECT?", () => {
+      this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/RejectRequest`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
@@ -153,10 +130,9 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['requestapproval']);
-         // this.setPage(this.gridOption.searchObject);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
-
+    }, function () { });
   }
 
   Action(item: any) {
@@ -164,15 +140,13 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     this.edited = true;
   }
 
-  ngOnDestroy(): void {
-    this.subs.unsubscribe();
-  }
   GetTotal() {
     let sum = 0;
-
     this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
-
     return sum;
+  }
 
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }

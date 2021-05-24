@@ -1,11 +1,13 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>FlexPO</title>
   <base href="/flexpo/">
-      <!-- Google Font: Source Sans Pro -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+  <!-- Google Font: Source Sans Pro -->
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
   <!-- Font Awesome -->
   <link rel="stylesheet" href="assets/plugins/fontawesome-free/css/all.min.css">
   <!-- Ionicons -->
@@ -27,6 +29,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
+
 <body>
   <app-root></app-root>
 
@@ -38,6 +41,7 @@
 
   <script>
     $.widget.bridge('uibutton', $.ui.button)
+
   </script>
   <!-- Bootstrap 4 -->
   <script src="assets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -65,35 +69,48 @@
   <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 
 
- 
+
 
   <script>
-    $(document).ready(function(e){
+    $(document).ready(function (e) {
+debugger
+     if( sessionStorage.getItem("main") != undefined && sessionStorage.getItem("child") != undefined){
+       $("#"+sessionStorage.getItem("main")).addClass('active');
+ $("#"+sessionStorage.getItem("main")).parent().addClass("menu-open");
+
+       $("#"+sessionStorage.getItem("child")).show();
+       $("#"+sessionStorage.getItem("child")).addClass('active');
+     }
+     else{
+      
+     }
+
+      $(document).on("click", "#heees .submain", function (xx) {
+
+        $(".main-sidebar a").removeClass("active");
+        $(".nav-item").removeClass("menu-open");
+        $(this).parent().addClass('menu-open')
+        $(this).addClass("active")
+
+       // alert($(this).attr('id'))
+        sessionStorage.setItem("main",$(this).attr('id'))
+
+      })
 
 
+      $(document).on("click", "#heees .nav .nav-treeview a", function (xx) {
 
-$(document).on("click","#heees .submain",function(xx){
+        $("#heees .nav .nav-treeview a").removeClass('active')
+        $(this).addClass('active')
+      //  alert($(this).attr('id'))
+        sessionStorage.setItem("child",$(this).attr('id'))
+      })
 
-  $(".main-sidebar a").removeClass("active");
-  $(".nav-item").removeClass("menu-open");
- $(this).parent().addClass('menu-open')
- $(this).addClass("active")
+    });
 
-})
-
-
-$(document).on("click","#heees .nav .nav-treeview a"  ,function(xx){
-
-  $("#heees .nav .nav-treeview a").removeClass('active')
-$(this).addClass('active')
-
-})
-
-
-
-     });
-   </script>
+  </script>
 </body>
+
 </html>
 <!-- ng serve -o --base-href /flexpo/ -->
 

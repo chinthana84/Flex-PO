@@ -1,3 +1,4 @@
+import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -5,7 +6,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ToastrService } from 'ngx-toastr';
 import { forkJoin, Observable, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
-import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
+import { GridOptions, GridType, PO_Status } from 'src/app/grid/gridModels/gridOption.model';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { TypeHeadSearchDTO } from 'src/app/grid/gridModels/typeheadSearch.model';
 import { purchaseRequestHeaderDTO, PurchaseRequestDetailDTO, PurchaseRequestAttachmentsDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
@@ -33,13 +34,15 @@ export class MyTasksComponent implements OnInit {
   modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
 
-  mode:string="";
+  mode: string = "";
 
   model: any;
   searching = false;
   searchFailed = false;
   formatter = (x: TypeHeadSearchDTO) => x.Name
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
+
+  public myEnum = PO_Status;
 
   gridOption: GridOptions = {
     datas: {},
@@ -51,8 +54,8 @@ export class MyTasksComponent implements OnInit {
       searchColName: '',
       colNames: [{ colName: "PONo", colText: 'PONo' },
       { colName: "DepartmentName", colText: 'Department' }
-      ,{ colName: "SupplierName", colText: 'Supplier' }
-      ,{ colName: "ShipTo", colText: 'ShipTo' }
+        , { colName: "SupplierName", colText: 'Supplier' }
+        , { colName: "ShipTo", colText: 'ShipTo' }
       ]
     }
   };
@@ -65,38 +68,36 @@ export class MyTasksComponent implements OnInit {
     private toastr: ToastrService,
     private itemService: ItemService,
     public commonService: CommonService,
-    public fileuploadService:FileuploadService
-    ) { this.edited = false; }
+    public fileuploadService: FileuploadService,
+    public gridService: GridService
+  ) { this.edited = false; }
 
   ngOnInit(): void {
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
-      if(this.modelPR.PurchaseRequestDetail == undefined){
-        this.modelPR.PurchaseRequestDetail=[];
+      if (this.modelPR.PurchaseRequestDetail == undefined) {
+        this.modelPR.PurchaseRequestDetail = [];
       }
-      if (this.modelPR.PurchaseRequestDetail.filter(x=> x.guid == r.guid).length >0){
-        this.modelPR.PurchaseRequestDetail= this.modelPR.PurchaseRequestDetail.filter(x=> x.guid != r.guid);
+      if (this.modelPR.PurchaseRequestDetail.filter(x => x.guid == r.guid).length > 0) {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(x => x.guid != r.guid);
         this.modelPR.PurchaseRequestDetail.push(r);
-      }else{
+      } else {
         this.modelPR.PurchaseRequestDetail.push(r);
       }
     });
 
-
-
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
-
-     if (params.id > 0) {
+      if (params.id > 0) {
         this.EditPR(params.id);
       } else {
-        this.setPage(this.gridOption.searchObject);
+        this.gridService.initGrid(this.gridOption);
         this.edited = false;
       }
     });
   }
 
-  EditPR(id:number,isCopy:Boolean=false){
+  EditPR(id: number, isCopy: Boolean = false) {
     this.edited = true;
-    this.mode="Edit";
+    this.mode = "Edit";
 
     let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
     let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
@@ -109,54 +110,47 @@ export class MyTasksComponent implements OnInit {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
-      if(isCopy){
-        this.mode="Copy PR";
-        this.modelPR.PoheaderId=0;
-        this.modelPR.Pono="";
-        this.modelPR.PoStatusRefId=0;
-        this.modelPR.PoStatusRef=null;
-        this.modelPR.PurchaseOrderApproval=[];
+      if (isCopy) {
+        this.mode = "Copy PR";
+        this.modelPR.PoheaderId = 0;
+        this.modelPR.Pono = "";
+        this.modelPR.PoStatusRefId = 0;
+        this.modelPR.PoStatusRef = null;
+        this.modelPR.PurchaseOrderApproval = [];
         this.modelPR.PurchaseRequestDetail.forEach(r => {
-          r.PoheaderId=0;
-          r.PodetId=0;
-          r.guid=this.commonService.newGuid();
+          r.PoheaderId = 0;
+          r.PodetId = 0;
+          r.guid = this.commonService.newGuid();
         });
 
-        this.modelPR.PurchaseRequestAttachments .forEach(r => {
-          r.PoheaderId=0;
-          r.Id=0;
+        this.modelPR.PurchaseRequestAttachments.forEach(r => {
+          r.PoheaderId = 0;
+          r.Id = 0;
         });
       }
-
-     }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+    }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-
-  ViewOnly(Id:number){
+  ViewOnly(Id: number) {
     this.router.navigate(["/MyTasks/edit"], { queryParams: { id: Id } });
-    this.EditPR(Id,false);
-  }
-
-  setPage(obj: SearchObject) {
-    this.subs.sink = this.http.post<any>(`${environment.APIEndpoint}/grid`, obj, {})
-      .subscribe((data) => {  this.gridOption.datas = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror);  });
+    this.EditPR(Id, false);
   }
 
   Action(item: any) {
     if (item == undefined) {
       this.router.navigate(["/MyTasks/edit"], { queryParams: { id: 0 } });
     } else {
-      this.router.navigate(["/MyTasks/edit"], {    queryParams: { id: item.Id } });
+      this.router.navigate(["/MyTasks/edit"], { queryParams: { id: item.Id } });
     }
     this.edited = true;
   }
 
   openXl(content) {
-    const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
+    const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
   }
 
-  editPoDetaisls(obj:PurchaseRequestDetailDTO) {
-    const modalRef= this.modalService.open(PoitemComponent ,{ size: 'xl' });
+  editPoDetaisls(obj: PurchaseRequestDetailDTO) {
+    const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
     modalRef.componentInstance.fromParent = obj;
   }
 
@@ -180,38 +174,37 @@ export class MyTasksComponent implements OnInit {
 
   selectedItem(item: any) {
     this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/GetSupplierByID/` + item.item.ID)
-      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror)  });
+      .subscribe((data) => { this.modelSupplier = data; this.modelPR.SupplierId = item.item.ID; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  deleteItem(index:PurchaseRequestDetailDTO){
+  deleteItem(index: PurchaseRequestDetailDTO) {
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-      if(index.PodetId > 0){
-        this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.ItemId != index.ItemId);
-      }else
-      {
-        this.modelPR.PurchaseRequestDetail=this.modelPR.PurchaseRequestDetail.filter(r=> r.guid != index.guid);
+      if (index.PodetId > 0) {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(r => r.ItemId != index.ItemId);
+      } else {
+        this.modelPR.PurchaseRequestDetail = this.modelPR.PurchaseRequestDetail.filter(r => r.guid != index.guid);
       }
-
     }, function () { });
   }
 
   Save() {
-    this.modelPR.PoStatusRefId =51; //assinged to me to small changes to request
+    this.modelPR.PoStatusRefId = this.myEnum.AssigedToMe; //assinged to me to small changes to request
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SaveByFinanace`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-          this.toastr.success(environment.dataSaved);
+          this.edited = false;
           this.router.navigate(['MyTasks']);
-          this.setPage(this.gridOption.searchObject);
+          this.gridService.initGrid(this.gridOption);
+          this.toastr.success(environment.dataSaved);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
   createPO() {
-    this.modelPR.PoStatusRefId =52;
+    this.modelPR.PoStatusRefId = this.myEnum.CreatePO;
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePO`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
@@ -220,17 +213,63 @@ export class MyTasksComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['MyTasks']);
-          this.setPage(this.gridOption.searchObject);
+          this.gridService.initGrid(this.gridOption);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  AddRowAttachemtns(){
-    let obj=new PurchaseRequestAttachmentsDTO();
+  createPOEmail() {
+    this.modelPR.PoStatusRefId = this.myEnum.PO_Raised_Via_emial;
+    this.subs.sink = this.http
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePO`, this.modelPR, {}).subscribe((data) => {
+        if (data.IsValid == false) {
+          this.confirmDialogService.messageListBox(data.ValidationMessages)
+        }
+        else {
+          this.toastr.success(environment.dataSaved);
+          this.router.navigate(['MyTasks']);
+          this.gridService.initGrid(this.gridOption);
+        }
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+  }
+
+  Approve() {
+    this.confirmDialogService.confirmThis("Are you sure to APPROVE?", () => {
+      this.subs.sink = this.http
+        .post<any>(`${environment.APIEndpoint}/PurchaseRequest/ApprovRequest`, this.modelPR, {}).subscribe((data) => {
+          if (data.IsValid == false) {
+            this.confirmDialogService.messageListBox(data.ValidationMessages)
+          }
+          else {
+            this.toastr.success(environment.dataSaved);
+            //this.router.navigate(['MyTasks']);
+            location.reload();
+          }
+        }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+    }, function () { });
+  }
+
+  Reject() {
+    this.confirmDialogService.confirmThis("Are you sure to REJECT?", () => {
+      this.subs.sink = this.http
+        .post<any>(`${environment.APIEndpoint}/PurchaseRequest/RejectRequest`, this.modelPR, {}).subscribe((data) => {
+          if (data.IsValid == false) {
+            this.confirmDialogService.messageListBox(data.ValidationMessages)
+          }
+          else {
+            this.toastr.success(environment.dataSaved);
+            this.router.navigate(['MyTasks']);
+          }
+        }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+    }, function () { });
+  }
+
+  AddRowAttachemtns() {
+    let obj = new PurchaseRequestAttachmentsDTO();
     this.modelPR.PurchaseRequestAttachments.push(obj);
   }
 
-  addFile(event,i: PurchaseRequestAttachmentsDTO): void {
+  addFile(event, i: PurchaseRequestAttachmentsDTO): void {
     let fileList: FileList = event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
@@ -241,25 +280,30 @@ export class MyTasksComponent implements OnInit {
     }
   }
 
-  deleteFile(id:number){
+  deleteFile(id: number) {
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-        this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
+      this.modelPR.PurchaseRequestAttachments = this.modelPR.PurchaseRequestAttachments.filter(item => item.Id != id);
     }, function () { });
   }
 
-
-  GetTotal(){
-    let sum= 0;
-
-this.modelPR?.PurchaseRequestDetail?.forEach(r=> sum += r.UnitPrice* r.Qty);
-
-      return sum;
-
+  GetTotal() {
+    let sum = 0;
+    this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
+    return sum;
   }
 
-  CreatePO(item :any){
-    this.confirmDialogService.confirmThis("Are you sure?", () => {
-      this.createPO();
+  RaisePO() {
+    let self = this;
+    this.confirmDialogService.confirmThis("Do you want to raise a PO?", () => {
+      this.confirmDialogService.confirmThis("Send the PO via email?", () => {
+        self.createPOEmail();
+      }, function () {
+        self.createPO();
+      });
     }, function () { });
+  }
+
+  ngOnDestroy(): void {
+    this.subs.unsubscribe();
   }
 }

@@ -29,12 +29,12 @@ export class AppComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-     
+
     this.setBreadcrumb();
 
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-
+debugger
 
       // if(this.router.url.includes("login")==true){
       //   return
@@ -56,6 +56,11 @@ export class AppComponent implements OnInit {
           this.auth.refreshToken().subscribe(
               (r) => {
                 this.currentObj = r;
+debugger
+                if(sessionStorage.getItem("main") == undefined){
+                  this.router.navigate(['home'])
+                }
+
               },
               (error) => {
                 this.router.navigate(['login']);

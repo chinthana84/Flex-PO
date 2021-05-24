@@ -4,9 +4,9 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
-            <table class="table  ">
-              <thead>
+            <app-search ></app-search>
+            <table class="table table-bordered  ">
+              <thead class="thead-light">
                 <th>PONo</th>
                 <th>Department</th>
                 <th>Supplier</th>
@@ -31,11 +31,11 @@
                     <div class="btn-group">
 
 
-                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">Assigne
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.PoheaderId)" class="btn btn-info  ">vVew
                       </button>
 
 
-                      <button (click)="AssignToMe(item.Id)" class="btn btn-warning  ">Assigned To Me
+                      <button (click)="AssignToMe(item.PoheaderId)" class="btn btn-warning  ">Assigned To Me
                       </button>
                     </div>
                   </td>
@@ -45,7 +45,7 @@
                 </tr>
               </tbody>
             </table>
-            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+            <app-pager  ></app-pager>
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
@@ -365,7 +365,7 @@
               </div>
             </div>
 
-            <div class="row">
+            <!-- <div class="row">
               <div class="col-md-6">
                 <div class="form-group">
                   <label for="userss">User</label>
@@ -378,12 +378,12 @@
                 </div>
               </div>
 
-            </div>
+            </div> -->
 
             <div class="btn-group">
-              <button type="button" *ngIf="this.selectedUserID >0"
-                (click)="Save2();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
-              <button type="button" (click)="router.navigate(['MyDeps']);" class="btn btn-primary back_button">
+              <!-- <button type="button" *ngIf="this.selectedUserID >0"
+                (click)="Save2();" class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button> -->
+              <button type="button" (click)="this.gridService.gotoback('MyDeps')" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
             </div>
           </form>

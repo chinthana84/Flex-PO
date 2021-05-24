@@ -1,3 +1,4 @@
+import { Grid2Service } from './grid-service/grid2.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SearchComponent } from './search/search.component';
@@ -19,6 +20,6 @@ import { RouterModule } from '@angular/router';
   ],
 
   exports:[SearchComponent ,PagerComponent]
-  , providers:[GridService]
+  , providers:[GridService,Grid2Service]
 })
 export class GridModule { }

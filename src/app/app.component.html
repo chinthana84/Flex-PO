@@ -177,7 +177,7 @@
           <ul class="sidemenu nav nav-pills nav-sidebar flex-column  " data-widget="treeview" role="menu"
             data-accordion="true">
             <li class="nav-item  submain">
-              <a routerLink="home" class="nav-link  ">
+              <a routerLink="home" class="nav-link  " id="home">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Home
@@ -187,16 +187,16 @@
             </li>
 
             <li class="nav-item ">
-              <a class="nav-link submain">
+              <a class="nav-link submain" id="prhander">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p>
+                <p >
                   PR Handler
                   <i class="right fas fa-angle-left"></i>
                 </p>
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="request" class="nav-link ">
+                  <a routerLink="request" class="nav-link " id='prhander_request'>
 
                     <p>MY Purchase Requests </p>
                   </a>
@@ -205,7 +205,7 @@
               </ul>
             </li>
             <li class="nav-item  ">
-              <a class="nav-link submain">
+              <a class="nav-link submain" id="mainapproval">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Approval
@@ -214,13 +214,13 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="requestapproval" class="nav-link ">
+                  <a routerLink="requestapproval" class="nav-link " id="mainapproval_order">
 
                     <p>Order </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="ammendPO" class="nav-link ">
+                  <a routerLink="ammendPO" class="nav-link " id="mainapproval_ammendpo">
 
                     <p>Ammend PO </p>
                   </a>
@@ -228,8 +228,8 @@
 
               </ul>
             </li>
-            <li class="nav-item  ">
-              <a class="nav-link submain">
+            <!-- <li class="nav-item  ">
+              <a class="nav-link submain" id="finance">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Finance
@@ -238,19 +238,19 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="grn" class="nav-link ">
+                  <a routerLink="grn" class="nav-link " id="finance_grn">
 
                     <p>GRN & Finalize</p>
                   </a>
                 </li>
 
               </ul>
-            </li>
+            </li> -->
 
 
 
             <li class="nav-item ">
-              <a class="nav-link submain">
+              <a class="nav-link submain" id="main_myworkspace">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   My Workspace
@@ -259,14 +259,14 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="MyDeps" class="nav-link ">
+                  <a routerLink="MyDeps" class="nav-link " id="child_mydep">
 
                     <p>My Departments </p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a routerLink="MyTasks" class="nav-link ">
+                  <a routerLink="MyTasks" class="nav-link " id="child_mytasks">
 
                     <p>My Tasks (PO Create) </p>
                   </a>
@@ -277,7 +277,7 @@
             </li>
 
             <li class="nav-item   ">
-              <a class="nav-link submain ">
+              <a class="nav-link submain " id="admin">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
                 <p>
                   Admin
@@ -286,51 +286,51 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().approvalGroups }}" class="nav-link  ">
+                  <a id="child_approvalgropus" routerLink="{{  this.commonService.GetAllNavigations().approvalGroups }}" class="nav-link  ">
 
                     <p>Approval Groups </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().approvalGroupsUsers }}" class="nav-link ">
+                  <a id="child_approvalgroupusers" routerLink="{{  this.commonService.GetAllNavigations().approvalGroupsUsers }}" class="nav-link ">
 
                     <p>Approval Groups Users </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().departments }}" class="nav-link  ">
+                  <a id="child_departmsntss" routerLink="{{  this.commonService.GetAllNavigations().departments }}" class="nav-link  ">
 
                     <p>Departments </p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link  ">
+                  <a id="child_departent_userss" routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link  ">
 
                     <p>Department Users </p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link ">
+                  <a id="child_supplierss" routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link ">
 
                     <p>Suppliers </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().items }}" class="nav-link ">
+                  <a id="cild_itmss" routerLink="{{  this.commonService.GetAllNavigations().items }}" class="nav-link ">
 
                     <p>Items</p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().masterData }}" class="nav-link ">
+                  <a id="child_masterdata" routerLink="{{  this.commonService.GetAllNavigations().masterData }}" class="nav-link ">
 
                     <p>MasterData </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a routerLink="{{  this.commonService.GetAllNavigations().accountList }}" class="nav-link ">
+                  <a id="child_accoutns" routerLink="{{  this.commonService.GetAllNavigations().accountList }}" class="nav-link ">
 
                     <p>Accounts </p>
                   </a>
