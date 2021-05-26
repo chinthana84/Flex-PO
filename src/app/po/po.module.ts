@@ -15,6 +15,7 @@ import { PoheaderComponent } from './poheader/poheader.component';
 import { PodetailsComponent } from './podetails/podetails.component';
 import { GrnComponent } from './grn/grn.component';
 import { ApprovalFlowComponent } from './approval-flow/approval-flow.component';
+import { PoviewComponent } from './poview/poview.component';
 
 const routes: Routes = [
   {
@@ -34,7 +35,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent, ApprovalFlowComponent],
+  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent, ApprovalFlowComponent, PoviewComponent],
 
   imports: [
     CommonModule,

@@ -34,7 +34,7 @@ export class AppComponent implements OnInit {
 
 
     this.securityService.currentSecurityObject.subscribe((r) => {
-debugger
+
 
       // if(this.router.url.includes("login")==true){
       //   return
@@ -56,7 +56,7 @@ debugger
           this.auth.refreshToken().subscribe(
               (r) => {
                 this.currentObj = r;
-debugger
+ 
                 if(sessionStorage.getItem("main") == undefined){
                   this.router.navigate(['home'])
                 }

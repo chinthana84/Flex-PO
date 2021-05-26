@@ -106,3 +106,16 @@ export class PurchaseOrderApprovalDTO
 }
 
 
+export   class PoDTO
+{
+    public   Id ?:Number=0;
+    public   PoheaderId ?:Number=0;
+    public   Recipents ?:string="";
+    public   Subject?:string="";
+    public   Cc ?:string="";
+    public   Body ?:string="";
+
+
+}
+
+

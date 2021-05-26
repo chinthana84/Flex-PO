@@ -19,6 +19,7 @@ import { TypeheadService } from 'src/app/myShared/services/typehead.service';
 import { PoitemComponent } from 'src/app/po/poitem/poitem.component';
 import { environment } from 'src/environments/environment';
 import { SubSink } from 'subsink';
+import { PoviewComponent } from 'src/app/po/poview/poview.component';
 
 @Component({
   selector: 'app-my-tasks',
@@ -204,7 +205,7 @@ export class MyTasksComponent implements OnInit {
   }
 
   createPO() {
-    this.modelPR.PoStatusRefId = this.myEnum.CreatePO;
+   // this.modelPR.PoStatusRefId = this.myEnum.CreatePO;
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePO`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
@@ -219,9 +220,9 @@ export class MyTasksComponent implements OnInit {
   }
 
   createPOEmail() {
-    this.modelPR.PoStatusRefId = this.myEnum.PO_Raised_Via_emial;
+   // this.modelPR.PoStatusRefId = this.myEnum.PO_Raised_Via_emial;
     this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePO`, this.modelPR, {}).subscribe((data) => {
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePOWithEmail`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
@@ -301,6 +302,13 @@ export class MyTasksComponent implements OnInit {
         self.createPO();
       });
     }, function () { });
+  }
+
+
+  POPreview(){
+    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPOBeforeSave/${this.modelPR.PoheaderId}`).subscribe(r => {
+      const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
+      modalRef.componentInstance.fromParent = r; });
   }
 
   ngOnDestroy(): void {

@@ -10,7 +10,7 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div>
-            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"> </app-search>
+            <app-search  > </app-search>
             <table class="table ">
               <thead>
                 <th>Name</th>
@@ -64,7 +64,7 @@
               </tbody>
             </table>
 
-            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"> </app-pager>
+            <app-pager > </app-pager>
             <br /><br />
           </div>
 

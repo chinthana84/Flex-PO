@@ -3,15 +3,11 @@
     <div class="card">
       <div class="card-body">
         <div class="tab-content p-0">
-
-
-
           <div *ngIf="!edited">
-            <!-- <app-search [searchID]="100"  #test (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
-            <app-search [searchID]="100" #test></app-search>
+            <app-search [searchID]="100"></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th (click)="this.gridService.OrderByList( 'PONo')">PONo</th>
+                <th (click)="this.gridService.OrderByList( 'ID')">PONo</th>
                 <th (click)="this.gridService.OrderByList('DepartmentName')">Department</th>
                 <th (click)="this.gridService.OrderByList('SupplierName')">Supplier</th>
                 <th (click)="this.gridService.OrderByList('ShipTo')">ShipTo</th>
@@ -25,7 +21,6 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of  this.gridOption?.datas?.pagedItems" class="table-hover">
-                  <!-- <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover"> -->
                   <td>{{ item.Pono }}</td>
                   <td>{{ item.DepartmentName }}</td>
                   <td>{{ item.SupplierName }}</td>
@@ -33,7 +28,6 @@
                   <td>
                     <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
                   </td>
-
                   <td>{{ item.CreateDate }}</td>
                   <td>{{ item.AssingedUser}}</td>
                   <td>
@@ -45,11 +39,14 @@
                       </button>
                       <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
                       </button>
+                      <button *ngIf="item.PoStatusId == myEnum.PO_Raised_Via_emial"
+                        (click)="ViewPO(item.Id,content,$event)" class="btn btn-info  ">View PO
+                      </button>
                     </div>
                   </td>
                 </tr>
                 <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
-                  <td class="datanotfound" colspan="7">Data not found</td>
+                  <td class="datanotfound" colspan="10">Data not found</td>
                 </tr>
               </tbody>
             </table>
@@ -401,7 +398,7 @@
               <div role="tabpanel" class="tab-pane fade" id="ApprovalFlow">
 
 
-<app-approval-flow [approval_flow_data]=" this.modelPR.PurchaseOrderApproval"></app-approval-flow>
+                <app-approval-flow [approval_flow_data]=" this.modelPR.PurchaseOrderApproval"></app-approval-flow>
               </div>
             </div>
 
@@ -415,7 +412,8 @@
                     <span class="fa fa-save"></span>
                     {{this.mode}}
                     PR</button> &nbsp;
-                  <button type="button" *ngIf="this.modelPR.PoStatusRefId==undefind || this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
+                  <button type="button"
+                    *ngIf="this.modelPR.PoStatusRefId==undefind || this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
                     (click)="SaveDrafts();" class="btn btn-warning save_button"> Save as drafts</button>
                   &nbsp;
                   <button type="button" (click)="this.gridService.gotoback('request')"
@@ -435,6 +433,11 @@
 
 <ng-template #content let-modal>
   <app-poitem></app-poitem>
+</ng-template>
+
+<ng-template #content let-modal>
+  <app-poview></app-poview>>
+
 </ng-template>
 
 

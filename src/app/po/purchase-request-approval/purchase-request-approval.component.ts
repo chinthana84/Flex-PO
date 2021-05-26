@@ -70,7 +70,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
       } else {
         this.modelPR.PurchaseRequestDetail.push(r);
       }
-
+ 
       this.modelPR.IsApproval=true;
       this.subs.sink = this.http
         .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {

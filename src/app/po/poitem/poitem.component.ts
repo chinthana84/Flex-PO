@@ -142,7 +142,7 @@ export class PoitemComponent implements OnInit   {
 
   deleteFile(id: number) {
     this.confirmDialogService.confirmThis("Are you sure to delete?", () => {
-      debugger
+       
       this.details.PrdetailsAttachments = this.details.PrdetailsAttachments.filter(item => item.PrdetAttachmentId != id);
     }, function () { });
   }

@@ -33,7 +33,7 @@ export class SearchComponent implements OnInit {
   constructor(private gridService: GridService, private gridSercie2: Grid2Service) { }
 
   searchClickNew(obj: any, s: string = "") {
-    debugger
+
 
     if (this.serviceID == 2) {
       this.gridoption2.searchObject.pageNo = 1;
@@ -60,17 +60,17 @@ export class SearchComponent implements OnInit {
   ngOnInit() {
 
     this.gridService.getGridOptions().subscribe(r => {
-      debugger
+
       this.gridoption = r;
       this.searchColumn = this.gridoption.searchObject.colNames[0].colName;
-      console.log(r)
+
     });
 
     this.gridSercie2.getGridOptions().subscribe(r => {
-      debugger
+
       this.gridoption2 = r;
       this.searchColumn2 = this.gridoption2.searchObject.colNames[0].colName;
-      console.log(r)
+    
     });
 
 
@@ -81,7 +81,7 @@ export class SearchComponent implements OnInit {
 
     }
     else{
-      
+
     }
     sessionStorage.setItem("filterid", this.selectedSummaryID.toString())
 

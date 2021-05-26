@@ -1,3 +1,4 @@
+import { PoviewComponent } from './../poview/poview.component';
 import { Grid2Service } from './../../grid/grid-service/grid2.service';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { LoaderService } from './../../myShared/services/loader.service';
@@ -9,7 +10,7 @@ import { TypeHeadSearchDTO } from './../../grid/gridModels/typeheadSearch.model'
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, of, forkJoin } from 'rxjs';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
-import { GridOptions, GridType } from 'src/app/grid/gridModels/gridOption.model';
+import { GridOptions, GridType, PO_Status } from 'src/app/grid/gridModels/gridOption.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { TypeheadService } from 'src/app/myShared/services/typehead.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -31,9 +32,9 @@ import { ApprovalOfficersDTO } from 'src/app/models/secutiry.model';
   styleUrls: ['./purchase-request.component.css']
 })
 export class PurchaseRequestComponent implements OnInit,OnDestroy  {
-  ngOnDestroy() {
-    this.subs.unsubscribe();
-  }
+
+
+  public myEnum = PO_Status;
 
   private subs = new SubSink();
   edited: boolean = false;
@@ -51,6 +52,8 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
   searchFailed = false;
   formatter = (x: TypeHeadSearchDTO) => x.Name
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
+
+  SelectedPRID:number=0;
 
   gridOption: GridOptions = {
 
@@ -141,10 +144,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
 
   DepaertmentChange() {
     this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
-      debugger
-      this.officers = r;
-
-      console.log(this.officers)
+       this.officers = r;
 
     });
   }
@@ -219,29 +219,8 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     this.EditPR(Id, false);
   }
 
-  // OrderByList(colname: string) {
-  //   debugger
-  //   this.gridOption.searchObject.defaultSortColumnName = colname;
-  //   if (this.gridOption.searchObject.aseOrDesc == undefined) {
-  //     this.gridOption.searchObject.aseOrDesc = "ASC"
-  //   }
-
-  //   if (this.gridOption.searchObject.aseOrDesc == "ASC") {
-  //     this.gridOption.searchObject.aseOrDesc = "DESC"
-  //   }
-  //   else if (this.gridOption.searchObject.aseOrDesc == "DESC") {
-  //     this.gridOption.searchObject.aseOrDesc = "ASC"
-  //   }
-
-
-  //   // this.gridOption.searchObject.searchColName = this.searchComponent.searchColumn;
-  //   // this.gridOption.searchObject.searchText = this.searchComponent.searchText;
-
-  //  // this.setPage(this.gridOption.searchObject);
-  // }
-
   Action(item: any) {
-    debugger
+     
     if (item == undefined) {
       this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     } else {
@@ -335,7 +314,6 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-
   AddRowAttachemtns() {
     let obj = new PurchaseRequestAttachmentsDTO();
     this.modelPR.PurchaseRequestAttachments.push(obj);
@@ -370,4 +348,14 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     return sum;
   }
 
+  ViewPO(id:number,content,$event){
+    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPoEmail/${id}`).subscribe(r => {
+      const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
+      modalRef.componentInstance.fromParent = r; });
+  }
+
+
+  ngOnDestroy() {
+    this.subs.unsubscribe();
+  }
 }

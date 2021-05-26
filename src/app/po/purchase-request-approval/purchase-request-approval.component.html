@@ -4,18 +4,17 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-            <app-search (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search>
+            <app-search  ></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th>Pono</th>
-                <th>Podate</th>
-                <th>Supplier</th>
-                <th>Department</th>
-                <th>ShipTo</th>
-                <th>Postatus</th>
-                <th>Next</th>
-                <th>RequestBy</th>
-                <!-- <th>Assinged</th> -->
+                <th (click)="this.gridService.OrderByList( 'POHeaderID')">Pono</th>
+                <th (click)="this.gridService.OrderByList( 'Podate')">Podate</th>
+                <th (click)="this.gridService.OrderByList( 'SupplierName')">Supplier</th>
+                <th (click)="this.gridService.OrderByList( 'DepartmentName')">Department</th>
+                <th (click)="this.gridService.OrderByList( 'ShipTo')">ShipTo</th>
+                <th (click)="this.gridService.OrderByList( 'Postatus')">Postatus</th>
+                <th (click)="this.gridService.OrderByList( 'NextStatus')">Next</th>
+                <th (click)="this.gridService.OrderByList( 'RequestBy')">RequestBy</th>
                 <th>Total</th>
                 <th> </th>
               </thead>
@@ -33,7 +32,6 @@
                     <h5> <span class="badge badge-warning"> {{ item.NextStatus}} </span></h5>
                   </td>
                   <td>{{ item.RequestBy }}</td>
-                  <!-- <td>{{item.Assinged}}</td> -->
                   <td>{{ item.Total   | number : '1.2-2' }}</td>
                   <td>
                     <div class="btn-group">
@@ -48,7 +46,7 @@
               </tbody>
             </table>
             <br />
-            <app-pager (pagedClicked)="setPage($event)" [pagerX]="gridOption"></app-pager>
+            <app-pager></app-pager>
           </div>
 
           <div *ngIf="edited">

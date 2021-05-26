@@ -7,12 +7,12 @@
             <app-search></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th>PONo</th>
-                <th>Department</th>
-                <th>Supplier</th>
-                <th>ShipTo</th>
-                <th>PO Status</th>
-                <th>Date</th>
+                <th  (click)="this.gridService.OrderByList( 'Id')">PONo</th>
+                <th  (click)="this.gridService.OrderByList( 'DepartmentName')">Department</th>
+                <th  (click)="this.gridService.OrderByList( 'SupplierName')">Supplier</th>
+                <th  (click)="this.gridService.OrderByList( 'ShipTo')">ShipTo</th>
+                <th  (click)="this.gridService.OrderByList( 'Postatus')">PO Status</th>
+                <th  (click)="this.gridService.OrderByList( 'CreateDate')">Date</th>
                 <th>
 
                 </th>
@@ -382,6 +382,8 @@
 
                 <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.Finance_Approved  "
                  (click)="RaisePO()" class="btn btn-warning ">  Raise PO</button>
+                 <button type="button"
+                 (click)="POPreview()" class="btn btn-warning ">    PO Preview </button>
             </div>
           </form>
         </div>
@@ -393,4 +395,10 @@
 
 <ng-template #content let-modal>
   <app-poitem></app-poitem>
+</ng-template>
+
+
+
+<ng-template #content let-modal>
+<app-poview></app-poview>>
 </ng-template>

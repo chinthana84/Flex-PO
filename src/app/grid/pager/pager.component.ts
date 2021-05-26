@@ -25,7 +25,7 @@ export class PagerComponent implements OnInit {
   uploadComplete(pageno: number) {
 
 
-    debugger
+
 
     if (this.serviceID == 2) {
       this.gridoption2.searchObject.pageNo = pageno;
@@ -46,12 +46,12 @@ export class PagerComponent implements OnInit {
 
   ngOnInit() {
     this.gridService.getGridOptions().subscribe(r => {
-      debugger
+
       this.gridoption = r;
     });
 
     this.gridService2.getGridOptions().subscribe(r => {
-      debugger
+       
       this.gridoption2 = r;
     });
 

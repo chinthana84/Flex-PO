@@ -73,7 +73,7 @@
 
   <script>
     $(document).ready(function (e) {
-debugger
+ 
      if( sessionStorage.getItem("main") != undefined && sessionStorage.getItem("child") != undefined){
        $("#"+sessionStorage.getItem("main")).addClass('active');
  $("#"+sessionStorage.getItem("main")).parent().addClass("menu-open");
@@ -82,7 +82,7 @@ debugger
        $("#"+sessionStorage.getItem("child")).addClass('active');
      }
      else{
-      
+
      }
 
       $(document).on("click", "#heees .submain", function (xx) {

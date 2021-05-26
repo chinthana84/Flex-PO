@@ -7,19 +7,19 @@
             <app-search ></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th>PONo</th>
-                <th>Department</th>
-                <th>Supplier</th>
-                <th>ShipTo</th>
-                <th>PO Status</th>
-                <th>Date</th>
+                <th (click)="this.gridService.OrderByList('PoheaderId')">PONo</th>
+                <th (click)="this.gridService.OrderByList('DepartmentName')">Department</th>
+                <th (click)="this.gridService.OrderByList('SupplierName')">Supplier</th>
+                <th (click)="this.gridService.OrderByList('ShipTo')">ShipTo</th>
+                <th (click)="this.gridService.OrderByList('Postatus')">PO Status</th>
+                <th (click)="this.gridService.OrderByList('CreateDate')">Date</th>
                 <th>
 
                 </th>
               </thead>
               <tbody>
                 <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover">
-                  <td>{{ item.Pono }}</td>
+                  <td >{{ item.Pono }}</td>
                   <td>{{ item.DepartmentName }}</td>
                   <td>{{ item.SupplierName }}</td>
                   <td>{{ item.ShipTo }}</td>
@@ -31,7 +31,7 @@
                     <div class="btn-group">
 
 
-                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.PoheaderId)" class="btn btn-info  ">vVew
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.PoheaderId)" class="btn btn-info  ">View
                       </button>
 
 

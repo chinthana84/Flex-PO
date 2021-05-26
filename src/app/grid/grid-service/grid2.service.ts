@@ -30,7 +30,7 @@ export class Grid2Service{
     this.myGridOption=new Subject<GridOptions>();
     gridoption.searchObject.searchText="";
     gridoption.searchObject.postatusid="0";
-debugger
+
     this.http.post<any>(`${environment.APIEndpoint}/grid`, gridoption.searchObject, {}).subscribe(r=>{
       gridoption.datas=r;
       this.setGridOptions(gridoption);
@@ -60,7 +60,7 @@ debugger
   }
 
   OrderByList(  colname: string) {
-    debugger
+     
 
     let grid=this.bar;
     grid.datas={}

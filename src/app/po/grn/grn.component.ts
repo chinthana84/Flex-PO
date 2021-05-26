@@ -88,7 +88,7 @@ export class GrnComponent implements OnInit {
       this.modelPR = data[0];
       this.modelPR.Podate = new Date(this.modelPR.Podate);
       //this.selectedStatusID = this.modelPR.PoStatusRefId;
-debugger
+
       if (this.modelPR.PoStatusRefId == PO_Status.CreatePO) {
 
         this.status = data[1].filter(r => r.RefId === PO_Status.Order_Partially_Received || r.RefId == PO_Status.Order_Receievd_in_Full);
@@ -100,7 +100,7 @@ debugger
         this.status = data[1].filter(r => r.RefId == PO_Status.Paid_Fully || r.RefId== PO_Status.Paid_Partilly  );
       }
 
-      console.log(this.modelPR )
+      
 
 
 
@@ -127,7 +127,7 @@ debugger
 
 
   FinalSaveStepsOnPO() {
-debugger
+
     // if (this.modelPR.PoStatusRefId === PO_Status.CreatePO)
     // {
     //   this.modelPR.PoStatusRefId = this.selectedStatusID;
@@ -183,7 +183,7 @@ debugger
     }
 
     return false;
-   
+
   }
 
   isCanReassinged() {
