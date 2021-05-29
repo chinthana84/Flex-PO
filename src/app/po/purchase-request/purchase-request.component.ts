@@ -107,7 +107,8 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
     public gridService: GridService,
-    public gridService2 :Grid2Service
+    public gridService2 :Grid2Service,
+    public gridService3 :Grid2Service
   ) {
     this.edited = false;
   }
@@ -220,7 +221,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
   }
 
   Action(item: any) {
-     
+
     if (item == undefined) {
       this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     } else {

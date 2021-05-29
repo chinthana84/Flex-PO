@@ -1,14 +1,14 @@
 import { GridOptions } from 'src/app/grid/gridModels/gridOption.model';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { environment } from 'src/environments/environment';
 import { SearchObject } from '../gridModels/searchObject.model';
 
 @Injectable()
-export class GridService{
+export class GridService {
 
   private _bar:GridOptions = {};
 
@@ -35,7 +35,7 @@ export class GridService{
     this.http.post<any>(`${environment.APIEndpoint}/grid`, gridoption.searchObject, {}).subscribe(r=>{
       gridoption.datas=r;
       this.setGridOptions(gridoption);
-      this.bar=gridoption; 
+      this.bar=gridoption;
     });
      return this.myGridOption.asObservable();
   }
