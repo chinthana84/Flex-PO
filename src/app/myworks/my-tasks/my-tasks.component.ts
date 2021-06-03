@@ -1,3 +1,4 @@
+import { PrService } from './../../myShared/services/pr.service';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -70,7 +71,8 @@ export class MyTasksComponent implements OnInit {
     private itemService: ItemService,
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
-    public gridService: GridService
+    public gridService: GridService,
+    public prService:PrService
   ) { this.edited = false; }
 
   ngOnInit(): void {
@@ -309,6 +311,36 @@ export class MyTasksComponent implements OnInit {
     this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPOBeforeSave/${this.modelPR.PoheaderId}`).subscribe(r => {
       const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
       modalRef.componentInstance.fromParent = r; });
+  }
+
+  Paying(){
+    this.subs.sink = this.http
+    .post<any>(`${environment.APIEndpoint}/PurchaseRequest/Paid`, this.modelPR, {}).subscribe((data) => {
+      if (data.IsValid == false) {
+        this.confirmDialogService.messageListBox(data.ValidationMessages)
+      }
+      else {
+        this.toastr.success(environment.dataSaved);
+        this.router.navigate(['MyTasks']);
+      }
+    }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+  }
+
+  Completed(){
+
+    this.confirmDialogService.confirmThis("Do you want to complete this PO?", () => {
+      this.subs.sink = this.http
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/Completed`, this.modelPR, {}).subscribe((data) => {
+        if (data.IsValid == false) {
+          this.confirmDialogService.messageListBox(data.ValidationMessages)
+        }
+        else {
+          this.toastr.success(environment.dataSaved);
+          this.router.navigate(['MyTasks']);
+        }
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+    }, function () { });
+
   }
 
   ngOnDestroy(): void {

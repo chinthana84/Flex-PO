@@ -1,3 +1,4 @@
+import { PrService } from './../../myShared/services/pr.service';
 import { PoviewComponent } from './../poview/poview.component';
 import { Grid2Service } from './../../grid/grid-service/grid2.service';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
@@ -24,6 +25,7 @@ import { environment } from 'src/environments/environment';
 import { FileuploadService } from 'src/app/myShared/services/fileupload.service';
 import { PoitemComponent } from '../poitem/poitem.component';
 import { ApprovalOfficersDTO } from 'src/app/models/secutiry.model';
+import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
 
 
 @Component({
@@ -55,7 +57,10 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
 
   SelectedPRID:number=0;
 
+  selectedSummaryID:number=0;
+
   gridOption: GridOptions = {
+    gridID:"a",
 
     datas: {},
     searchObject: {
@@ -70,11 +75,12 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         , { colName: "ShipTo", colText: 'ShipTo' }
         , { colName: "POStatus", colText: 'PRStatus' }
       ]
+      ,postatusid:"0"
     }
   };
 
   gridOption2: GridOptions = {
-
+    gridID:"b",
     datas: {},
     searchObject: {
       girdId: GridType.PR
@@ -84,9 +90,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       searchColName: '',
       colNames: [{ colName: "PONo", colText: 'PONo' },
       { colName: "DepartmentName", colText: 'Department' }
-        , { colName: "SupplierName", colText: 'Supplier' }
-        , { colName: "ShipTo", colText: 'ShipTo' }
-        , { colName: "POStatus", colText: 'PRStatus' }
+
       ]
     }
   };
@@ -108,9 +112,11 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     public fileuploadService: FileuploadService,
     public gridService: GridService,
     public gridService2 :Grid2Service,
-    public gridService3 :Grid2Service
+    public gridService3 :Grid3Service,
+    public prService :PrService
   ) {
     this.edited = false;
+
   }
 
   ngOnInit(): void {
@@ -127,8 +133,11 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       }
     });
 
-     this.gridService.initGrid(this.gridOption) ;
-     this.gridService2.initGrid(this.gridOption2) ;
+    //  this.gridService.initGrid(this.gridOption) ;
+    //  this.gridService2.initGrid(this.gridOption2) ;
+
+    this.gridService3.initGridNew(this.gridOption);
+    this.gridService3.initGridNew(this.gridOption2);
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id == 0) {
@@ -137,8 +146,10 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         this.EditPR(params.id);
       } else {
         this.edited = false;
-        this.gridService.initGrid(this.gridOption) ;
-        this.gridService2.initGrid(this.gridOption2) ;
+      //  this.gridService.initGrid(this.gridOption) ;
+        //this.gridService2.initGrid(this.gridOption2) ;
+
+
       }
     });
   }
@@ -290,6 +301,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
           this.modelPR.PoStatusRefId = 0;
         }
         else {
+          this.gridService3.initGridNew(this.gridOption)
           this.edited=false;
           this.router.navigate(['request']);
           this.gridService.initGrid(this.gridOption) ;
@@ -354,6 +366,54 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
       modalRef.componentInstance.fromParent = r; });
   }
+
+  ClickSummary(){
+
+    this.gridOption.searchObject.postatusid=this.selectedSummaryID.toString()
+    this.gridService3.initGridNew(this.gridOption);
+  }
+
+
+  Cancel(id:number) {
+    debugger
+    this.confirmDialogService.confirmThis("Are you sure to Cancel?", () => {
+      debugger
+      this.modelPR=new purchaseRequestHeaderDTO();
+      this.modelPR.PoheaderId=id;
+      this.subs.sink = this.http
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/Cancel`, this.modelPR, {}).subscribe((data) => {
+        if (data.IsValid == false) {
+          this.confirmDialogService.messageListBox(data.ValidationMessages)
+        }
+        else {
+          this.toastr.success(environment.dataSaved);
+          this.router.navigate(['request']);
+        }
+      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+    }, function () { });
+
+
+  }
+
+  Receving(id:number) {
+    this.router.navigate(["/request/edit"], { queryParams: { id: id } }).then(r=>{
+alert('asdf');
+    });
+  }
+
+  saveRecevedItems(det:PurchaseRequestDetailDTO){
+    this.subs.sink = this.http
+    .post<any>(`${environment.APIEndpoint}/PurchaseRequest/RecevingOrderItem`, det, {}).subscribe((data) => {
+      if (data.IsValid == false) {
+        this.confirmDialogService.messageListBox(data.ValidationMessages)
+      }
+      else {
+        this.toastr.success(environment.dataSaved);
+        this.router.navigate(['request']);
+      }
+    }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+  }
+
 
 
   ngOnDestroy() {

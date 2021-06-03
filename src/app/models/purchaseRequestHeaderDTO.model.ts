@@ -64,6 +64,9 @@ export class PurchaseRequestDetailDTO
     public    Poheader ?:purchaseRequestHeaderDTO;
 
     public   PrdetailsAttachments?:PrdetailsAttachmentsDTO[]=[];
+
+    public   PoOrderReceivedRefId ?: number=0;
+    public  ReceviedQty ?: number=0;
 }
 
 export class PrdetailsAttachmentsDTO

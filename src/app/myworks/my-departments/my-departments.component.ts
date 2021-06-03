@@ -20,6 +20,8 @@ import { TypeheadService } from 'src/app/myShared/services/typehead.service';
 import { PoitemComponent } from 'src/app/po/poitem/poitem.component';
 import { environment } from 'src/environments/environment';
 import { SubSink } from 'subsink';
+import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
+import { AuthService } from 'src/app/myShared/services/auth.service';
 
 @Component({
   selector: 'app-my-departments',
@@ -35,6 +37,8 @@ export class MyDepartmentsComponent implements OnInit {
   modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
 
+  modelPRList: purchaseRequestHeaderDTO[] = [];
+
   mode: string = "";
 
   model: any;
@@ -47,6 +51,7 @@ export class MyDepartmentsComponent implements OnInit {
   selectedUserID: number = 0;
 
   gridOption: GridOptions = {
+    gridID: "Mytasks",
     datas: {},
     searchObject: {
       girdId: GridType.AssignedToME
@@ -71,20 +76,25 @@ export class MyDepartmentsComponent implements OnInit {
     private itemService: ItemService,
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
-    public gridService:GridService
+    public gridService3: Grid3Service,
+    public authService: AuthService
   ) { this.edited = false; }
 
   ngOnInit(): void {
 
 
+    this.selectedUserID = parseInt(this.authService.DecodeJWT().UserID);
+    this.getallUsers();
+    debugger
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
-
+      debugger
       if (params.id > 0) {
         this.EditPR(params.id);
         this.getallUsers();
       } else {
-        this.gridService.initGrid(this.gridOption) ;
-        this.edited = false; 
+        debugger
+        this.gridService3.initGridNew(this.gridOption);
+        this.edited = false;
       }
     });
 
@@ -145,43 +155,47 @@ export class MyDepartmentsComponent implements OnInit {
 
 
   Save() {
+
+
+    this.modelPRList.forEach(r=>{
+      r.AssignedToMeUserId=this.selectedUserID;
+    });
+
     this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPR, {}).subscribe((data) => {
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPRList, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
-          this.edited=false;
+          this.edited = false;
+          debugger
           this.router.navigate(['MyDeps']);
-          this.gridService.initGrid(this.gridOption) ;
-          this.toastr.success(environment.dataSaved);
-
+          location.reload()
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  Save2() {
-    this.modelPR.AssignedToMeUserId=this.selectedUserID;
-    this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPR, {}).subscribe((data) => {
-        if (data.IsValid == false) {
-          this.confirmDialogService.messageListBox(data.ValidationMessages)
-        }
-        else {
-          this.edited=false;
-          this.router.navigate(['MyDeps']);
-          this.gridService.initGrid(this.gridOption) ;
-          this.toastr.success(environment.dataSaved);
-        }
-      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
-  }
+  // Save2() {
+  //   this.modelPR.AssignedToMeUserId = this.selectedUserID;
+  //   this.subs.sink = this.http
+  //     .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPR, {}).subscribe((data) => {
+  //       if (data.IsValid == false) {
+  //         this.confirmDialogService.messageListBox(data.ValidationMessages)
+  //       }
+  //       else {
+  //         this.edited = false;
+  //         this.toastr.success(environment.dataSaved);
+  //         this.router.navigate(['MyDeps']);
+  //       }
+  //     }, (error) => {
+
+  //       this.confirmDialogService.messageBox(environment.APIerror)
+  //     });
+  // }
 
 
 
-  AssignToMe(id: number = 0) {
-
-    this.modelPR = new purchaseRequestHeaderDTO();
-    this.modelPR.PoheaderId = id;
+  AssignToMe() {
     this.confirmDialogService.confirmThis("Are you sure ?", () => {
       this.Save();
     }, function () { });
@@ -190,17 +204,26 @@ export class MyDepartmentsComponent implements OnInit {
 
   getallUsers() {
     this.http.get<any>(`${environment.APIEndpoint}/Admin/GetAllUsers`)
-      .subscribe((data) => { this.selectedUserID = 0; this.userDetaills = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
+      .subscribe((data) => { this.userDetaills = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
   }
 
 
 
   GetTotal() {
     let sum = 0;
-
     this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
-
     return sum;
+  }
 
+  SelectItemToAssign(e, obj: any) {
+    debugger
+    if (e.target.checked) {
+      let o = new purchaseRequestHeaderDTO();
+      o.PoheaderId = obj.PoheaderId;
+      this.modelPRList.push(o);
+    }
+    else{
+      this.modelPRList=this.modelPRList.filter(r=> r.PoheaderId!= obj.PoheaderId);
+    }
   }
 }

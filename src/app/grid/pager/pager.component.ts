@@ -1,10 +1,11 @@
+import { GridOptions } from 'src/app/grid/gridModels/gridOption.model';
+import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
 
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { SearchObject } from '../gridModels/searchObject.model';
 import { GridService } from '../grid-service/grid.service';
-import { Grid } from '../gridModels/grid.model';
-import { GridOptions } from '../gridModels/gridOption.model';
+import { Grid } from '../gridModels/grid.model'; 
 import { Grid2Service } from '../grid-service/grid2.service';
 
 @Component({
@@ -18,6 +19,11 @@ export class PagerComponent implements OnInit {
   gridoption: GridOptions = {};
   gridoption2: GridOptions = {};
 
+  gridoptionList:GridOptions[]=[];
+
+
+  @Input()
+  assosiatedGridIDXXX: string="";
 
 
 
@@ -38,23 +44,40 @@ export class PagerComponent implements OnInit {
 
 
 
-  constructor(private gridService: GridService, private gridService2: Grid2Service) {
+  constructor(private gridService: GridService, private gridService2: Grid2Service,private gridSercie3:Grid3Service) {
 
 
 
   }
 
   ngOnInit() {
-    this.gridService.getGridOptions().subscribe(r => {
+    // this.gridService.getGridOptions().subscribe(r => {
 
-      this.gridoption = r;
+    //   this.gridoption = r;
+    // });
+
+    // this.gridService2.getGridOptions().subscribe(r => {
+
+    //   this.gridoption2 = r;
+    // });
+
+    this.gridSercie3.getGridOptionsXXX().subscribe(r => {
+      if(r!= undefined && r.filter(a=> a.gridID == this.assosiatedGridIDXXX).length>0)
+      {
+
+        this.gridoption =r.filter(a=> a.gridID == this.assosiatedGridIDXXX)[0];
+        this.gridoptionList=r;
+
+
+      }
     });
 
-    this.gridService2.getGridOptions().subscribe(r => {
-       
-      this.gridoption2 = r;
-    });
+  }
 
+  public getCurrent(){
+
+    let obj=this.gridoptionList.filter(r=> r.gridID==this.assosiatedGridIDXXX)[0];
+   return (this.gridoptionList.filter(r=> r.gridID==this.assosiatedGridIDXXX)[0]);
   }
 
 }

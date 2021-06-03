@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-            <app-search  ></app-search>
+            <app-search  [assosiatedGridIDXXX]="this.gridOption.gridID"  ></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
                 <th (click)="this.gridService.OrderByList( 'POHeaderID')">Pono</th>
@@ -46,7 +46,7 @@
               </tbody>
             </table>
             <br />
-            <app-pager></app-pager>
+            <app-pager  [assosiatedGridIDXXX]="this.gridOption.gridID" ></app-pager>
           </div>
 
           <div *ngIf="edited">

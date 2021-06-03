@@ -16,6 +16,7 @@ import { SubSink } from 'subsink';
 import { PoitemComponent } from '../poitem/poitem.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemService } from 'src/app/myShared/services/item.service';
+import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
 
 
 
@@ -31,6 +32,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   edited: boolean = false;
 
   gridOption: GridOptions = {
+    gridID:'prrequestapproval',
     datas: {},
     searchObject: {
       girdId: GridType.PRApprove
@@ -53,7 +55,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     public fileuploadService: FileuploadService,
     private modalService: NgbModal,
     private itemService: ItemService,
-    private gridService :GridService
+    private gridService3 :Grid3Service
   ) {
     this.edited = false;
   }
@@ -70,7 +72,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
       } else {
         this.modelPR.PurchaseRequestDetail.push(r);
       }
- 
+
       this.modelPR.IsApproval=true;
       this.subs.sink = this.http
         .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
@@ -93,7 +95,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
         });
       } else {
         this.edited = false;
-      this.gridService.initGrid(this.gridOption) ;
+      this.gridService3.initGridNew(this.gridOption) ;
       }
     });
   }

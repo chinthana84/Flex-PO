@@ -7,12 +7,12 @@
             <app-search></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th  (click)="this.gridService.OrderByList( 'Id')">PONo</th>
-                <th  (click)="this.gridService.OrderByList( 'DepartmentName')">Department</th>
-                <th  (click)="this.gridService.OrderByList( 'SupplierName')">Supplier</th>
-                <th  (click)="this.gridService.OrderByList( 'ShipTo')">ShipTo</th>
-                <th  (click)="this.gridService.OrderByList( 'Postatus')">PO Status</th>
-                <th  (click)="this.gridService.OrderByList( 'CreateDate')">Date</th>
+                <th (click)="this.gridService.OrderByList( 'Id')">PONo</th>
+                <th (click)="this.gridService.OrderByList( 'DepartmentName')">Department</th>
+                <th (click)="this.gridService.OrderByList( 'SupplierName')">Supplier</th>
+                <th (click)="this.gridService.OrderByList( 'ShipTo')">ShipTo</th>
+                <th (click)="this.gridService.OrderByList( 'Postatus')">PO Status</th>
+                <th (click)="this.gridService.OrderByList( 'CreateDate')">Date</th>
                 <th>
 
                 </th>
@@ -367,24 +367,62 @@
 
 
               </div>
-            </div>
-            <pre>
 
-            </pre>
+              <div class="row" *ngIf="this.prService.IsPaidOption(this.modelPR.PoStatusRefId)">
+                <section class="col-lg-12">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="tab-content p-0">
+                        <div class="row">
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label for="ShiptTo">Paid Option</label>
+                              <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdfaasdf"  [(ngModel)]="this.modelPR.PoStatusRefId">
+                                <ng-option [value]="0" disabled selected>--Select--</ng-option>
+                                <ng-option *ngIf="this.modelPR.PoStatusRefId==67" [value]="67">Pending Payment</ng-option>
+                                <ng-option [value]="69">Paid - Partially</ng-option>
+                                <ng-option [value]="68">Paid - Full</ng-option>
+                              </ng-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+              </div>
+            </div>
+
+
+
 
             <div class="btn-group">
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==this.myEnum.AssigedToMe" (click)="Save();" class="btn btn-primary save_button"> <span
-                  class="fa fa-save"></span> </button>
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe"(click)="Approve()" class="btn btn-warning ">  Approve</button>
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Reject()" class="btn btn-warning ">  Reject</button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==this.myEnum.AssigedToMe" (click)="Save();"
+                class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Approve()"
+                class="btn btn-warning "> Approve</button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Reject()"
+                class="btn btn-warning "> Reject</button>
               <button type="button" (click)="router.navigate(['MyTasks']);" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
 
-                <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.Finance_Approved  "
-                 (click)="RaisePO()" class="btn btn-warning ">  Raise PO</button>
-                 <button type="button"
-                 (click)="POPreview()" class="btn btn-warning ">    PO Preview </button>
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.Finance_Approved  " (click)="RaisePO()"
+                class="btn btn-warning "> Raise PO</button>
+              <button type="button" (click)="POPreview()" class="btn btn-warning "> PO Preview </button>
+
+              <button type="button" class="btn btn-primary save_button" (click)="Paying()" *ngIf="this.prService.IsPaidOption(this.modelPR.PoStatusRefId)">
+                <span class="fa fa-save"></span>
+
+              </button>
+
+              <button type="button" (click)="this.Completed()" class="btn btn-warning "*ngIf="this.prService.IsCompletedVisible(this.modelPR.PoStatusRefId)">Completed PO </button>
             </div>
+
+
+
+
+
+
           </form>
         </div>
       </div>
@@ -400,5 +438,5 @@
 
 
 <ng-template #content let-modal>
-<app-poview></app-poview>>
+  <app-poview></app-poview>>
 </ng-template>

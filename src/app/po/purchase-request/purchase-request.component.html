@@ -3,17 +3,46 @@
     <div class="card">
       <div class="card-body">
         <div class="tab-content p-0">
+          {{this.gridOption.searchObject.postatusid}}
           <div *ngIf="!edited">
-            <app-search [searchID]="100"></app-search>
+            <div class="col-md-12">
+              <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
+                <label class="btn btn-warning active ">
+                  <input type="radio" name="options1asdf" id="option1" (change)="ClickSummary()" value="0"
+                    [(ngModel)]=" this.selectedSummaryID" autocomplete="off" checked> All
+                </label>
+                <label class="btn btn-warning ">
+                  <input type="radio" name="options2asdf" id="option2" (change)="ClickSummary()" value="27"
+                    [(ngModel)]=" this.selectedSummaryID" autocomplete="off"> Pending
+                </label>
+                <label class="btn btn-warning ">
+                  <input type="radio" name="options3asdf" id="option3" (change)="ClickSummary()" value="66"
+                    [(ngModel)]=" this.selectedSummaryID" autocomplete="off"> Drafts
+                </label>
+                <label class="btn btn-warning ">
+                  <input type="radio" name="options4sdf" id="option4" (change)="ClickSummary()" value="27"
+                    [(ngModel)]=" this.selectedSummaryID" autocomplete="off"> Denied
+                </label>
+                <label class="btn btn-warning ">
+                  <input type="radio" name="options5asdf" id="option5" (change)="ClickSummary()" value="27"
+                    [(ngModel)]=" this.selectedSummaryID" autocomplete="off"> Purchased
+                </label>
+                <label class="btn btn-warning ">
+                  <input type="radio" name="options6asdf" id="option6" (change)="ClickSummary()" value="27"
+                    [(ngModel)]=" this.selectedSummaryID" autocomplete="off"> Recevied
+                </label>
+              </div>
+            </div>
+            <app-search [assosiatedGridIDXXX]="this.gridOption.gridID"></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
-                <th (click)="this.gridService.OrderByList( 'ID')">PONo</th>
-                <th (click)="this.gridService.OrderByList('DepartmentName')">Department</th>
-                <th (click)="this.gridService.OrderByList('SupplierName')">Supplier</th>
-                <th (click)="this.gridService.OrderByList('ShipTo')">ShipTo</th>
-                <th (click)="this.gridService.OrderByList('POStatus')">PR Status</th>
-                <th (click)="this.gridService.OrderByList('CreateDate')">Date</th>
-                <th>Assinged User</th>
+                <th (click)="this.gridService3.OrderByList('a', 'ID')">PONo</th>
+                <th (click)="this.gridService3.OrderByList('a','DepartmentName')">Department</th>
+                <th (click)="this.gridService3.OrderByList('a','SupplierName')">Supplier</th>
+                <th (click)="this.gridService3.OrderByList('a','ShipTo')">ShipTo</th>
+                <th (click)="this.gridService3.OrderByList('a','POStatus')">PR Status</th>
+                <th (click)="this.gridService3.OrderByList('a','CreateDate')">Date</th>
+                <th (click)="this.gridService3.OrderByList('a','AssingedUser')">Assinged User</th>
                 <th>
                   <button (click)="Action(null)" class="btn btn-primary ">New Request <span
                       class="fa fa-plus"></span></button>
@@ -42,7 +71,14 @@
                       <button *ngIf="item.PoStatusId == myEnum.PO_Raised_Via_emial"
                         (click)="ViewPO(item.Id,content,$event)" class="btn btn-info  ">View PO
                       </button>
+                      <button *ngIf="this.prService.IsPRCanCancel(item.PoStatusId)" class="btn btn-info  "
+                        (click)="Cancel(item.Id)">Cancel PR
+                      </button>
+                      <button *ngIf="this.prService.IsCanOrderRecevie(item.PoStatusId)" class="btn btn-info  "
+                        (click)="Receving(item.Id)">Order Receive
+                      </button>
                     </div>
+
                   </td>
                 </tr>
                 <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
@@ -50,11 +86,58 @@
                 </tr>
               </tbody>
             </table>
-            <app-pager></app-pager>
+            <app-pager [assosiatedGridIDXXX]="this.gridOption.gridID"></app-pager>
+            <!--  <app-search [assosiatedGridIDXXX]="this.gridOption2.gridID" [searchID]="100"></app-search>
+            <table class="table table-bordered  ">
+              <thead class="thead-light">
+                <th (click)="this.gridService3.OrderByList( 'b','ID')">PONo</th>
+                <th (click)="this.gridService.OrderByList('DepartmentName')">Department</th>
+                <th (click)="this.gridService.OrderByList('SupplierName')">Supplier</th>
+                <th (click)="this.gridService.OrderByList('ShipTo')">ShipTo</th>
+                <th (click)="this.gridService.OrderByList('POStatus')">PR Status</th>
+                <th (click)="this.gridService.OrderByList('CreateDate')">Date</th>
+                <th>Assinged User</th>
+                <th>
+                  <button (click)="Action(null)" class="btn btn-primary ">New Request <span
+                      class="fa fa-plus"></span></button>
+                </th>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of  this.gridOption2?.datas?.pagedItems" class="table-hover">
+                  <td>{{ item.Pono }}</td>
+                  <td>{{ item.DepartmentName }}</td>
+                  <td>{{ item.SupplierName }}</td>
+                  <td>{{ item.ShipTo }}</td>
+                  <td>
+                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
+                  </td>
+                  <td>{{ item.CreateDate }}</td>
+                  <td>{{ item.AssingedUser}}</td>
+                  <td>
+                    <div class="btn-group">
+                      <button *ngIf="item.PoStatusId==27  || item.PoStatusId==66" (click)="Action(item,false)"
+                        class="btn btn-primary"> <span class="fa fa-edit"></span></button>
+                      <button *ngIf="item.PoStatusId!=27 || item.PoStatusId!=66" (click)="copyPR(item.Id)"
+                        class="btn btn-warning  ">Copy PR
+                      </button>
+                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
+                      </button>
+                      <button *ngIf="item.PoStatusId == myEnum.PO_Raised_Via_emial"
+                        (click)="ViewPO(item.Id,content,$event)" class="btn btn-info  ">View PO
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr *ngIf="this.gridOption2.datas.pagedItems==undefined || this.gridOption2.datas.pagedItems==0">
+                  <td class="datanotfound" colspan="10">Data not found</td>
+                </tr>
+              </tbody>
+            </table>
+            <app-pager [assosiatedGridIDXXX]="this.gridOption2.gridID"></app-pager> -->
           </div>
 
-          <div style="display: none;" *ngIf="!edited">
-            <!-- <app-search [searchID]="100"  #test (searchClicked)="setPage($event)" [search]="this.gridOption.searchObject"></app-search> -->
+          <!-- <div style="display: none;" *ngIf="!edited">
+
             <app-search [serviceID]="2"></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
@@ -71,7 +154,6 @@
               </thead>
               <tbody>
                 <tr *ngFor="let item of  this.gridOption2?.datas?.pagedItems" class="table-hover">
-                  <!-- <tr *ngFor="let item of gridOption.datas.pagedItems" class="table-hover"> -->
                   <td>{{ item.Pono }}</td>
                   <td>{{ item.DepartmentName }}</td>
                   <td>{{ item.SupplierName }}</td>
@@ -99,7 +181,7 @@
               </tbody>
             </table>
             <app-pager [serviceID]="2"></app-pager>
-          </div>
+          </div> -->
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
             <ul class="nav nav-tabs" role="tablist">
@@ -319,6 +401,23 @@
                                       type="button" (click)="deleteItem(item)" class="btn btn-danger ">
                                       <span class="fa fa-trash"></span></button>
                                   </div>
+                                  <div  *ngIf="this.prService.IsCanOrderRecevie(this.modelPR.PoStatusRefId)"  class="form-group">
+
+                                    <input class="form-control" id="poitemQuantity{{i}}" name="poitemQuantity{{i}}"
+                                      placeholder="Quantity" [(ngModel)]="item.ReceviedQty" numeric decimals="2" />
+                                    <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdfa"
+                                      [(ngModel)]="item.PoOrderReceivedRefId">
+                                      <ng-option [value]="0" disabled selected>--Select--</ng-option>
+                                      <ng-option [value]="63">Order Partially Received</ng-option>
+                                      <ng-option [value]="64">Order Receievd in Full</ng-option>
+
+                                    </ng-select>
+                                     <button type="button" class="btn btn-primary save_button" (click)="saveRecevedItems(item)">
+                                    <span class="fa fa-save"></span>
+
+                                  </button>
+                                  </div>
+
 
 
                                 </td>

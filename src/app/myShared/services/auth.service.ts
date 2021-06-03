@@ -16,14 +16,23 @@ export class AuthService {
   private readonly REFRESH_TOKEN = 'refreshTokenFlex';
   private loggedUser: string;
   //todoBearerToken  refreshToken
+
   constructor(private http: HttpClient,public jwtHelper :JwtHelperService) {}
 
   isLoggedIn() {
     return !!this.getJwtToken();
   }
 
+
+  public DecodeJWT(){
+    debugger
+    var givenName = this.jwtHelper.decodeToken(this.getJwtToken());
+    console.log(givenName)
+    return givenName;
+  }
+
   public getUserName(){
-     
+
     return localStorage.getItem("usernameFlex");
   }
 
