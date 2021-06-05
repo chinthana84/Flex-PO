@@ -2,7 +2,7 @@
   <section class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <div class="tab-content p-0">
+        <div *ngIf="!ispo" class="tab-content p-0">
           <div *ngIf="!edited">
             <app-search [assosiatedGridIDXXX]="this.gridOption.gridID"></app-search>
             <table class="table table-bordered  ">
@@ -377,9 +377,11 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label for="ShiptTo">Paid Option</label>
-                              <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdfaasdf"  [(ngModel)]="this.modelPR.PoStatusRefId">
+                              <ng-select placeholder="Select item" [clearable]="false" name="DepartmentIdfaasdf"
+                                [(ngModel)]="this.modelPR.PoStatusRefId">
                                 <ng-option [value]="0" disabled selected>--Select--</ng-option>
-                                <ng-option *ngIf="this.modelPR.PoStatusRefId==67" [value]="67">Pending Payment</ng-option>
+                                <ng-option *ngIf="this.modelPR.PoStatusRefId==67" [value]="67">Pending Payment
+                                </ng-option>
                                 <ng-option [value]="69">Paid - Partially</ng-option>
                                 <ng-option [value]="68">Paid - Full</ng-option>
                               </ng-select>
@@ -397,11 +399,11 @@
 
 
             <div class="btn-group">
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==this.myEnum.AssigedToMe" (click)="Save();"
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==this.myEnum.LockedbyFinance" (click)="Save();"
                 class="btn btn-primary save_button"> <span class="fa fa-save"></span> </button>
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Approve()"
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.LockedbyFinance" (click)="Approve()"
                 class="btn btn-warning "> Approve</button>
-              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Reject()"
+              <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.LockedbyFinance" (click)="Reject()"
                 class="btn btn-warning "> Reject</button>
 
 
@@ -409,14 +411,119 @@
                 class="btn btn-warning "> Raise PO</button>
               <button type="button" (click)="POPreview()" class="btn btn-warning "> PO Preview </button>
 
-              <button type="button" class="btn btn-primary save_button" (click)="Paying()" *ngIf="this.prService.IsPaidOption(this.modelPR.PoStatusRefId)">Paying</button>
+              <button type="button" class="btn btn-primary save_button" (click)="Paying()"
+                *ngIf="this.prService.IsPaidOption(this.modelPR.PoStatusRefId)">Paying</button>
 
-              <button type="button" (click)="this.Completed()" class="btn btn-warning "*ngIf="this.prService.IsCompletedVisible(this.modelPR.PoStatusRefId)">Completed PO </button>
+              <button type="button" (click)="this.Completed()" class="btn btn-warning "
+                *ngIf="this.prService.IsCompletedVisible(this.modelPR.PoStatusRefId)">Completed PO </button>
               <button type="button" (click)="router.navigate(['MyTasks']);" class="btn btn-primary back_button">
                 <span class="fa fa-arrow-left"></span> </button>
             </div>
           </form>
         </div>
+
+
+
+        <div *ngIf="ispo">
+
+          <h1>Email preview and send</h1>
+          <nav>
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+              <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-email" role="tab"
+                aria-controls="nav-home" aria-selected="true">Email</a>
+              <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-po" role="tab"
+                aria-controls="nav-profile" aria-selected="false">PO</a>
+              <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-pr" role="tab"
+                aria-controls="nav-contact" aria-selected="false">PR</a>
+              <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-other" role="tab"
+                aria-controls="nav-contact" aria-selected="false">Other</a>
+            </div>
+          </nav>
+          <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-email" role="tabpanel" aria-labelledby="nav-home-tab">
+
+
+              <br />
+              <div class="row">
+                <div class="col-md-12   bg-white">
+
+                  <div class="row">
+
+                    <div class="col-md-12">
+                      <div class="row m-0">
+                        <div class="col-lg-12 bg-dark text-white">
+
+                        </div>
+                        <div class="col-lg-12 p-0 ">
+
+                            <div class="form-group">
+                              <input   [(ngModel)]="this.po.Recipents"  type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="To">
+                              <input  [(ngModel)]="this.po.Subject"  type="email" class="form-control" id="exampleInputEmail1"
+                                aria-describedby="emailHelp" placeholder="Subject">
+                              <textarea [(ngModel)]="this.po.Body" class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
+                            </div>
+
+                        </div>
+                        <div class="co-lg-12 message-box-last-content p-2">
+                          <a href="#" (click)="createPOEmail()" class="btn btn-primary btn-sm pl-3 pr-3">SEND</a>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+            </div>
+            <div class="tab-pane fade" id="nav-po" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+
+            </div>
+            <div class="tab-pane fade" id="nav-pr" role="tabpanel" aria-labelledby="nav-contact-tab">
+              <table class="table table-striped">
+                <thead>
+                  <th>Description</th>
+                  <th>Uploader</th>
+                  <th>Download</th>
+                  <th>
+                    <button type="button" class="btn btn-primary" data-title="Edit" data-toggle="modal"
+                      (click)="AddPORowAttachemtns()" data-target="#edit">
+                      <span class="fa fa-plus"></span>
+                    </button>
+                  </th>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of this.po.Podetails let index = index" class="table-hover mt-0">
+                    <td>
+                      <input [(ngModel)]="i.Description" id="TherNoteTitleaaaa{{index}}" name="TherNoteTitle{{index}}"
+                        type="text" class="form-control" placeholder="Description" />
+                    </td>
+                    <td>
+                      <input name="fileuploaderaaaa{{index}}" type="file" (change)="this.addFilePO($event,i)" />
+                    </td>
+                    <td>
+                      <button *ngIf="i.UniqueFileName.length >0" type="button"
+                        (click)="this.fileuploadService.downloadFile(i.UniqueFileName)" class="btn btn-warning">Download
+                      </button>
+                    </td>
+                    <td>
+
+                    </td>
+                  </tr>
+                  <tr *ngIf="this.modelPR.PurchaseRequestAttachments?.length == 0">
+                    <td class="datanotfound" colspan="4">Data not found</td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+            <div class="tab-pane fade" id="nav-other" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
+          </div>
+
+        </div>
+
       </div>
     </div>
   </section>

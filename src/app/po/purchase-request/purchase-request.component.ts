@@ -146,7 +146,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         this.EditPR(params.id);
       } else {
         this.edited = false;
-      //  this.gridService.initGrid(this.gridOption) ;
+        this.gridService3.initGridNew(this.gridOption);
         //this.gridService2.initGrid(this.gridOption2) ;
 
 

@@ -10,7 +10,7 @@ import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from '
 import { GridOptions, GridType, PO_Status } from 'src/app/grid/gridModels/gridOption.model';
 import { SearchObject } from 'src/app/grid/gridModels/searchObject.model';
 import { TypeHeadSearchDTO } from 'src/app/grid/gridModels/typeheadSearch.model';
-import { purchaseRequestHeaderDTO, PurchaseRequestDetailDTO, PurchaseRequestAttachmentsDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
+import { purchaseRequestHeaderDTO, PurchaseRequestDetailDTO, PurchaseRequestAttachmentsDTO,  PoDTO, PodetailsDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { SupplierDTO, RefTableDTO } from 'src/app/models/refTable.model';
 import { ConfirmDialogService } from 'src/app/myShared/confirm-dialog/confirm-dialog.service';
 import { CommonService } from 'src/app/myShared/services/common.service';
@@ -46,6 +46,9 @@ export class MyTasksComponent implements OnInit {
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
   public myEnum = PO_Status;
+  ispo:boolean=false;
+
+  po:PoDTO={};
 
   gridOption: GridOptions = {
     gridID: "MyWorkMyTask",
@@ -226,7 +229,7 @@ export class MyTasksComponent implements OnInit {
   createPOEmail() {
    // this.modelPR.PoStatusRefId = this.myEnum.PO_Raised_Via_emial;
     this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePOWithEmail`, this.modelPR, {}).subscribe((data) => {
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePOWithEmail`, this.po, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
@@ -297,11 +300,35 @@ export class MyTasksComponent implements OnInit {
     return sum;
   }
 
+  AddPORowAttachemtns(){
+    let obj = new PodetailsDTO();
+    this.po.Podetails.push(obj);
+  }
+
+  addFilePO(event, i: PodetailsDTO): void {
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+      let formData: FormData = new FormData();
+      formData.append('uploadFile', file, file.name);
+      this.fileuploadService
+        .upload(file).subscribe(res => { i.UniqueFileName = String(res); });
+    }
+  }
+
   RaisePO() {
     let self = this;
     this.confirmDialogService.confirmThis("Do you want to raise a PO?", () => {
       this.confirmDialogService.confirmThis("Send the PO via email?", () => {
-        self.createPOEmail();
+        //self.createPOEmail();
+        this.ispo=true;
+
+        this.http.get<PoDTO>(`${environment.APIEndpoint}/PurchaseRequest/GetAllAttachmentsByPR_ID/${this.modelPR.PoheaderId}`)
+        .subscribe(r=>{
+          debugger
+          self.po=r;
+        });
+
       }, function () {
         self.createPO();
       });
@@ -329,7 +356,6 @@ export class MyTasksComponent implements OnInit {
   }
 
   Completed(){
-
     this.confirmDialogService.confirmThis("Do you want to complete this PO?", () => {
       this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/Completed`, this.modelPR, {}).subscribe((data) => {

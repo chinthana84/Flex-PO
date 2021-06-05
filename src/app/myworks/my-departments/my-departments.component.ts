@@ -54,7 +54,7 @@ export class MyDepartmentsComponent implements OnInit {
     gridID: "MyWorksMydepartment",
     datas: {},
     searchObject: {
-      girdId: GridType.AssignedToME
+      girdId: GridType.LockedbyFinance
       , SavedDBColumn: "SupplierID"
       , defaultSortColumnName: "PONo",
       pageNo: 1,
