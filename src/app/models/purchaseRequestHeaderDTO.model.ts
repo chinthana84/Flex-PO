@@ -65,6 +65,7 @@ export class PurchaseRequestDetailDTO
 
     public   PrdetailsAttachments?:PrdetailsAttachmentsDTO[]=[];
 
+    public    PoOrderReceivedRef ?:RefTableDTO={}
     public   PoOrderReceivedRefId ?: number=0;
     public  ReceviedQty ?: number=0;
 }

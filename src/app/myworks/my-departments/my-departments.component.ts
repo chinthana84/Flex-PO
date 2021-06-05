@@ -51,7 +51,7 @@ export class MyDepartmentsComponent implements OnInit {
   selectedUserID: number = 0;
 
   gridOption: GridOptions = {
-    gridID: "Mytasks",
+    gridID: "MyWorksMydepartment",
     datas: {},
     searchObject: {
       girdId: GridType.AssignedToME

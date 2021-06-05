@@ -11,7 +11,7 @@ export class GridOptions{
     GridClassInstance ?:any
     searchID?:number=1
 
-  
+
   }
 
 export enum GridType {
@@ -31,7 +31,7 @@ export enum PO_Status
 {
     PR_Raised = 27,
     Rejected = 46,
-    AssigedToMe = 51,
+    LockedbyFinance = 51,
     CreatePO = 52,
     PO_Raised_Via_emial=72,
     Cancelled = 62,

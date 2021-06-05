@@ -177,6 +177,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
+      console.log(this.modelPR )
       this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
         this.officers = r;
 
@@ -350,7 +351,6 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
   }
 
   copyPR(id: number) {
-
     this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     this.EditPR(id, true);
   }
@@ -361,18 +361,16 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     return sum;
   }
 
-  ViewPO(id:number,content,$event){
+  ViewPO(id:number,$event){
     this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPoEmail/${id}`).subscribe(r => {
       const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
       modalRef.componentInstance.fromParent = r; });
   }
 
   ClickSummary(){
-
     this.gridOption.searchObject.postatusid=this.selectedSummaryID.toString()
     this.gridService3.initGridNew(this.gridOption);
   }
-
 
   Cancel(id:number) {
     debugger
@@ -391,14 +389,19 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         }
       }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
     }, function () { });
-
-
   }
 
   Receving(id:number) {
-    this.router.navigate(["/request/edit"], { queryParams: { id: id } }).then(r=>{
-alert('asdf');
-    });
+    this.router.navigate(["/request/edit"], { queryParams: { id: id } }).then(r=>{});
+  }
+
+  OrderReceveDrodown(item:any){
+    if(item.PoOrderReceivedRefId== this.myEnum.Order_Receievd_in_Full){
+      item.ReceviedQty=item.Qty;
+    }
+    else{
+      item.ReceviedQty=0;
+    }
   }
 
   saveRecevedItems(det:PurchaseRequestDetailDTO){
@@ -413,8 +416,6 @@ alert('asdf');
       }
     }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
   }
-
-
 
   ngOnDestroy() {
     this.subs.unsubscribe();

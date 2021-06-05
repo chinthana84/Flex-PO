@@ -21,6 +21,7 @@ import { PoitemComponent } from 'src/app/po/poitem/poitem.component';
 import { environment } from 'src/environments/environment';
 import { SubSink } from 'subsink';
 import { PoviewComponent } from 'src/app/po/poview/poview.component';
+import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
 
 @Component({
   selector: 'app-my-tasks',
@@ -47,6 +48,7 @@ export class MyTasksComponent implements OnInit {
   public myEnum = PO_Status;
 
   gridOption: GridOptions = {
+    gridID: "MyWorkMyTask",
     datas: {},
     searchObject: {
       girdId: GridType.MyTasks
@@ -71,7 +73,7 @@ export class MyTasksComponent implements OnInit {
     private itemService: ItemService,
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
-    public gridService: GridService,
+    public gridService: Grid3Service,
     public prService:PrService
   ) { this.edited = false; }
 
@@ -92,7 +94,7 @@ export class MyTasksComponent implements OnInit {
       if (params.id > 0) {
         this.EditPR(params.id);
       } else {
-        this.gridService.initGrid(this.gridOption);
+        this.gridService.initGridNew(this.gridOption);
         this.edited = false;
       }
     });
@@ -191,7 +193,7 @@ export class MyTasksComponent implements OnInit {
   }
 
   Save() {
-    this.modelPR.PoStatusRefId = this.myEnum.AssigedToMe; //assinged to me to small changes to request
+    this.modelPR.PoStatusRefId = this.myEnum.LockedbyFinance; //assinged to me to small changes to request
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SaveByFinanace`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
@@ -200,7 +202,7 @@ export class MyTasksComponent implements OnInit {
         else {
           this.edited = false;
           this.router.navigate(['MyTasks']);
-          this.gridService.initGrid(this.gridOption);
+          this.gridService.initGridNew(this.gridOption);
           this.toastr.success(environment.dataSaved);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
@@ -216,7 +218,7 @@ export class MyTasksComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['MyTasks']);
-          this.gridService.initGrid(this.gridOption);
+          this.gridService.initGridNew(this.gridOption);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
@@ -231,7 +233,7 @@ export class MyTasksComponent implements OnInit {
         else {
           this.toastr.success(environment.dataSaved);
           this.router.navigate(['MyTasks']);
-          this.gridService.initGrid(this.gridOption);
+          this.gridService.initGridNew(this.gridOption);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }

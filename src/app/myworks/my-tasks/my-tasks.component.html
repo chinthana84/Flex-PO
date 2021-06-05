@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-            <app-search></app-search>
+            <app-search [assosiatedGridIDXXX]="this.gridOption.gridID"></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
                 <th (click)="this.gridService.OrderByList( 'Id')">PONo</th>
@@ -42,7 +42,7 @@
                 </tr>
               </tbody>
             </table>
-            <app-pager></app-pager>
+            <app-pager [assosiatedGridIDXXX]="this.gridOption.gridID"></app-pager>
           </div>
 
           <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">
@@ -403,26 +403,18 @@
                 class="btn btn-warning "> Approve</button>
               <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.AssigedToMe" (click)="Reject()"
                 class="btn btn-warning "> Reject</button>
-              <button type="button" (click)="router.navigate(['MyTasks']);" class="btn btn-primary back_button">
-                <span class="fa fa-arrow-left"></span> </button>
+
 
               <button type="button" *ngIf="this.modelPR.PoStatusRefId==myEnum.Finance_Approved  " (click)="RaisePO()"
                 class="btn btn-warning "> Raise PO</button>
               <button type="button" (click)="POPreview()" class="btn btn-warning "> PO Preview </button>
 
-              <button type="button" class="btn btn-primary save_button" (click)="Paying()" *ngIf="this.prService.IsPaidOption(this.modelPR.PoStatusRefId)">
-                <span class="fa fa-save"></span>
-
-              </button>
+              <button type="button" class="btn btn-primary save_button" (click)="Paying()" *ngIf="this.prService.IsPaidOption(this.modelPR.PoStatusRefId)">Paying</button>
 
               <button type="button" (click)="this.Completed()" class="btn btn-warning "*ngIf="this.prService.IsCompletedVisible(this.modelPR.PoStatusRefId)">Completed PO </button>
+              <button type="button" (click)="router.navigate(['MyTasks']);" class="btn btn-primary back_button">
+                <span class="fa fa-arrow-left"></span> </button>
             </div>
-
-
-
-
-
-
           </form>
         </div>
       </div>

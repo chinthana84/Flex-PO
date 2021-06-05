@@ -41,5 +41,14 @@ export class PrService {
     return false;
   }
 
+  IsCanViewPO(statusID:number){
+    debugger
+    let status=  [52,63,64,67,68,69,70,72];
+    if ( status.filter(r=> r == statusID).length >0){
+      return true;
+    }
+    return false;
+  }
+
 
 }
