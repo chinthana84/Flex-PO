@@ -17,6 +17,7 @@ export class purchaseRequestHeaderDTO {
   public ApprovalRemarks?: string = "";
 
   public AssignedToMeUserId?: number = 0;
+  public  AssignedUpdatedDate?:Date
 
   public PoOrderRefId?: number = 0;
 

@@ -26,6 +26,7 @@ import { FileuploadService } from 'src/app/myShared/services/fileupload.service'
 import { PoitemComponent } from '../poitem/poitem.component';
 import { ApprovalOfficersDTO } from 'src/app/models/secutiry.model';
 import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
+import { POViewNewComponent } from '../poview-new/poview-new.component';
 
 
 @Component({
@@ -33,7 +34,7 @@ import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
   templateUrl: './purchase-request.component.html',
   styleUrls: ['./purchase-request.component.css']
 })
-export class PurchaseRequestComponent implements OnInit,OnDestroy  {
+export class PurchaseRequestComponent implements OnInit, OnDestroy {
 
 
   public myEnum = PO_Status;
@@ -49,18 +50,20 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
 
   mode: string = "";
 
+  setReadOnly: Boolean = false;
+
   model: any;
   searching = false;
   searchFailed = false;
   formatter = (x: TypeHeadSearchDTO) => x.Name
   formatterx = (x: TypeHeadSearchDTO) => x.Name;
 
-  SelectedPRID:number=0;
+  SelectedPRID: number = 0;
 
-  selectedSummaryID:number=0;
+  selectedSummaryID: number = 0;
 
   gridOption: GridOptions = {
-    gridID:"a",
+    gridID: "a",
 
     datas: {},
     searchObject: {
@@ -75,12 +78,12 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         , { colName: "ShipTo", colText: 'ShipTo' }
         , { colName: "POStatus", colText: 'PRStatus' }
       ]
-      ,postatusid:"0"
+      , postatusid: "0"
     }
   };
 
   gridOption2: GridOptions = {
-    gridID:"b",
+    gridID: "b",
     datas: {},
     searchObject: {
       girdId: GridType.PR
@@ -111,16 +114,23 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
     public gridService: GridService,
-    public gridService2 :Grid2Service,
-    public gridService3 :Grid3Service,
-    public prService :PrService
+    public gridService2: Grid2Service,
+    public gridService3: Grid3Service,
+    public prService: PrService
   ) {
     this.edited = false;
 
   }
 
   ngOnInit(): void {
-      this.subs.sink = this.itemService.itemAdded().subscribe(r => {
+    debugger
+
+
+
+    this.subs.sink = this.itemService.itemAdded().subscribe(r => {
+
+
+
 
       if (this.modelPR.PurchaseRequestDetail == undefined) {
         this.modelPR.PurchaseRequestDetail = [];
@@ -140,6 +150,8 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     this.gridService3.initGridNew(this.gridOption2);
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
+
+
       if (params.id == 0) {
         this.NewPR();
       } else if (params.id > 0) {
@@ -156,7 +168,7 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
 
   DepaertmentChange() {
     this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
-       this.officers = r;
+      this.officers = r;
 
     });
   }
@@ -177,8 +189,8 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
 
-      console.log(this.modelPR )
-      this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
+
+           this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
         this.officers = r;
 
       });
@@ -189,10 +201,13 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         this.modelPR.Pono = "";
         this.modelPR.PoStatusRefId = 0;
         this.modelPR.PoStatusRef = null;
+        this.modelPR.AssignedToMeUserId = 0;
         this.modelPR.PurchaseOrderApproval = [];
         this.modelPR.PurchaseRequestDetail.forEach(r => {
           r.PoheaderId = 0;
           r.PodetId = 0;
+          r.ReceviedQty = 0;
+          r.PoOrderReceivedRefId = 0
           r.guid = this.commonService.newGuid();
         });
 
@@ -205,9 +220,10 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
           r.PrdetailsAttachments.forEach(s => {
             s.PodetId = 0;
             s.PrdetAttachmentId = 0;
-
           })
         });
+
+
       }
 
     }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
@@ -220,11 +236,23 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     this.model = new TypeHeadSearchDTO();
     this.officers = [[]];
 
+
     this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
       .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
     this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
       r => { this.modelShiptTo = r; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+  }
+
+
+  SetReadOnlyFuction() {
+    debugger
+    if (this.modelPR.PoStatusRefId == undefined || this.modelPR.PoStatusRefId == 0 || this.modelPR.PoStatusRefId == 27 || this.modelPR.PoStatusRefId == 66) {
+     return false;
+    }
+    else {
+      return true;
+    }
   }
 
   ViewOnly(Id: number) {
@@ -286,8 +314,8 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     }, function () { });
   }
 
-  IsShowSave(){
-    if(this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66){
+  IsShowSave() {
+    if (this.modelPR.PoStatusRefId == 27 || this.modelPR.PoStatusRefId == 0 || this.modelPR.PoStatusRefId == 66) {
       return true;
     }
     return false;
@@ -303,9 +331,9 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
         }
         else {
           this.gridService3.initGridNew(this.gridOption)
-          this.edited=false;
+          this.edited = false;
           this.router.navigate(['request']);
-          this.gridService.initGrid(this.gridOption) ;
+          this.gridService.initGrid(this.gridOption);
           this.toastr.success(environment.dataSaved);
         }
       }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
@@ -320,9 +348,9 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
           this.modelPR.PoStatusRefId = 0;
         }
         else {
-          this.edited=false;
+          this.edited = false;
           this.router.navigate(['request']);
-          this.gridService.initGrid(this.gridOption) ;
+          this.gridService.initGrid(this.gridOption);
           this.toastr.success(environment.dataSaved);
         }
       }, (error) => { this.modelPR.PoStatusRefId = 0; this.confirmDialogService.messageBox(environment.APIerror) });
@@ -361,60 +389,66 @@ export class PurchaseRequestComponent implements OnInit,OnDestroy  {
     return sum;
   }
 
-  ViewPO(id:number,$event){
-    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPoEmail/${id}`).subscribe(r => {
-      const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
-      modalRef.componentInstance.fromParent = r; });
+  ViewPO(id: number, $event) {
+    // this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPoEmail/${id}`).subscribe(r => {
+    //   const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
+    //   modalRef.componentInstance.fromParent = r; });
+
+    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/ViewPOByPrID/${this.modelPR.PoheaderId}`).subscribe(r => {
+      const modalRef = this.modalService.open(POViewNewComponent, { size: 'xl' });
+      modalRef.componentInstance.poFROMPARANT = r;
+    });
   }
 
-  ClickSummary(){
-    this.gridOption.searchObject.postatusid=this.selectedSummaryID.toString()
+  ClickSummary() {
+    this.gridOption.searchObject.postatusid = this.selectedSummaryID.toString()
     this.gridService3.initGridNew(this.gridOption);
   }
 
-  Cancel(id:number) {
+  Cancel(id: number) {
     debugger
     this.confirmDialogService.confirmThis("Are you sure to Cancel?", () => {
       debugger
-      this.modelPR=new purchaseRequestHeaderDTO();
-      this.modelPR.PoheaderId=id;
+      this.modelPR = new purchaseRequestHeaderDTO();
+      this.modelPR.PoheaderId = id;
       this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/Cancel`, this.modelPR, {}).subscribe((data) => {
+        .post<any>(`${environment.APIEndpoint}/PurchaseRequest/Cancel`, this.modelPR, {}).subscribe((data) => {
+          if (data.IsValid == false) {
+            this.confirmDialogService.messageListBox(data.ValidationMessages)
+          }
+          else {
+            this.toastr.success(environment.dataSaved);
+            this.router.navigate(['request']);
+          }
+        }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+    }, function () { });
+  }
+
+  Receving(id: number) {
+    this.router.navigate(["/request/edit"], { queryParams: { id: id } }).then(r => { });
+  }
+
+  OrderReceveDrodown(item: any) {
+    if (item.PoOrderReceivedRefId == this.myEnum.Order_Receievd_in_Full) {
+      item.ReceviedQty = item.Qty;
+    }
+    else {
+      item.ReceviedQty = 0;
+    }
+  }
+
+  saveRecevedItems(det: PurchaseRequestDetailDTO) {
+    this.subs.sink = this.http
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/RecevingOrderItem`, det, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
         else {
           this.toastr.success(environment.dataSaved);
-          this.router.navigate(['request']);
+          if (data.SavedID > 0) { this.router.navigate(['request']); }
+          // this.router.navigate(['request']);
         }
-      }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
-    }, function () { });
-  }
-
-  Receving(id:number) {
-    this.router.navigate(["/request/edit"], { queryParams: { id: id } }).then(r=>{});
-  }
-
-  OrderReceveDrodown(item:any){
-    if(item.PoOrderReceivedRefId== this.myEnum.Order_Receievd_in_Full){
-      item.ReceviedQty=item.Qty;
-    }
-    else{
-      item.ReceviedQty=0;
-    }
-  }
-
-  saveRecevedItems(det:PurchaseRequestDetailDTO){
-    this.subs.sink = this.http
-    .post<any>(`${environment.APIEndpoint}/PurchaseRequest/RecevingOrderItem`, det, {}).subscribe((data) => {
-      if (data.IsValid == false) {
-        this.confirmDialogService.messageListBox(data.ValidationMessages)
-      }
-      else {
-        this.toastr.success(environment.dataSaved);
-        this.router.navigate(['request']);
-      }
-    }, (error) => {this.confirmDialogService.messageBox(environment.APIerror)});
+      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
   ngOnDestroy() {

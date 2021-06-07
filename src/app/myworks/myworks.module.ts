@@ -1,3 +1,5 @@
+import { POViewNewComponent } from './../po/poview-new/poview-new.component';
+import { PoModule } from './../po/po.module';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,7 +32,8 @@ const routes: Routes = [
     NgSelectModule,
     GridModule,
     MySharedModule,
-    NgbModule
+    NgbModule,
+    PoModule
   ]
 })
 export class MyworksModule { }

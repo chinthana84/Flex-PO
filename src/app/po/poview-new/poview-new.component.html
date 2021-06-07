@@ -1,0 +1,86 @@
+<h1>PO Email Information</h1>
+<nav>
+  <div class="nav nav-tabs" id="nav-tab" role="tablist">
+    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-email" role="tab"
+      aria-controls="nav-home" aria-selected="true">Email</a>
+    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-pr" role="tab"
+      aria-controls="nav-contact" aria-selected="false">PR</a>
+
+  </div>
+</nav>
+<div class="tab-content" id="nav-tabContent">
+  <div class="tab-pane fade show active" id="nav-email" role="tabpanel" aria-labelledby="nav-home-tab">
+
+
+    <br />
+    <div class="row m-2">
+
+
+          <div class="col-md-12">
+            <div class="row">
+                   <div class="col-md-12 ">
+
+                <div class="form-group">
+                  <input [(ngModel)]="this.poFROMPARANT.Recipents" type="email" class="form-control"
+                    id="exampleInputEmail1asdfasf" name="asdfasdf asdf asdfa" aria-describedby="emailHelp"
+                    placeholder="To">
+                  <input [(ngModel)]="this.poFROMPARANT.Subject" type="email" class="form-control"
+                    id="exampleInputEmail1" name="xe0e" aria-describedby="emailHelp" placeholder="Subject">
+                  <textarea [(ngModel)]="this.poFROMPARANT.Body" class="form-control" id="exampleFormControlTextarea1"
+                    rows="6" name="88jd"></textarea>
+                </div>
+
+              </div>
+              <div *ngIf="this.YourReadOnly" class="col-md-12">
+                <button type="button" (click)="createPOEmail()" class="btn btn-primary">SEND</button>
+
+              </div>
+            </div>
+          </div>
+
+
+    </div>
+
+
+  </div>
+
+  <div class="tab-pane fade" id="nav-pr" role="tabpanel" aria-labelledby="nav-contact-tab">
+    <table class="table table-striped">
+      <thead>
+        <th>Description</th>
+        <th>Uploader</th>
+        <th>Download</th>
+        <th>
+          <button type="button" class="btn btn-primary" data-title="Edit" data-toggle="modal" *ngIf="this.YourReadOnly"
+            (click)="AddPORowAttachemtns()" data-target="#edit">
+            <span class="fa fa-plus"></span>
+          </button>
+        </th>
+      </thead>
+      <tbody>
+        <tr *ngFor="let i of this.poFROMPARANT.Podetails let index = index" class="table-hover mt-0">
+          <td>
+            <input [(ngModel)]="i.Description" id="TherNoteTitleaaaa{{index}}" name="TherNoteTitle{{index}}" type="text"
+              class="form-control" placeholder="Description" />
+          </td>
+          <td>
+            <input name="fileuploaderaaaa{{index}}" type="file" (change)="this.addFilePO($event,i)" />
+          </td>
+          <td>
+            <button *ngIf="i.UniqueFileName.length >0" type="button"
+              (click)="this.fileuploadService.downloadFile(i.UniqueFileName)" class="btn btn-warning">Download
+            </button>
+          </td>
+          <td>
+
+          </td>
+        </tr>
+        <tr *ngIf="this.poFROMPARANT.Podetails ?.length == 0">
+          <td class="datanotfound" colspan="4">Data not found</td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

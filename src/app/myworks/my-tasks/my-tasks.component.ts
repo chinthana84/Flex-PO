@@ -1,3 +1,4 @@
+import { POViewNewComponent } from './../../po/poview-new/poview-new.component';
 import { PrService } from './../../myShared/services/pr.service';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { HttpClient } from '@angular/common/http';
@@ -49,6 +50,7 @@ export class MyTasksComponent implements OnInit {
   ispo:boolean=false;
 
   po:PoDTO={};
+  isEditPR:boolean=false;
 
   gridOption: GridOptions = {
     gridID: "MyWorkMyTask",
@@ -103,10 +105,8 @@ export class MyTasksComponent implements OnInit {
     });
   }
 
-  EditPR(id: number, isCopy: Boolean = false) {
+  EditPR(id: number) {
     this.edited = true;
-    this.mode = "Edit";
-
     let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
     let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
     let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + id);
@@ -117,34 +117,16 @@ export class MyTasksComponent implements OnInit {
       this.modelSupplier = data[2].Supplier;
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
-
-      if (isCopy) {
-        this.mode = "Copy PR";
-        this.modelPR.PoheaderId = 0;
-        this.modelPR.Pono = "";
-        this.modelPR.PoStatusRefId = 0;
-        this.modelPR.PoStatusRef = null;
-        this.modelPR.PurchaseOrderApproval = [];
-        this.modelPR.PurchaseRequestDetail.forEach(r => {
-          r.PoheaderId = 0;
-          r.PodetId = 0;
-          r.guid = this.commonService.newGuid();
-        });
-
-        this.modelPR.PurchaseRequestAttachments.forEach(r => {
-          r.PoheaderId = 0;
-          r.Id = 0;
-        });
-      }
     }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  ViewOnly(Id: number) {
-    this.router.navigate(["/MyTasks/edit"], { queryParams: { id: Id } });
-    this.EditPR(Id, false);
-  }
+  // ViewOnly(Id: number) {
+  //   this.router.navigate(["/MyTasks/edit"], { queryParams: { id: Id } });
+  //   this.EditPR(Id, false);
+  // }
 
-  Action(item: any) {
+  Action(item: any,isEdit:boolean) {
+    this.isEditPR=isEdit;
     if (item == undefined) {
       this.router.navigate(["/MyTasks/edit"], { queryParams: { id: 0 } });
     } else {
@@ -196,9 +178,9 @@ export class MyTasksComponent implements OnInit {
   }
 
   Save() {
-    this.modelPR.PoStatusRefId = this.myEnum.LockedbyFinance; //assinged to me to small changes to request
+   // this.modelPR.PoStatusRefId = this.myEnum.LockedbyFinance; //assinged to me to small changes to request
     this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SaveByFinanace`, this.modelPR, {}).subscribe((data) => {
+      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/SavePurchaseRequest`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
           this.confirmDialogService.messageListBox(data.ValidationMessages)
         }
@@ -212,7 +194,6 @@ export class MyTasksComponent implements OnInit {
   }
 
   createPO() {
-   // this.modelPR.PoStatusRefId = this.myEnum.CreatePO;
     this.subs.sink = this.http
       .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePO`, this.modelPR, {}).subscribe((data) => {
         if (data.IsValid == false) {
@@ -226,20 +207,7 @@ export class MyTasksComponent implements OnInit {
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  createPOEmail() {
-   // this.modelPR.PoStatusRefId = this.myEnum.PO_Raised_Via_emial;
-    this.subs.sink = this.http
-      .post<any>(`${environment.APIEndpoint}/PurchaseRequest/CreatePOWithEmail`, this.po, {}).subscribe((data) => {
-        if (data.IsValid == false) {
-          this.confirmDialogService.messageListBox(data.ValidationMessages)
-        }
-        else {
-          this.toastr.success(environment.dataSaved);
-          this.router.navigate(['MyTasks']);
-          this.gridService.initGridNew(this.gridOption);
-        }
-      }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
-  }
+
 
   Approve() {
     this.confirmDialogService.confirmThis("Are you sure to APPROVE?", () => {
@@ -300,22 +268,6 @@ export class MyTasksComponent implements OnInit {
     return sum;
   }
 
-  AddPORowAttachemtns(){
-    let obj = new PodetailsDTO();
-    this.po.Podetails.push(obj);
-  }
-
-  addFilePO(event, i: PodetailsDTO): void {
-    let fileList: FileList = event.target.files;
-    if (fileList.length > 0) {
-      let file: File = fileList[0];
-      let formData: FormData = new FormData();
-      formData.append('uploadFile', file, file.name);
-      this.fileuploadService
-        .upload(file).subscribe(res => { i.UniqueFileName = String(res); });
-    }
-  }
-
   RaisePO() {
     let self = this;
     this.confirmDialogService.confirmThis("Do you want to raise a PO?", () => {
@@ -337,9 +289,9 @@ export class MyTasksComponent implements OnInit {
 
 
   POPreview(){
-    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPOBeforeSave/${this.modelPR.PoheaderId}`).subscribe(r => {
-      const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
-      modalRef.componentInstance.fromParent = r; });
+    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/ViewPOByPrID/${this.modelPR.PoheaderId}`).subscribe(r => {
+      const modalRef = this.modalService.open(POViewNewComponent, { size: 'xl' });
+      modalRef.componentInstance.poFROMPARANT = r; });
   }
 
   Paying(){

@@ -4,7 +4,7 @@
       <div class="card-body">
         <div class="tab-content p-0">
           <div *ngIf="!edited">
-
+<!--
             <div class="btn-group btn-group-toggle d-flex" data-toggle="buttons">
               <label class="btn btn-warning active ">
                 <input type="radio" name="options1asdf" id="option1" (change)="ClickSummary()" value="0"
@@ -32,7 +32,7 @@
               </label>
 
             </div>
-            <br />
+            <br /> -->
             <app-search [assosiatedGridIDXXX]="this.gridOption.gridID"></app-search>
             <table class="table table-bordered  ">
               <thead class="thead-light">
@@ -222,7 +222,8 @@
                             <div class="col-md-12">
                               <div class="form-group">
                                 <label for="Name">Name</label>
-                                <input id="Name" name="Name" type="text" autocomplete="off" [(ngModel)]="model"
+                                <input [readonly]="this.SetReadOnlyFuction()"
+                                id="Name" name="Name" type="text" autocomplete="off" [(ngModel)]="model"
                                   [resultFormatter]="formatter" [inputFormatter]="formatterx" [ngbTypeahead]="search"
                                   (selectItem)="selectedItem($event)" class="form-control" placeholder="Name" />
                               </div>
@@ -297,7 +298,7 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label for="DepartmentId">Department</label>
-                              <ng-select placeholder="Select item" [clearable]="false" name="DepartmentId"
+                              <ng-select [readonly]="this.SetReadOnlyFuction()" placeholder="Select item" [clearable]="false" name="DepartmentId"
                                 (change)="this.DepaertmentChange()" [(ngModel)]="this.modelPR.DepartmentId">
                                 <ng-option [value]="0" disabled selected>Please Select</ng-option>
                                 <ng-option *ngFor="let car of this.loggedUserDepartments" [value]="car.DepartmentId">
@@ -309,7 +310,7 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label for="ShiptTo">ShiptTo</label>
-                              <ng-select [clearable]="false" name="ShiptTo" [(ngModel)]="this.modelPR.ShipToRefId">
+                              <ng-select [readonly]="this.SetReadOnlyFuction()" [clearable]="false" name="ShiptTo" [(ngModel)]="this.modelPR.ShipToRefId">
                                 <ng-option [value]="0" disabled selected>Please Select</ng-option>
                                 <ng-option *ngFor="let car of this.modelShiptTo" [value]="car.RefId">
                                   {{car.RefDescription}}
@@ -325,10 +326,10 @@
 
                             <div class="form-group">
                               <div class="input-group">
-                                <input class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
+                                <input [readonly]="this.SetReadOnlyFuction()" class="form-control" placeholder="yyyy-mm-dd" name="d2" #c2="ngModel"
                                   [(ngModel)]="modelPR.Podate" ngbDatepicker #d2="ngbDatepicker">
                                 <div class="input-group-append">
-                                  <button class="btn btn-outline-secondary calendar fa fa-calendar"
+                                  <button [readonly]="this.SetReadOnlyFuction()" class="btn btn-outline-secondary calendar fa fa-calendar"
                                     (click)="d2.toggle()" type="button"></button>
                                 </div>
                               </div>
@@ -343,7 +344,7 @@
                           <div class="col-md-12">
                             <div class="form-group">
                               <label for="City">Quote Ref</label>
-                              <input class="form-control" id="quoteRef" name="quoteRef" type="text"
+                              <input [readonly]="this.SetReadOnlyFuction()" class="form-control" id="quoteRef" name="quoteRef" type="text"
                                 [(ngModel)]="this.modelPR.Reference" placeholder="quoteRef" />
                             </div>
                           </div>
@@ -378,8 +379,8 @@
                                 <th>Job Code</th>
                                 <th>Payment Type</th>
                                 <th>Recevied Status</th>
-                                <th>ReceviedQty</th>
                                 <th>Order</th>
+                                <th>ReceviedQty</th>
                                 <th>
                                   <button type="button"
                                     *ngIf="this.modelPR.PoStatusRefId==27 ||this.modelPR.PoStatusRefId==0 ||this.modelPR.PoStatusRefId==66"
@@ -400,15 +401,12 @@
                                   <td>{{item.JobRef.RefDescription}}</td>
                                   <td>{{item.PaymentTypeRef?.RefDescription}}</td>
                                   <td> {{item.PoOrderReceivedRef?.RefDescription}} </td>
-                                  <td> <input [readonly]="!this.prService.IsCanOrderRecevie(this.modelPR.PoStatusRefId)"
-                                      class="form-control" id="poitemQuantity{{i}}" name="poitemQuantity{{i}}"
-                                      placeholder="Quantity" [(ngModel)]="item.ReceviedQty" numeric decimals="2" /></td>
+
                                   <td>
                                     <div class="btn-group">
                                       <ng-select *ngIf="this.prService.IsCanOrderRecevie(this.modelPR.PoStatusRefId)"
-                                        placeholder="Select item" [clearable]="false" name="DepartmentIdfa"
-                                        (change)="OrderReceveDrodown(item)"
-                                        [(ngModel)]="item.PoOrderReceivedRefId">
+                                        placeholder="Select item" [clearable]="false" name="DepartmentIdfa1010{{i}}"
+                                        (change)="OrderReceveDrodown(item)" [(ngModel)]="item.PoOrderReceivedRefId">
                                         <ng-option [value]="0" disabled selected>--Select--</ng-option>
                                         <ng-option [value]="63">Partially</ng-option>
                                         <ng-option [value]="64">Fully</ng-option>
@@ -419,6 +417,11 @@
                                         (click)="saveRecevedItems(item)"><span class="fa fa-save"></span> </button>
                                     </div>
                                   </td>
+                                  <td> <input
+                                    [readonly]="!this.prService.IsCanOrderRecevie(this.modelPR.PoStatusRefId) || item.Qty==item.ReceviedQty"
+                                    class="form-control" id="poitemQuantity{{i}}" name="poitemQuantity{{i}}"
+                                    placeholder="Quantity" [(ngModel)]="item.ReceviedQty" numeric decimals="2" />
+                                </td>
                                   <td>
                                     <div class="btn-group">
                                       <button

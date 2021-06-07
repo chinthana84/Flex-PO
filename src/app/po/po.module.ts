@@ -16,6 +16,7 @@ import { PodetailsComponent } from './podetails/podetails.component';
 import { GrnComponent } from './grn/grn.component';
 import { ApprovalFlowComponent } from './approval-flow/approval-flow.component';
 import { PoviewComponent } from './poview/poview.component';
+import { POViewNewComponent } from './poview-new/poview-new.component';
 
 const routes: Routes = [
   {
@@ -35,8 +36,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent, ApprovalFlowComponent, PoviewComponent],
-
+  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent, ApprovalFlowComponent, PoviewComponent, POViewNewComponent],
   imports: [
     CommonModule,
     GridModule,
@@ -51,5 +51,9 @@ const routes: Routes = [
 
     //{provide: NgbDateAdapter, useClass: NgbDateNativeAdapter}
   ],
+  exports: [
+    POViewNewComponent,
+]
+   
 })
 export class PoModule { }
