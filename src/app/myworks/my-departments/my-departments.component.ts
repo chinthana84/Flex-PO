@@ -1,3 +1,4 @@
+import { PrService } from 'src/app/myShared/services/pr.service';
 import { GridService } from 'src/app/grid/grid-service/grid.service';
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
@@ -77,7 +78,8 @@ export class MyDepartmentsComponent implements OnInit {
     public commonService: CommonService,
     public fileuploadService: FileuploadService,
     public gridService3: Grid3Service,
-    public authService: AuthService
+    public authService: AuthService,
+    public prService:PrService
   ) { this.edited = false; }
 
   ngOnInit(): void {

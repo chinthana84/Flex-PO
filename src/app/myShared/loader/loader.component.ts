@@ -9,17 +9,23 @@ import { LoaderService } from '../services/loader.service';
 })
 export class LoaderComponent implements OnInit {
 
-  constructor(private loaderService: LoaderService) { }
-  isLoadingRequest:boolean=false; //this.loaderService.isLoadingRequest;
+//   constructor(private loaderService: LoaderService) { }
+//   isLoadingRequest:boolean=false; //this.loaderService.isLoadingRequest;
 
-  ngOnInit(): void {
+//   ngOnInit(): void {
 
- this.loaderService.main$.subscribe(r=>{
+//  this.loaderService.main$.subscribe(r=>{
 
-  this.isLoadingRequest=r;
- })
+//   this.isLoadingRequest=r;
+//  })
 
-  }
+//   }
+constructor(private loaderService: LoaderService) { }
+
+ngOnInit(): void {
+}
+
+isLoading: Subject<boolean> = this.loaderService.isLoadingRequest;
 
 
 

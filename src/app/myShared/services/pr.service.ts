@@ -1,3 +1,4 @@
+import { purchaseRequestHeaderDTO } from 'src/app/models/purchaseRequestHeaderDTO.model';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -50,13 +51,35 @@ export class PrService {
   }
 
   IsCanViewPO(statusID:number){
-     
+
     let status=  [52,63,64,67,68,69,70,72];
     if ( status.filter(r=> r == statusID).length >0){
       return true;
     }
     return false;
   }
+
+
+  GetTotalGst(modelPR: purchaseRequestHeaderDTO) {
+    return  this.GetTotal(modelPR) *  (modelPR.Gst /100)
+
+   }
+
+   GetTotal(modelPR: purchaseRequestHeaderDTO) {
+     let sum = 0;
+     modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
+     return sum;
+   }
+
+   GetTotalWithGST(modelPR: purchaseRequestHeaderDTO){
+     debugger
+     if(modelPR.IsGst==true){
+       return this.GetTotal(modelPR) + this.GetTotalGst(modelPR)
+     }
+     else{
+       return this.GetTotal(modelPR);
+     }
+   }
 
 
 }

@@ -45,8 +45,10 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
   modelSupplier: SupplierDTO = {};
   modelShiptTo: RefTableDTO[] = [];
   loggedUserDepartments: any[] = [];
+  Gst: RefTableDTO[] = [];
 
-  officers: [ApprovalOfficersDTO[]] = [[]];
+
+  //officers: [ApprovalOfficersDTO[]] = [[]];
 
   mode: string = "";
 
@@ -119,19 +121,10 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
     public prService: PrService
   ) {
     this.edited = false;
-
   }
 
   ngOnInit(): void {
-    debugger
-
-
-
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
-
-
-
-
       if (this.modelPR.PurchaseRequestDetail == undefined) {
         this.modelPR.PurchaseRequestDetail = [];
       }
@@ -143,15 +136,10 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
       }
     });
 
-    //  this.gridService.initGrid(this.gridOption) ;
-    //  this.gridService2.initGrid(this.gridOption2) ;
-
     this.gridService3.initGridNew(this.gridOption);
     this.gridService3.initGridNew(this.gridOption2);
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
-
-
       if (params.id == 0) {
         this.NewPR();
       } else if (params.id > 0) {
@@ -159,18 +147,16 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
       } else {
         this.edited = false;
         this.gridService3.initGridNew(this.gridOption);
-        //this.gridService2.initGrid(this.gridOption2) ;
-
-
+        this.gridService3.initGridNew(this.gridOption2);
       }
     });
   }
 
   DepaertmentChange() {
-    this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
-      this.officers = r;
+    // this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
+    //   this.officers = r;
 
-    });
+    // });
   }
 
   EditPR(id: number, isCopy: Boolean = false) {
@@ -180,20 +166,22 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
     let x = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`);
     let y = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To');
     let z = this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPurchaseRequestByID/` + id);
+    let a = this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'GST');
 
-    forkJoin([x, y, z]).subscribe((data) => {
+    forkJoin([x, y, z,a]).subscribe((data) => {
       this.loggedUserDepartments = data[0];
       this.modelShiptTo = data[1];
       this.modelPR = data[2];
       this.modelSupplier = data[2].Supplier;
       this.modelPR.SupplierId = data[2].SupplierId;
       this.modelPR.Podate = new Date(this.modelPR.Podate);
+      this.Gst= data[3];
 
 
-           this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
-        this.officers = r;
+      //      this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetApprovalOfficersList/${this.GetTotal()}/${1}/${this.modelPR.DepartmentId}`).subscribe(r => {
+      //   this.officers = r;
 
-      });
+      // });
 
       if (isCopy) {
         this.mode = "Copy PR";
@@ -222,10 +210,7 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
             s.PrdetAttachmentId = 0;
           })
         });
-
-
       }
-
     }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
@@ -234,21 +219,22 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
     this.edited = true;
     this.modelPR = new purchaseRequestHeaderDTO();
     this.model = new TypeHeadSearchDTO();
-    this.officers = [[]];
-
+    // this.officers = [[]];
 
     this.subs.sink = this.http.get<any>(`${environment.APIEndpoint}/Admin/LoggedUsersDeparmnts`)
       .subscribe((data) => { this.loggedUserDepartments = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
     this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'Ship To').subscribe(
       r => { this.modelShiptTo = r; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+
+      this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'GST').subscribe(
+        r => { this.Gst = r; console.log(r) }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
 
   SetReadOnlyFuction() {
-    debugger
     if (this.modelPR.PoStatusRefId == undefined || this.modelPR.PoStatusRefId == 0 || this.modelPR.PoStatusRefId == 27 || this.modelPR.PoStatusRefId == 66) {
-     return false;
+      return false;
     }
     else {
       return true;
@@ -261,7 +247,6 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
   }
 
   Action(item: any) {
-
     if (item == undefined) {
       this.router.navigate(["/request/edit"], { queryParams: { id: 0 } });
     } else {
@@ -275,7 +260,6 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
   }
 
   editPoDetaisls(obj: PurchaseRequestDetailDTO) {
-
     const modalRef = this.modalService.open(PoitemComponent, { size: 'xl' });
     modalRef.componentInstance.fromParent = obj;
   }
@@ -383,17 +367,28 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
     this.EditPR(id, true);
   }
 
-  GetTotal() {
-    let sum = 0;
-    this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
-    return sum;
-  }
+  // GetTotalGst() {
+  //  return  this.GetTotal() *  (parseFloat(this.Gst[0].RefDescription)/100)
+
+  // }
+
+  // GetTotal() {
+  //   let sum = 0;
+  //   this.modelPR?.PurchaseRequestDetail?.forEach(r => sum += r.UnitPrice * r.Qty);
+  //   return sum;
+  // }
+
+  // GetTotalWithGST(){
+  //   debugger
+  //   if(this.modelPR.IsGst==true){
+  //     return this.GetTotal() - this.GetTotalGst()
+  //   }
+  //   else{
+  //     return this.GetTotal();
+  //   }
+  // }
 
   ViewPO(id: number, $event) {
-    // this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/GetPoEmail/${id}`).subscribe(r => {
-    //   const modalRef = this.modalService.open(PoviewComponent, { size: 'xl' });
-    //   modalRef.componentInstance.fromParent = r; });
-
     this.http.get<any>(`${environment.APIEndpoint}/PurchaseRequest/ViewPOByPrID/${this.modelPR.PoheaderId}`).subscribe(r => {
       const modalRef = this.modalService.open(POViewNewComponent, { size: 'xl' });
       modalRef.componentInstance.poFROMPARANT = r;
@@ -406,7 +401,6 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
   }
 
   Cancel(id: number) {
-    debugger
     this.confirmDialogService.confirmThis("Are you sure to Cancel?", () => {
       debugger
       this.modelPR = new purchaseRequestHeaderDTO();
@@ -446,7 +440,6 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
         else {
           this.toastr.success(environment.dataSaved);
           if (data.SavedID > 0) { this.router.navigate(['request']); }
-          // this.router.navigate(['request']);
         }
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }

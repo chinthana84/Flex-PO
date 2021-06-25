@@ -17,6 +17,7 @@ import { PoitemComponent } from '../poitem/poitem.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ItemService } from 'src/app/myShared/services/item.service';
 import { Grid3Service } from 'src/app/grid/grid-service/grid3.service';
+import { PrService } from 'src/app/myShared/services/pr.service';
 
 
 
@@ -55,7 +56,8 @@ export class PurchaseRequestApprovalComponent implements OnInit {
     public fileuploadService: FileuploadService,
     private modalService: NgbModal,
     private itemService: ItemService,
-    private gridService3 :Grid3Service
+    private gridService3 :Grid3Service,
+    private prService:PrService
   ) {
     this.edited = false;
   }

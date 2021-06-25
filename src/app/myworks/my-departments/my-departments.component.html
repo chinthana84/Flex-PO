@@ -276,13 +276,29 @@
 
                                 </td>
                               </tr>
-                              <tr style="font-weight: bold;">
+                              <!-- <tr style="font-weight: bold;">
                                 <td class="datanotfound" colspan="7"></td>
                                 <td>Total</td>
                                 <td> {{ this.GetTotal()  | number : '1.2-2' }}
                                 </td>
                                 <td></td>
-                              </tr>
+                              </tr> -->
+
+                              <tr style="font-weight: bold;"
+                              *ngIf="this.modelPR.IsGst ==true  && this.modelPR.PurchaseRequestDetail?.length > 0">
+                              <td class="datanotfound" colspan="7"></td>
+                           
+                              <td>GST</td>
+                              <td> {{ prService.GetTotalGst(this.modelPR) | number : '1.2-2' }} </td>
+                            </tr>
+
+                            <tr style="font-weight: bold;" *ngIf=" this.modelPR.PurchaseRequestDetail?.length > 0">
+                              <td class="datanotfound" colspan="7"></td>
+
+                              <td>Total</td>
+                              <td> {{ prService.GetTotalWithGST(this.modelPR) | number : '1.2-2' }} </td>
+                            </tr>
+
                               <tr
                                 *ngIf=" this.modelPR.PurchaseRequestDetail?.length == 0 ||  this.modelPR.PurchaseRequestDetail == undefined">
                                 <td class="datanotfound" colspan="10">Data not found</td>

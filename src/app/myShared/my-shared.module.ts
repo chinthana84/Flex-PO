@@ -1,3 +1,4 @@
+import { DisableButtonAfterClickDirective } from './directives/disableafterclick.directive';
 import { AuthService } from './services/auth.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -14,12 +15,12 @@ import { SearchPipe } from './pipes/filterFromList.pipe';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @NgModule({
-  declarations: [ConfirmDialogComponent,NumericDirective, LoaderComponent,SearchPipe],
+  declarations: [ConfirmDialogComponent,NumericDirective, LoaderComponent,SearchPipe,DisableButtonAfterClickDirective],
   imports: [
     CommonModule,
     FormsModule
   ],
-  exports: [ConfirmDialogComponent,NumericDirective,LoaderComponent,SearchPipe],
+  exports: [ConfirmDialogComponent,NumericDirective,LoaderComponent,SearchPipe,DisableButtonAfterClickDirective],
   providers: [LoaderService,SecurityService, ConfirmDialogService,AuthService,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true }
   ],

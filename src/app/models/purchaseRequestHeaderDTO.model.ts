@@ -40,6 +40,9 @@ export class purchaseRequestHeaderDTO {
   public BoardApproval?: number = 0;
 
   public IsApproval?: boolean = false;
+
+  public   Gst ?: number = 0;
+  public  IsGst ?:Boolean=false;
 }
 
 
