@@ -84,21 +84,21 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
     }
   };
 
-  gridOption2: GridOptions = {
-    gridID: "b",
-    datas: {},
-    searchObject: {
-      girdId: GridType.PR
-      , SavedDBColumn: "SupplierID"
-      , defaultSortColumnName: "PONo",
-      pageNo: 1,
-      searchColName: '',
-      colNames: [{ colName: "PONo", colText: 'PONo' },
-      { colName: "DepartmentName", colText: 'Department' }
+  // gridOption2: GridOptions = {
+  //   gridID: "b",
+  //   datas: {},
+  //   searchObject: {
+  //     girdId: GridType.PR
+  //     , SavedDBColumn: "SupplierID"
+  //     , defaultSortColumnName: "PONo",
+  //     pageNo: 1,
+  //     searchColName: '',
+  //     colNames: [{ colName: "PONo", colText: 'PONo' },
+  //     { colName: "DepartmentName", colText: 'Department' }
 
-      ]
-    }
-  };
+  //     ]
+  //   }
+  // };
 
 
   closeResult: string;
@@ -137,7 +137,7 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
     });
 
     this.gridService3.initGridNew(this.gridOption);
-    this.gridService3.initGridNew(this.gridOption2);
+    //this.gridService3.initGridNew(this.gridOption2);
 
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id == 0) {
@@ -147,7 +147,7 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
       } else {
         this.edited = false;
         this.gridService3.initGridNew(this.gridOption);
-        this.gridService3.initGridNew(this.gridOption2);
+      //  this.gridService3.initGridNew(this.gridOption2);
       }
     });
   }
@@ -228,7 +228,9 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
       r => { this.modelShiptTo = r; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
 
       this.http.get<RefTableDTO[]>(`${environment.APIEndpoint}/Admin/GetRefByName/` + 'GST').subscribe(
-        r => { this.Gst = r; console.log(r) }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
+        r => { this.Gst = r; console.log(r)
+            this.modelPR.Gst=parseFloat(r[0].RefDescription)
+        }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
 

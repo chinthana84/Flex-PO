@@ -69,8 +69,8 @@ export class MyDepartmentsComponent implements OnInit {
   };
   closeResult: string;
 
-  constructor(private modalService: NgbModal, private confirmDialogService: ConfirmDialogService, private typeheadService: TypeheadService
-    , private http: HttpClient,
+  constructor(private modalService: NgbModal, private confirmDialogService: ConfirmDialogService, private typeheadService: TypeheadService,
+    private http: HttpClient,
     public router: Router,
     private activatedRoute: ActivatedRoute,
     private toastr: ToastrService,
@@ -79,27 +79,22 @@ export class MyDepartmentsComponent implements OnInit {
     public fileuploadService: FileuploadService,
     public gridService3: Grid3Service,
     public authService: AuthService,
-    public prService:PrService
+    public prService: PrService
   ) { this.edited = false; }
 
   ngOnInit(): void {
-
-
     this.selectedUserID = parseInt(this.authService.DecodeJWT().UserID);
-    this.getallUsers();
+    this.getallFinanceUsers();
     debugger
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
-      debugger
       if (params.id > 0) {
         this.EditPR(params.id);
-        this.getallUsers();
+        this.getallFinanceUsers();
       } else {
-        debugger
         this.gridService3.initGridNew(this.gridOption);
         this.edited = false;
       }
     });
-
   }
 
   EditPR(id: number, isCopy: Boolean = false) {
@@ -129,16 +124,13 @@ export class MyDepartmentsComponent implements OnInit {
           r.PodetId = 0;
           r.guid = this.commonService.newGuid();
         });
-
         this.modelPR.PurchaseRequestAttachments.forEach(r => {
           r.PoheaderId = 0;
           r.Id = 0;
         });
       }
-
     }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
-
 
   ViewOnly(Id: number) {
     this.router.navigate(["/MyDeps/edit"], { queryParams: { id: Id } });
@@ -146,21 +138,14 @@ export class MyDepartmentsComponent implements OnInit {
   }
 
 
-
   Action(item: any) {
-
-    this.router.navigate(["/MyDeps/edit"], { queryParams: { id: item.Id } });
-
+   this.router.navigate(["/MyDeps/edit"], { queryParams: { id: item.Id } });
     this.edited = true;
   }
 
-
-
   Save() {
-
-
-    this.modelPRList.forEach(r=>{
-      r.AssignedToMeUserId=this.selectedUserID;
+    this.modelPRList.forEach(r => {
+      r.AssignedToMeUserId = this.selectedUserID;
     });
 
     this.subs.sink = this.http
@@ -177,39 +162,16 @@ export class MyDepartmentsComponent implements OnInit {
       }, (error) => { this.confirmDialogService.messageBox(environment.APIerror) });
   }
 
-  // Save2() {
-  //   this.modelPR.AssignedToMeUserId = this.selectedUserID;
-  //   this.subs.sink = this.http
-  //     .post<any>(`${environment.APIEndpoint}/PurchaseRequest/AssignedToMe`, this.modelPR, {}).subscribe((data) => {
-  //       if (data.IsValid == false) {
-  //         this.confirmDialogService.messageListBox(data.ValidationMessages)
-  //       }
-  //       else {
-  //         this.edited = false;
-  //         this.toastr.success(environment.dataSaved);
-  //         this.router.navigate(['MyDeps']);
-  //       }
-  //     }, (error) => {
-
-  //       this.confirmDialogService.messageBox(environment.APIerror)
-  //     });
-  // }
-
-
-
   AssignToMe() {
     this.confirmDialogService.confirmThis("Are you sure ?", () => {
       this.Save();
     }, function () { });
   }
 
-
-  getallUsers() {
-    this.http.get<any>(`${environment.APIEndpoint}/Admin/GetAllUsers`)
+  getallFinanceUsers() {
+    this.http.get<any>(`${environment.APIEndpoint}/Admin/GetOnlyFinanceUsers`)
       .subscribe((data) => { this.userDetaills = data; }, (error) => { this.confirmDialogService.messageBox(environment.APIerror); });
   }
-
-
 
   GetTotal() {
     let sum = 0;
@@ -224,8 +186,8 @@ export class MyDepartmentsComponent implements OnInit {
       o.PoheaderId = obj.PoheaderId;
       this.modelPRList.push(o);
     }
-    else{
-      this.modelPRList=this.modelPRList.filter(r=> r.PoheaderId!= obj.PoheaderId);
+    else {
+      this.modelPRList = this.modelPRList.filter(r => r.PoheaderId != obj.PoheaderId);
     }
   }
 }

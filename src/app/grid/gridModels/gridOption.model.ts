@@ -24,7 +24,8 @@ export enum GridType {
   PRApprove=7,
   LockedbyFinance=8,
   MyTasks=9,
-  GRN=10
+  GRN=10,
+  PR_VIEW=11
 }
 
 export enum PO_Status
@@ -57,6 +58,7 @@ export enum PO_Status
    public departmentUsers="DepUsers";
    public myDepartments="MyDeps";
    public myTasks="MyTasks";
+   public list="list";
    }
 
 

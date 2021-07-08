@@ -1,52 +1,48 @@
+<div class="row">
 
+  <div class="col-md-4 col-sm-4 form-horizontal">
+    <div class="form-group">
+      <!-- <div class="form-group"  >
 
-  <div  class="row"  >
+        <select class="form-control" [(ngModel)]="searchColumn2">
+          <option *ngFor="let x of this.gridoption2?.searchObject?.colNames;
+                 let index = index" [value]="x.colName">
+            {{x.colText }}
+          </option>
+        </select>
 
-    <div class="col-md-4 col-sm-4 form-horizontal">
-      <div class="form-group">
-        <div class="form-group" *ngIf="this.serviceID==2" >
+      </div> -->
+      <div class="form-group" >
 
-            <select class="form-control"  [(ngModel)]="searchColumn2" >
-                <option *ngFor="let x of this.gridoption2?.searchObject?.colNames;
-                 let index = index" [value]="x.colName"  >
-                  {{x.colText }}
-                </option>
-            </select>
+        <select class="form-control" [(ngModel)]="searchColumn" id="searhcdrodown{{this.gridoption.gridID}}" name="searhcdrodown{{this.gridoption.gridID}}">
+          <option *ngFor="let x of this.gridoption?.searchObject?.colNames;
+               let index = index" [value]="x.colName">
+            {{x.colText }}
+          </option>
+        </select>
 
-      </div>
-      <div class="form-group" *ngIf="this.serviceID!=2" >
-
-          <select class="form-control"  [(ngModel)]="searchColumn" >
-              <option *ngFor="let x of this.gridoption?.searchObject?.colNames;
-               let index = index" [value]="x.colName"  >
-                {{x.colText }}
-              </option>
-          </select>
-
-    </div>
-      </div>
-    </div>
-
-
-    <div class="col-md-6 col-sm-5 form-horizontal">
-      <div class="form-group">
-        <div class="col-md-12 col-sm-12">
-          <input id="textinput" name="textinput" type="text" [(ngModel)]="searchText" placeholder="Search Text" class="form-control">
-        </div>
-      </div>
-    </div>
-
-    <div class="col-md-2 col-sm-12 form-horizontal">
-      <div class="form-group">
-        <div class="col-md-12 col-sm-12">
-          <button id="button1id" name="button1id" class="btn btn-success btn-block " (click)='searchClickNew(searchColumn,this.searchText)' >
-            <span class="fa fa-search"></span>
-             </button>
-        </div>
       </div>
     </div>
   </div>
 
 
+  <div class="col-md-6 col-sm-5 form-horizontal">
+    <div class="form-group">
+      <div class="col-md-12 col-sm-12">
+        <input id="textinput{{this.gridoption.gridID}" name="textinput{{this.gridoption.gridID}}" type="text" [(ngModel)]="searchText"
+          placeholder="Search Text" class="form-control">
+      </div>
+    </div>
+  </div>
 
-
+  <div class="col-md-2 col-sm-12 form-horizontal">
+    <div class="form-group">
+      <div class="col-md-12 col-sm-12">
+        <button id="button1id" name="button1id" class="btn btn-success btn-block "
+          (click)='searchClickNew(searchColumn,this.searchText)'>
+          <span class="fa fa-search"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

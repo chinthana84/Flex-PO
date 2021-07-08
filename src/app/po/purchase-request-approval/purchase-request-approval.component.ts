@@ -63,6 +63,7 @@ export class PurchaseRequestApprovalComponent implements OnInit {
   }
 
   ngOnInit() {
+    debugger
     this.subs.sink = this.itemService.itemAdded().subscribe(r => {
 
       if (this.modelPR.PurchaseRequestDetail == undefined) {

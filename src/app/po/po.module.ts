@@ -17,6 +17,7 @@ import { GrnComponent } from './grn/grn.component';
 import { ApprovalFlowComponent } from './approval-flow/approval-flow.component';
 import { PoviewComponent } from './poview/poview.component';
 import { POViewNewComponent } from './poview-new/poview-new.component';
+import { ViewprComponent } from './purchase-request/viewpr/viewpr.component';
 
 const routes: Routes = [
   {
@@ -36,7 +37,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent, ApprovalFlowComponent, PoviewComponent, POViewNewComponent],
+  declarations: [PurchaseRequestComponent, PoitemComponent, PurchaseRequestApprovalComponent, AmmendPoComponent, PoheaderComponent, PodetailsComponent, GrnComponent, ApprovalFlowComponent, PoviewComponent, POViewNewComponent, ViewprComponent],
   imports: [
     CommonModule,
     GridModule,
@@ -53,7 +54,8 @@ const routes: Routes = [
   ],
   exports: [
     POViewNewComponent,
+    ViewprComponent
 ]
-   
+
 })
 export class PoModule { }

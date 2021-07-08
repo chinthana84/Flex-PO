@@ -70,25 +70,15 @@ export class SearchComponent implements OnInit {
 
   ngOnInit() {
 
-    // this.gridService.getGridOptions().subscribe(r => {
-
-    //   this.gridoption = r;
-    //   this.searchColumn = this.gridoption.searchObject.colNames[0].colName;
-
-    // });
-
-    // this.gridSercie2.getGridOptions().subscribe(r => {
-
-    //   this.gridoption2 = r;
-    //   this.searchColumn2 = this.gridoption2.searchObject.colNames[0].colName;
-
-    // });
-
    this.gridSercie3.getGridOptionsXXX().subscribe(r => {
+     debugger
       if(r!= undefined && r.filter(a=> a.gridID == this.assosiatedGridIDXXX).length>0)
       {
         this.gridoption = r.filter(r=> r.gridID==this.assosiatedGridIDXXX)[0];
-        this.searchColumn = this.gridoption.searchObject.colNames[0].colName;
+        if(this.searchColumn==""){
+          this.searchColumn = this.gridoption.searchObject.colNames[0].colName;
+        }
+       
       }
     });
 

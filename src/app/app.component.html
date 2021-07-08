@@ -5,7 +5,7 @@
 
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link" data-widget="pushmenu"   role="button"><i class="fas fa-bars"></i></a>
+          <a class="nav-link" data-widget="pushmenu" role="button"><i class="fas fa-bars"></i></a>
         </li>
         <!-- <li class="nav-item d-none d-sm-inline-block">
           <a href="index3.html" class="nav-link">Home</a>
@@ -189,7 +189,7 @@
             <li class="nav-item ">
               <a class="nav-link submain" id="prhander">
                 <i class="nav-icon fas fa-tachometer-alt"></i>
-                <p >
+                <p>
                   PR Handler
                   <i class="right fas fa-angle-left"></i>
                 </p>
@@ -272,7 +272,12 @@
                   </a>
                 </li>
 
+                <li class="nav-item">
+                  <a routerLink="list" class="nav-link " id="child_list">
 
+                    <p>list </p>
+                  </a>
+                </li>
               </ul>
             </li>
 
@@ -286,33 +291,38 @@
               </a>
               <ul class="nav nav-treeview">
                 <li class="nav-item">
-                  <a id="child_approvalgropus" routerLink="{{  this.commonService.GetAllNavigations().approvalGroups }}" class="nav-link  ">
+                  <a id="child_approvalgropus" routerLink="{{  this.commonService.GetAllNavigations().approvalGroups }}"
+                    class="nav-link  ">
 
                     <p>Approval Groups </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a id="child_approvalgroupusers" routerLink="{{  this.commonService.GetAllNavigations().approvalGroupsUsers }}" class="nav-link ">
+                  <a id="child_approvalgroupusers"
+                    routerLink="{{  this.commonService.GetAllNavigations().approvalGroupsUsers }}" class="nav-link ">
 
                     <p>Approval Groups Users </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a id="child_departmsntss" routerLink="{{  this.commonService.GetAllNavigations().departments }}" class="nav-link  ">
+                  <a id="child_departmsntss" routerLink="{{  this.commonService.GetAllNavigations().departments }}"
+                    class="nav-link  ">
 
                     <p>Departments </p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a id="child_departent_userss" routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link  ">
+                  <a id="child_departent_userss"
+                    routerLink="{{  this.commonService.GetAllNavigations().departmentUsers }}" class="nav-link  ">
 
                     <p>Department Users </p>
                   </a>
                 </li>
 
                 <li class="nav-item">
-                  <a id="child_supplierss" routerLink="{{  this.commonService.GetAllNavigations().supplier }}" class="nav-link ">
+                  <a id="child_supplierss" routerLink="{{  this.commonService.GetAllNavigations().supplier }}"
+                    class="nav-link ">
 
                     <p>Suppliers </p>
                   </a>
@@ -324,13 +334,15 @@
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a id="child_masterdata" routerLink="{{  this.commonService.GetAllNavigations().masterData }}" class="nav-link ">
+                  <a id="child_masterdata" routerLink="{{  this.commonService.GetAllNavigations().masterData }}"
+                    class="nav-link ">
 
                     <p>MasterData </p>
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a id="child_accoutns" routerLink="{{  this.commonService.GetAllNavigations().accountList }}" class="nav-link ">
+                  <a id="child_accoutns" routerLink="{{  this.commonService.GetAllNavigations().accountList }}"
+                    class="nav-link ">
 
                     <p>Accounts </p>
                   </a>
@@ -346,15 +358,15 @@
       </div>
       <!-- /.sidebar -->
     </aside>
-     <app-confirm-dialog></app-confirm-dialog>
+    <app-confirm-dialog></app-confirm-dialog>
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
       <section class="content">
         <div class="container-fluid  ">
           <br />
-<app-loader> </app-loader>
+          <app-loader> </app-loader>
           <router-outlet> </router-outlet>
- <!--  -->
+          <!--  -->
 
           <!-- /.row (main row) -->
         </div><!-- /.container-fluid -->

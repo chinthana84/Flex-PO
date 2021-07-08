@@ -11,6 +11,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 import { GridModule } from '../grid/grid.module';
 import { MySharedModule } from '../myShared/my-shared.module';
 import { MyTasksComponent } from './my-tasks/my-tasks.component';
+import { ListComponent } from './list/list.component';
 
 const routes: Routes = [
 
@@ -20,12 +21,16 @@ const routes: Routes = [
   {
     path: new CommonService().GetAllNavigations().myTasks,  data: { titleKey: 'My Tasks' }, component: MyTasksComponent , children: [{ path: 'edit', component: MyTasksComponent } ]
   }
+  ,
+  {
+    path: new CommonService().GetAllNavigations().list,  data: { titleKey: 'My Tasks' }, component: ListComponent ,
+     children: [{ path: 'edit', component: ListComponent } ]
+  }
 ]
 
 @NgModule({
-  declarations: [MyDepartmentsComponent, MyTasksComponent],
+  declarations: [MyDepartmentsComponent, MyTasksComponent, ListComponent],
   imports: [
-
     CommonModule,
     FormsModule,
     RouterModule.forChild(routes),
