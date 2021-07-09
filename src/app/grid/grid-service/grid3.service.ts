@@ -44,7 +44,7 @@ export class Grid3Service {
   }
 
   OrderByList(gridid:string,  colname: string) {
-debugger
+ 
 
    let grid= this.myGridOptionList.filter(r => r.gridID == gridid)[0];
 

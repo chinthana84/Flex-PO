@@ -72,7 +72,7 @@ export class PrService {
    }
 
    GetTotalWithGST(modelPR: purchaseRequestHeaderDTO){
-     debugger
+      
      if(modelPR.IsGst==true){
        return this.GetTotal(modelPR) + this.GetTotalGst(modelPR)
      }

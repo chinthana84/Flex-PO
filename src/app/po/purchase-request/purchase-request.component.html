@@ -16,7 +16,7 @@
 
         <!-- Tab panes -->
         <div class="tab-content">
-          <div class="tab-pane container active" id="homex">
+          <div class="tab-pane   active" id="homex">
             <div *ngIf="!edited">
               <app-search [assosiatedGridIDXXX]="this.gridOption.gridID"></app-search>
               <table class="table table-bordered  ">
@@ -445,88 +445,17 @@
 
 
 
-            <!-- <label for="ItemDescription">supplierSearch</label>
-            <input id="typeahead-http" type="text" [resultFormatter]="formatter"
-            [inputFormatter]="formatterx"
-            class="form-control mx-sm-3" [class.is-invalid]="searchFailed"
-             [(ngModel)]="model"  typeaheadOptionField="Name" [ngbTypeahead]="search" placeholder="Wikipedia search" />
-
-             -->
-
-            <!-- <div class="row">
-              <section class="col-lg-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h3 class="card-title">
-                      <i class="fas fa-chart-pie mr-1"></i>
-                      Sales
-                    </h3>
-                  </div>
-                  <div class="card-body">
-                    <div class="tab-content p-0"></div>
-                  </div>
-                </div>
-              </section>
-            </div> -->
-
-
-
           </div>
-          <div class="tab-pane container fade" id="menu1">
-            <app-viewpr></app-viewpr>
+          <div class="tab-pane   fade" id="menu1">
+            <div class="row">
+              <div class="col-md-12">
+                        <app-viewpr></app-viewpr>
+              </div>
+            </div>
+
 
           </div>
         </div>
-
-
-        <!-- <div style="display: none;" *ngIf="!edited">
-
-            <app-search [serviceID]="2"></app-search>
-            <table class="table table-bordered  ">
-              <thead class="thead-light">
-                <th>PONo</th>
-                <th>Department</th>
-                <th>Supplier</th>
-                <th>ShipTo</th>
-                <th>PR Status</th>
-                <th>Date</th>
-                <th>
-                  <button (click)="Action(null)" class="btn btn-primary ">New Request <span
-                      class="fa fa-plus"></span></button>
-                </th>
-              </thead>
-              <tbody>
-                <tr *ngFor="let item of  this.gridOption2?.datas?.pagedItems" class="table-hover">
-                  <td>{{ item.Pono }}</td>
-                  <td>{{ item.DepartmentName }}</td>
-                  <td>{{ item.SupplierName }}</td>
-                  <td>{{ item.ShipTo }}</td>
-                  <td>
-                    <h5> <span class="badge badge-secondary"> {{ item.Postatus}} </span></h5>
-                  </td>
-
-                  <td>{{ item.CreateDate }}</td>
-                  <td>
-                    <div class="btn-group">
-                      <button *ngIf="item.PoStatusId==27  || item.PoStatusId==66" (click)="Action(item,false)"
-                        class="btn btn-primary"> <span class="fa fa-edit"></span></button>
-                      <button *ngIf="item.PoStatusId!=27 || item.PoStatusId!=66" (click)="copyPR(item.Id)"
-                        class="btn btn-warning  ">Copy PR
-                      </button>
-                      <button *ngIf="item.PoStatusId!=27" (click)="ViewOnly(item.Id)" class="btn btn-info  ">View
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-                <tr *ngIf="this.gridOption.datas.pagedItems==undefined || this.gridOption.datas.pagedItems==0">
-                  <td class="datanotfound" colspan="7">Data not found</td>
-                </tr>
-              </tbody>
-            </table>
-            <app-pager [serviceID]="2"></app-pager>
-          </div> -->
-
-
 
       </div>
     </div>
@@ -544,13 +473,6 @@
 
 
 
-<!-- <label for="ItemDescription">supplierSearch</label>
-<input id="typeahead-http" type="text" [resultFormatter]="formatter"
-[inputFormatter]="formatterx"
-class="form-control mx-sm-3" [class.is-invalid]="searchFailed"
- [(ngModel)]="model"  typeaheadOptionField="Name" [ngbTypeahead]="search" placeholder="Wikipedia search" />
-
- -->
 
 <!-- <div class="row">
   <section class="col-lg-12">

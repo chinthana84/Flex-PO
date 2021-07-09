@@ -1,4 +1,4 @@
-<div *ngIf="!edited">
+<div *ngIf="!edited"></div>
   <app-search [assosiatedGridIDXXX]="this.gridOption2.gridID"></app-search>
 <table class="table table-bordered  ">
   <thead class="thead-light">
@@ -41,7 +41,7 @@
   </tbody>
 </table>
 <app-pager></app-pager>
-</div>
+
 
 <div *ngIf="edited">
   <form (ngSubmit)="onSubmit(model)" *ngIf="edited" novalidate #heroForm="ngForm">

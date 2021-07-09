@@ -1,4 +1,6 @@
+
 import { Component, OnInit } from '@angular/core';
+import { GridService } from 'src/app/grid/grid-service/grid.service';
 
 @Component({
   selector: 'app-list',
@@ -7,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ListComponent implements OnInit {
 
-  constructor() { }
+  constructor(public gridService: GridService) { }
 
   ngOnInit(): void {
   }

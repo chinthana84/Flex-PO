@@ -85,7 +85,7 @@ export class MyDepartmentsComponent implements OnInit {
   ngOnInit(): void {
     this.selectedUserID = parseInt(this.authService.DecodeJWT().UserID);
     this.getallFinanceUsers();
-    debugger
+
     this.subs.sink = this.activatedRoute.queryParams.subscribe((params) => {
       if (params.id > 0) {
         this.EditPR(params.id);
@@ -155,7 +155,7 @@ export class MyDepartmentsComponent implements OnInit {
         }
         else {
           this.edited = false;
-          debugger
+
           this.router.navigate(['MyDeps']);
           location.reload()
         }
@@ -180,7 +180,7 @@ export class MyDepartmentsComponent implements OnInit {
   }
 
   SelectItemToAssign(e, obj: any) {
-    debugger
+     
     if (e.target.checked) {
       let o = new purchaseRequestHeaderDTO();
       o.PoheaderId = obj.PoheaderId;

@@ -381,7 +381,7 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
   // }
 
   // GetTotalWithGST(){
-  //   debugger
+  //
   //   if(this.modelPR.IsGst==true){
   //     return this.GetTotal() - this.GetTotalGst()
   //   }
@@ -404,7 +404,7 @@ export class PurchaseRequestComponent implements OnInit, OnDestroy {
 
   Cancel(id: number) {
     this.confirmDialogService.confirmThis("Are you sure to Cancel?", () => {
-      debugger
+       
       this.modelPR = new purchaseRequestHeaderDTO();
       this.modelPR.PoheaderId = id;
       this.subs.sink = this.http

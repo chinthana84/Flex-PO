@@ -277,7 +277,7 @@ export class MyTasksComponent implements OnInit {
 
         this.http.get<PoDTO>(`${environment.APIEndpoint}/PurchaseRequest/GetAllAttachmentsByPR_ID/${this.modelPR.PoheaderId}`)
         .subscribe(r=>{
-          debugger
+           
           self.po=r;
         });
 

@@ -25,7 +25,7 @@ export class AuthService {
 
 
   public DecodeJWT(){
-    debugger
+
     var givenName = this.jwtHelper.decodeToken(this.getJwtToken());
     console.log(givenName)
     return givenName;
